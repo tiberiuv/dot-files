@@ -1,0 +1,15 @@
+{
+    "diagnostic.virtualText": true,
+    "diagnostic.virtualTextPrefix": " # ",
+    "diagnostic.displayByAle": true,
+    "suggest.localityBonus": true,
+    "diagnostic.refreshOnInsertMode": true,
+    "coc.preferences.hoverTarget": "float",
+    "python.jediEnabled": true,
+    "python.jediPath": "/Users/tiberiusimionvoicu/neovim3/lib/python3.7/site-packages",
+    "python.linting.enabled": false,
+    "python.analysis.diagnosticEnabled": false,
+    "rust-analyzer.serverPath": "~/rust-analyzer/target/release/rust-analyzer",
+    "rust-analyzer.checkOnSave.command": "clippy",
+    "rust-analyzer.lruCapacity": 1000
+}
