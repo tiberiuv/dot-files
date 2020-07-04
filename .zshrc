@@ -36,7 +36,7 @@ export PATH="$PATH:$N_PREFIX/bin"
 # Eval
 # ------------------------------------------------------------ #
 #eval $(thefuck --alias)
-eval "$(pyenv init - --no-rehash)"
+#eval "$(pyenv init - --no-rehash)"
 
 # ------------------------------------------------------------ #
 
@@ -65,9 +65,20 @@ export VAULT_ADDR=https://vault.blockops.co
 # ------------------------------------------------------------ #
 # FZF
 # ------------------------------------------------------------ #
+#export FZF_COMPLETION_TRIGGER='**'
+#export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages'
+#export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Using fzf as the selector interface for ripgrep
 export FZF_COMPLETION_TRIGGER='**'
-export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# Use ripgrep as the only filter when searching
+# this way fzf is just an interactive selector interface
+RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+INITIAL_QUERY="foo"
+FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY' || true" \
+  fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+      --ansi --phony --query "$INITIAL_QUERY"
 
 _fzf_compgen_path() {
   rg --smart-case --files --hidden --no-messages ${1}

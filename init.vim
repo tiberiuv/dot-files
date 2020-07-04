@@ -62,6 +62,7 @@ set signcolumn=yes  " Always show the signcolumn
 
 let g:loaded_sql_completion = 0
 let g:omni_sql_no_default_maps = 1
+let g:rooter_patterns = ['.git', '.git/']
 
 " Load plugins
 source ~/.config/nvim/plugins.vim
@@ -82,6 +83,17 @@ augroup END
 
 " -------------------------------------
 " FZF
+" Use ripgrep as the only filter when searching
+" this way fzf is just an interactive selector interface
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " Use ctrl-p/f for search using fzf
@@ -222,12 +234,18 @@ let test#python#runner = 'pyunit'
 
 let g:ale_linters = {
 \   'markdown': ['mdl', 'writegood'],
+\   'python': ['flake8'],
+\   'javascript': ['eslint'],
+\   'typescript': ['eslint']
 \}
 
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'json': ['prettier', 'remove_trailing_lines', 'trim_whitespace'],
-\   'yaml': ['prettier', 'remove_trailing_lines', 'trim_whitespace'],
+\   'json': ['prettier'],
+\   'yaml': ['prettier'],
+\   'javascript': ['pretier'],
+\   'python': ['black'],
+\   'rust': ['rustfmt']
 \}
 
 
@@ -242,6 +260,7 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType yml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWritePre <buffer> %s/\s\+$//e
 
+let g:vim_jsx_pretty_colorful_config = 1
 let g:delimitMate_expand_cr = 1
 let g:rainbow_active = 1
 " Use coc built from source
@@ -254,7 +273,6 @@ if has("termguicolors")     " set true colors
     set termguicolors
 endif
 
-let g:vim_jsx_pretty_colorful_config = 1
 set background=dark
 let g:gruvbox_contrast_dark='medium'
 let g:gruvbox_italic=1

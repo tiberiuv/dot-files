@@ -51,15 +51,10 @@ colors:
     cursor: '0xffffff'
 
   primary:
-    # hard contrast
-    # background: '#1d2021'
-
     # medium contrast
     background: '#282828'
-
-    # soft contrast:
-    # background: '#32302f'
-
+    # hard contrast - background: '#1d2021'
+    # soft contrast - background: '#32302f'
     foreground: '#ebdbb2'
 
   # Normal colors
