@@ -15,7 +15,6 @@ Plug 'terryma/vim-smooth-scroll'
 Plug 'mhinz/vim-signify'
 Plug 'zivyangll/git-blame.vim'
 Plug 'janko-m/vim-test'
-Plug 'wakatime/vim-wakatime'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'Raimondi/delimitMate'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -30,7 +29,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
 Plug 'hail2u/vim-css3-syntax'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'wavded/vim-stylus'
 Plug 'arzg/vim-rust-syntax-ext', {'for': 'rust'}
 
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'

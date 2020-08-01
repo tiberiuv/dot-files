@@ -25,37 +25,24 @@ export SPARK_HOME="/usr/local/Cellar/apache-spark/2.4.4/libexec"
 export GOROOT="/usr/local/Cellar/go/1.11.1"
 export GOPATH="$HOME/go"
 export PYENV_ROOT=$(pyenv root)
-#export TERM=xterm-256color
 
 export FZF_BASE="/Users/tiberiusimionvoicu/.config/nvim/plugged/fzf"
 
 export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH="$PATH:$N_PREFIX/bin"
-# ------------------------------------------------------------ #
-# Eval
-# ------------------------------------------------------------ #
-#eval $(thefuck --alias)
-#eval "$(pyenv init - --no-rehash)"
-
-# ------------------------------------------------------------ #
-
-
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/tiberiusimionvoicu/.oh-my-zsh"
-
-#ZSH_THEME="awesomepanda"
 
 COMPLETION_WAITING_DOTS=true
 DISABLE_MAGIC_FUNCTIONS=true
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
-plugins=(
-  git
-  docker
-)
-
-source $ZSH/oh-my-zsh.sh
+# ------------------------------------------------------------ #
+# Without the bindkey alt+right/left is broken it tmux
+# ------------------------------------------------------------ #
+bindkey -e
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
+# ------------------------------------------------------------ #
 
 # ------------------------------------------------------------ #
 # Work
@@ -65,20 +52,9 @@ export VAULT_ADDR=https://vault.blockops.co
 # ------------------------------------------------------------ #
 # FZF
 # ------------------------------------------------------------ #
-#export FZF_COMPLETION_TRIGGER='**'
-#export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages'
-#export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
-# Using fzf as the selector interface for ripgrep
 export FZF_COMPLETION_TRIGGER='**'
+export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-# Use ripgrep as the only filter when searching
-# this way fzf is just an interactive selector interface
-RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-INITIAL_QUERY="foo"
-FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY' || true" \
-  fzf --bind "change:reload:$RG_PREFIX {q} || true" \
-      --ansi --phony --query "$INITIAL_QUERY"
 
 _fzf_compgen_path() {
   rg --smart-case --files --hidden --no-messages ${1}
@@ -92,12 +68,7 @@ _fzf_compgen_dir() {
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # ------------------------------------------------------------ #
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
-else
-  export EDITOR='nvim'
-fi
+export EDITOR='nvim'
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"

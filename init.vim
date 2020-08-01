@@ -18,7 +18,6 @@ set backspace=indent,eol,start
 set number
 set cursorline
 set wildmenu
-set lazyredraw
 set autochdir
 " Display row and column number when last closed file
 set laststatus=2
@@ -31,7 +30,9 @@ set ttimeoutlen=50
 set redrawtime=10000
 set autoread
 set relativenumber
-set re=0
+set re=1
+set ttyfast
+set lazyredraw
 
 " Some servers have issues with backup files
 set nobackup
@@ -82,19 +83,6 @@ augroup END
 
 
 " -------------------------------------
-" FZF
-" Use ripgrep as the only filter when searching
-" this way fzf is just an interactive selector interface
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
-command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
-
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " Use ctrl-p/f for search using fzf
 nnoremap <silent> <C-p> :Files<CR>
@@ -236,21 +224,21 @@ let g:ale_linters = {
 \   'markdown': ['mdl', 'writegood'],
 \   'python': ['flake8'],
 \   'javascript': ['eslint'],
-\   'typescript': ['eslint']
+\   'typescript': ['eslint'],
 \}
 
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'json': ['prettier'],
 \   'yaml': ['prettier'],
-\   'javascript': ['pretier'],
+\   'javascript': ['prettier'],
+\   'typescript': ['prettier'],
 \   'python': ['black'],
-\   'rust': ['rustfmt']
+\   'rust': ['rustfmt'],
 \}
 
 
 " run ale_fixers and save
-nnoremap <Leader>f :<C-u>ALEFix<CR> \| :w<CR>
 " -------------------------------------
 
 autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
@@ -259,6 +247,8 @@ autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType yml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWritePre <buffer> %s/\s\+$//e
+
+nnoremap <Leader>f :<C-u>ALEFix<CR> \| :w<CR>
 
 let g:vim_jsx_pretty_colorful_config = 1
 let g:delimitMate_expand_cr = 1
