@@ -1,10 +1,67 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# ------------------------------------------------------------ #
+# Zinit install chunk
+# ------------------------------------------------------------ #
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+# ------------------------------------------------------------ #
+# THEME
+# ------------------------------------------------------------ #
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+POWERLEVEL10K_MODE="nerfont-complete"
+setopt promptsubst
+# ------------------------------------------------------------ #
+# PLUGINS
+# ------------------------------------------------------------ #
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-bin-gem-node \
+    zinit-zsh/z-a-submods \
+    zdharma/declare-zsh
+
+zinit wait"0a" lucid light-mode for \
+  atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
+zinit wait lucid light-mode for \
+  blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions \
+  atinit"zicompinit; zicdreplay" zdharma/fast-syntax-highlighting
+
+zinit wait lucid light-mode for zsh-users/zsh-history-substring-search
+
+zinit wait lucid for \
+  OMZL::git.zsh \
+  atload"unalias grv" OMZP::git
+
+
+zstyle ':completion:*' menu select # select completions with arrow keys
+zstyle ':completion:*' group-name '' # group results by category
+zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+
+# In the line editor, number of matches to show before asking permission
+LISTMAX=9999
+
+zinit wait lucid light-mode for \
+  OMZ::plugins/thefuck/thefuck.plugin.zsh \
+
+# ------------------------------------------------------------ #
 export GPG_TTY=$(tty)
 # Set Path
 # ------------------------------------------------------------ #
@@ -19,54 +76,78 @@ export PATH="$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex"
 # ------------------------------------------------------------ #
 # Env vars
 # ------------------------------------------------------------ #
+export LANG="en_US.UTF-8"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-13.0.2.jdk/Contents/Home"
 export SCALA_HOME="/usr/local/opt/scala/idea"
-export SPARK_HOME="/usr/local/Cellar/apache-spark/2.4.4/libexec"
+export SPARK_HOME="/usr/local/Cellar/apache-spark/3.0.0/libexec"
+export PYSPARK_PYTHON=python3
 export GOROOT="/usr/local/Cellar/go/1.11.1"
 export GOPATH="$HOME/go"
 export PYENV_ROOT=$(pyenv root)
-
 export FZF_BASE="/Users/tiberiusimionvoicu/.config/nvim/plugged/fzf"
-
 export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH="$PATH:$N_PREFIX/bin"
-
-COMPLETION_WAITING_DOTS=true
-DISABLE_MAGIC_FUNCTIONS=true
-export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-
 # ------------------------------------------------------------ #
 # Without the bindkey alt+right/left is broken it tmux
 # ------------------------------------------------------------ #
 bindkey -e
-bindkey '^[[1;3C' forward-word
-bindkey '^[[1;3D' backward-word
-# ------------------------------------------------------------ #
+bindkey '^[[1;9C' forward-word
+bindkey '^[[1;9D' backward-word
 
+backward-kill-dir () {
+    local WORDCHARS=${WORDCHARS/\/}
+    zle backward-kill-word
+}
+zle -N backward-kill-dir
+bindkey '^[^?' backward-kill-dir
 # ------------------------------------------------------------ #
-# Work
-# ------------------------------------------------------------ #
-alias build_server="ssh build@build.passfortdev.com"
-export VAULT_ADDR=https://vault.blockops.co
+COMPLETION_WAITING_DOTS=true
+DISABLE_MAGIC_FUNCTIONS=true
 # ------------------------------------------------------------ #
 # FZF
 # ------------------------------------------------------------ #
 export FZF_COMPLETION_TRIGGER='**'
-export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages'
+export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages --glob "!.git" --glob "!node_module/*" --glob "!*.lock"'
+
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
 
 _fzf_compgen_path() {
-  rg --smart-case --files --hidden --no-messages ${1}
+  rg --smart-case --files --hidden --no-messages --glob "!.git" --glob "!node_module/*" --glob "!*.lock" ${1}
 }
 
 _fzf_compgen_dir() {
-  rg --smart-case --files --hidden --no-messages ${1}
+  rg --smart-case --files --hidden --no-messages --glob "!.git" --glob "!node_module/*" --glob "!*.lock" ${1}
 
 }
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # ------------------------------------------------------------ #
+
+setopt AUTO_CD              # Change directory without cd
+setopt AUTO_PUSHD           # Make cd push each old directory onto the stack
+setopt no_beep
+unsetopt LIST_BEEP          # Don't beep on an ambiguous completion
+setopt auto_menu            # Automatically use menu completion
+setopt auto_list            # Automatically List Choices On Ambiguous Completion.
+setopt always_to_end        # Vove cursor to end if word had one match
+setopt complete_in_word     # Complete From Both Ends Of A Word.
+
+HISTFILE=${HOME}/.zsh_history
+HISTSIZE=120000             # Larger than $SAVEHIST for HIST_EXPIRE_DUPS_FIRST to work
+SAVEHIST=100000
+
+setopt EXTENDED_HISTORY         # Save time stamps and durations
+setopt HIST_EXPIRE_DUPS_FIRST   # Expire duplicates first
+setopt HIST_IGNORE_DUPS         # Do not enter 2 consecutive duplicates into history
+setopt HIST_IGNORE_SPACE        # Ignore command lines with leading spaces
+setopt HIST_VERIFY              # Reload results of history expansion before executing
+setopt INC_APPEND_HISTORY       # Constantly update $HISTFILE
+setopt SHARE_HISTORY            # Constantly share history between shell instances
+setopt path_dirs                # Perform Path Search Even On Command Names With Slashes.
+setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A Trailing Slash.
 
 export EDITOR='nvim'
 
@@ -83,48 +164,19 @@ if [ -f '/Users/tiberiusimionvoicu/google-cloud-sdk/completion.zsh.inc' ]; then 
 # ------------------------------------------------------------ #
 alias ssh='TERM=xterm-256color ssh'
 if type nvim > /dev/null 2>&1; then
-  alias vim='nvim'
+  alias vim=nvim
 fi
 if type exa >/dev/null 2>&1; then
   alias ls=exa
 fi
+if type bat >/dev/null 2>&1; then
+  alias cat=bat
+fi
+if type procs >/dev/null 2>&1; then
+  alias ps=procs
+fi
+
 # ------------------------------------------------------------ #
-source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
-
-
-# autosuggestions, trigger precmd hook upon load
-zinit ice wait lucid atload'_zsh_autosuggest_start'
-zinit light zsh-users/zsh-autosuggestions
-export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=10
-
-# Tab completions
-zinit ice wait lucid blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
-
-# Syntax highlighting
-zinit ice wait lucid atinit'zpcompinit; zpcdreplay'
-zinit light zdharma/fast-syntax-highlighting
-### End of Zinit's installer chunk

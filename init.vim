@@ -25,14 +25,16 @@ set showmatch
 set smarttab
 set wrap "Wrap lines
 set tm=500
-set updatetime=300
+set updatetime=200
 set ttimeoutlen=50
 set redrawtime=10000
 set autoread
 set relativenumber
-set re=1
+set synmaxcol=200
 set ttyfast
 set lazyredraw
+set noshowcmd
+set noruler
 
 " Some servers have issues with backup files
 set nobackup
@@ -60,12 +62,14 @@ set undofile
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 set signcolumn=yes  " Always show the signcolumn
+set colorcolumn=88
 
 let g:loaded_sql_completion = 0
 let g:omni_sql_no_default_maps = 1
 let g:rooter_patterns = ['.git', '.git/']
+let g:ale_disable_lsp = 1
 
-" Load plugins
+ "Load plugins
 source ~/.config/nvim/plugins.vim
 " -------------------------------------
 
@@ -193,7 +197,6 @@ map <C-n> :call NERDTreeToggleInCurDir()<CR>
 augroup nerdtree
     autocmd!
     autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 augroup END
 
 let g:NERDTreeLimitedSyntax = 1
@@ -211,12 +214,13 @@ let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 0
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
-let g:ale_virtualenv_dir_names = ['neovim3']
+
+let g:ale_virtualenv_dir_names = ['pynvim']
 let g:airline#extensions#ale#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:WebDevIconsOS = 'Darwin'
 
-let g:python3_host_prog = '~/neovim3/bin/python'
+let g:python3_host_prog = '~/pynvim/bin/python'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 let test#python#runner = 'pyunit'
 
@@ -237,9 +241,13 @@ let g:ale_fixers = {
 \   'rust': ['rustfmt'],
 \}
 
+let g:ale_sign_priority = 100
+let g:ale_lint_on_text_changed = 0
+let g:ale_sign_column_always = 1
 
 " run ale_fixers and save
 " -------------------------------------
+nnoremap <Leader>f :<C-u>ALEFix<CR> \| :w<CR>
 
 autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
 autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
@@ -248,7 +256,6 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType yml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWritePre <buffer> %s/\s\+$//e
 
-nnoremap <Leader>f :<C-u>ALEFix<CR> \| :w<CR>
 
 let g:vim_jsx_pretty_colorful_config = 1
 let g:delimitMate_expand_cr = 1

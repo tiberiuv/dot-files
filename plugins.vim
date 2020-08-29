@@ -31,6 +31,7 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
 Plug 'hail2u/vim-css3-syntax'
 Plug 'wavded/vim-stylus'
 Plug 'arzg/vim-rust-syntax-ext', {'for': 'rust'}
+Plug 'cespare/vim-toml'
 
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
@@ -39,7 +40,6 @@ call plug#end()
 call coc#add_extension(
 \ 'coc-tsserver', 'coc-flow', 'coc-yaml',
 \ 'coc-css', 'coc-json', 'coc-python',
-\ 'coc-rust-analyzer', 'coc-highlight',
-\ 'coc-texlab', 'coc-styled-components',
-\ 'coc-snippets',
+\ 'coc-rust-analyzer', 'coc-texlab',
+\ 'coc-styled-components', 'coc-snippets',
 \ )

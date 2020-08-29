@@ -1,5 +1,5 @@
 env:
-  TERM: xterm-256color
+  TERM: alacritty
 
 font:
   normal:
@@ -39,6 +39,12 @@ scrolling:
   history: 10000
   multiplier: 3
 
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+
+  # When set to `true`, selected text will be copied to the primary clipboard.
+  save_to_clipboard: false
+
 live_config_reload: true
 background_opacity: 1
 custom_cursor_colors: true
@@ -49,6 +55,8 @@ colors:
   cursor:
     text: '0x000000'
     cursor: '0xffffff'
+
+    unfocused_hollow: true
 
   primary:
     # medium contrast
