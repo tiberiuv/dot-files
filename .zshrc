@@ -16,6 +16,7 @@ fi
 source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
+
 # ------------------------------------------------------------ #
 # THEME
 # ------------------------------------------------------------ #
@@ -61,6 +62,23 @@ LISTMAX=9999
 zinit wait lucid light-mode for \
   OMZ::plugins/thefuck/thefuck.plugin.zsh \
 
+# Setup GitHub HTTPS credentials.
+if git credential-osxkeychain 2>&1 | grep $Q "git.credential-osxkeychain" > /dev/null
+then
+  if [ "$(git config --global credential.helper)" != "osxkeychain" ]
+  then
+    git config --global credential.helper osxkeychain
+  fi
+
+  if [ -n "$STRAP_GITHUB_USER" ] && [ -n "$STRAP_GITHUB_TOKEN" ]
+  then
+    printf "protocol=https\\nhost=github.com\\n" | git credential-osxkeychain erase
+    printf "protocol=https\\nhost=github.com\\nusername=%s\\npassword=%s\\n" \
+          "$STRAP_GITHUB_USER" "$STRAP_GITHUB_TOKEN" \
+          | git credential-osxkeychain store
+  fi
+fi
+
 # ------------------------------------------------------------ #
 export GPG_TTY=$(tty)
 # Set Path
@@ -79,7 +97,7 @@ export PATH="$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex"
 export LANG="en_US.UTF-8"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-13.0.2.jdk/Contents/Home"
 export SCALA_HOME="/usr/local/opt/scala/idea"
-export SPARK_HOME="/usr/local/Cellar/apache-spark/3.0.0/libexec"
+export SPARK_HOME="/usr/local/Cellar/apache-spark/3.0.1/libexec"
 export PYSPARK_PYTHON=python3
 export GOROOT="/usr/local/Cellar/go/1.11.1"
 export GOPATH="$HOME/go"
@@ -95,12 +113,7 @@ bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
 
-backward-kill-dir () {
-    local WORDCHARS=${WORDCHARS/\/}
-    zle backward-kill-word
-}
-zle -N backward-kill-dir
-bindkey '^[^?' backward-kill-dir
+WORDCHARS='*?[]~=&;!#$%^(){}<>'
 # ------------------------------------------------------------ #
 COMPLETION_WAITING_DOTS=true
 DISABLE_MAGIC_FUNCTIONS=true
@@ -108,18 +121,17 @@ DISABLE_MAGIC_FUNCTIONS=true
 # FZF
 # ------------------------------------------------------------ #
 export FZF_COMPLETION_TRIGGER='**'
-export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages --glob "!.git" --glob "!node_module/*" --glob "!*.lock"'
+export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages --glob "!{node_modules,.git,*.lock,target}"'
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
 
 _fzf_compgen_path() {
-  rg --smart-case --files --hidden --no-messages --glob "!.git" --glob "!node_module/*" --glob "!*.lock" ${1}
+  rg --smart-case --files --hidden --no-messages --glob "!{node_modules,.git,*.lock,target}" ${1}
 }
 
 _fzf_compgen_dir() {
-  rg --smart-case --files --hidden --no-messages --glob "!.git" --glob "!node_module/*" --glob "!*.lock" ${1}
-
+  rg --smart-case --files --hidden --no-messages --glob "!{node_modules,.git,*.lock,target}" ${1}
 }
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -174,6 +186,9 @@ if type bat >/dev/null 2>&1; then
 fi
 if type procs >/dev/null 2>&1; then
   alias ps=procs
+fi
+if type htop >/dev/null 2>&1; then
+  alias top=htop
 fi
 
 # ------------------------------------------------------------ #

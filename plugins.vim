@@ -16,30 +16,30 @@ Plug 'mhinz/vim-signify'
 Plug 'zivyangll/git-blame.vim'
 Plug 'janko-m/vim-test'
 Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'Raimondi/delimitMate'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'puremourning/vimspector'
 Plug 'gruvbox-community/gruvbox'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'RishabhRD/popfix'
+Plug 'RishabhRD/nvim-lsputils'
+Plug 'Raimondi/delimitMate'
 
 " Languages and syntax highlighting
+Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'dense-analysis/ale'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'yuezk/vim-js'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
-Plug 'hail2u/vim-css3-syntax'
-Plug 'wavded/vim-stylus'
-Plug 'arzg/vim-rust-syntax-ext', {'for': 'rust'}
-Plug 'cespare/vim-toml'
-
+Plug 'chr4/nginx.vim'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
-call plug#end()
 
-call coc#add_extension(
-\ 'coc-tsserver', 'coc-flow', 'coc-yaml',
-\ 'coc-css', 'coc-json', 'coc-python',
-\ 'coc-rust-analyzer', 'coc-texlab',
-\ 'coc-styled-components', 'coc-snippets',
-\ )
+" LSP & Snippets
+Plug 'neovim/nvim-lsp'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
+Plug 'nvim-lua/diagnostic-nvim'
+Plug 'nvim-lua/lsp-status.nvim'
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+
+call plug#end()
