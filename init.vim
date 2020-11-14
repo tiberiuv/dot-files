@@ -21,9 +21,9 @@ set laststatus=2
 set showmatch
 set smarttab
 set wrap "Wrap lines
-set tm=500
-set updatetime=200
+set timeoutlen=500
 set ttimeoutlen=50
+set updatetime=200
 set redrawtime=10000
 set autoread
 set relativenumber
@@ -56,13 +56,10 @@ set undodir=~/.cache/vim/undo//
 set undofile
 
 " Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
+"set shortmess+=c
 set signcolumn=yes  " Always show the signcolumn
 set colorcolumn=100
 
-let g:loaded_sql_completion = 0
-let g:omni_sql_no_default_maps = 1
-let g:ale_disable_lsp = 1
 let g:cursorhold_updatetime = 100
 
 let g:rooter_patterns = ['.git', '.git/']
@@ -89,7 +86,7 @@ nnoremap <silent> <C-f> :Rg<CR>
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case --glob "!{node_modules,.git,*.lock,target}" -- '.shellescape(<q-args>), 1,
+  \   'rg --column --line-number --no-heading --color=always --smart-case --glob "!{node_modules,.git,*.lock,target,flow-typed,dist}" -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
@@ -102,21 +99,11 @@ nnoremap Q <nop>
 nmap <S-Enter> O<Esc>
 nmap <CR> o<Esc>
 
-" Next/previous diagnostics
-" nmap <silent> [g <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <silent> [g :ALENext<cr>
-nmap <silent> ]g :ALEPrevious<cr>
-
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
-
- fun! SetupCommandAlias(from, to)
-   exec 'cnoreabbrev <expr> '.a:from
-         \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
-         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
- endfun
+fun! SetupCommandAlias(from, to)
+    exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
 
 call SetupCommandAlias("W", "w")
 call SetupCommandAlias("Q", "q")
@@ -157,6 +144,8 @@ let g:WebDevIconsOS = 'Darwin'
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
+let g:NERDTreeHighlightCursorline = 0
+
 
 " -------------------------------------
 " ALE
@@ -167,15 +156,16 @@ let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 0
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
+let g:ale_rust_rustfmt_executable="rustfmt"
+let g:ale_python_flake8_args="--max-line-length=100"
+
+let g:ale_sign_priority = 100
+let g:ale_lint_on_text_changed = 0
+let g:ale_sign_column_always = 1
+let g:ale_python_auto_pipenv = 1
+let g:ale_disable_lsp = 1
 
 let g:ale_virtualenv_dir_names = ['pynvim']
-let g:airline#extensions#ale#enabled = 1
-let g:airline_powerline_fonts = 1
-let g:WebDevIconsOS = 'Darwin'
-
-let g:python3_host_prog = '~/pynvim/bin/python'
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-let test#python#runner = 'pyunit'
 
 let g:ale_linters = {
 \   'markdown': ['mdl', 'writegood'],
@@ -194,16 +184,11 @@ let g:ale_fixers = {
 \   'rust': ['rustfmt'],
 \}
 
-let g:ale_python_flake8_args="--max-line-length=100"
-
-let g:ale_sign_priority = 100
-let g:ale_lint_on_text_changed = 0
-let g:ale_sign_column_always = 1
-let g:ale_python_auto_pipenv = 1
-
+" Next/previous diagnostics
+nmap <silent> [g :ALENext<cr>
+nmap <silent> ]g :ALEPrevious<cr>
 
 " run ale_fixers and save
-" -------------------------------------
 nnoremap <Leader>f :<C-u>ALEFix<CR> \| :w<CR>
 
 autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
@@ -216,6 +201,13 @@ autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWrit
 let g:vim_jsx_pretty_colorful_config = 1
 let g:delimitMate_expand_cr = 1
 let g:rainbow_active = 1
+let g:airline_powerline_fonts = 1
+let g:WebDevIconsOS = 'Darwin'
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#nvimlsp#enabled = 1
+let g:python3_host_prog = '~/pynvim/bin/python'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+let test#python#runner = 'pyunit'
 
 " Remove Highlight on esc
 nmap <silent><ESC> :noh<CR>
@@ -245,7 +237,9 @@ silent colorscheme gruvbox
       "jsdoc",
       "javascript",
       "css",
-      "markdown",
+      "yaml",
+      "toml",
+      "bash",
     },
     highlight = { enable = true },
     incremental_selection = { enable = true },
@@ -264,10 +258,7 @@ EOF
   vim.lsp.set_log_level("debug")
 
   local on_attach = function(_, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-    require'diagnostic'.on_attach()
     require'completion'.on_attach()
-
     -- Mappings.
     local opts = { noremap=true, silent=true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -281,25 +272,56 @@ EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.util.show_line_diagnostics()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   end
 
-  local servers = {'rust_analyzer', 'vimls', 'jsonls', 'html', 'flow'}
+  configs.pyright = {
+    default_config = {
+      cmd = {"pyright-langserver", "--stdio"};
+      filetypes = {"python"};
+      root_dir = nvim_lsp.util.root_pattern(".git", "setup.py",  "setup.cfg", "pyproject.toml", "requirements.txt");
+      settings = {
+        analysis = { autoSearchPaths= true; };
+        pyright = { useLibraryCodeForTypes = true; };
+      };
+      -- The following before_init function can be removed once https://github.com/neovim/neovim/pull/12638 is merged
+      before_init = function(initialize_params)
+        initialize_params['workspaceFolders'] = {{
+          name = 'workspace',
+          uri = initialize_params['rootUri']
+        }}
+      end
+      };
+  }
+
+  nvim_lsp['tsserver'].setup{
+    on_attach=on_attach,
+    filetypes={'typescript', 'typescriptreact', 'typescript.tsx' }
+  }
+
+  nvim_lsp['clangd'].setup{
+    on_attach=on_attach,
+    filetype={'c', 'ino', 'cpp', '.ino'}
+  }
+
+  local servers = {
+    'rust_analyzer',
+    'vimls',
+    'jsonls',
+    'html',
+    'flow',
+    'cssls',
+    'terraformls',
+    'dockerls',
+    'texlab',
+    'yamlls',
+    'pyright',
+  }
   for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
       on_attach = on_attach,
     }
   end
-
-  nvim_lsp['jedi_language_server'].setup{
-    on_attach=on_attach,
-    cmd={"/Users/tiberiusimionvoicu/pynvim/bin/jedi-language-server"}
-  }
-
-  nvim_lsp['tsserver'].setup{
-      on_attach=on_attach,
-      filetypes={'typescript', 'typescriptreact', 'typescript.tsx' }
-  }
 
   vim.lsp.callbacks['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
   vim.lsp.callbacks['textDocument/references'] = require'lsputil.locations'.references_handler
@@ -309,7 +331,50 @@ EOF
   vim.lsp.callbacks['textDocument/implementation'] = require'lsputil.locations'.implementation_handler
   vim.lsp.callbacks['textDocument/documentSymbol'] = require'lsputil.symbols'.document_handler
   vim.lsp.callbacks['workspace/symbol'] = require'lsputil.symbols'.workspace_handler
+
+  vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, {
+      underline = true,
+      virtual_text = true,
+      signs = true,
+      update_in_insert = false,
+    }
+  )
 EOF
+
+" vimrc
+let g:completion_chain_complete_list = {
+    \ 'default': [
+    \    {'complete_items': ['lsp', 'snippet', 'tabnine' ]},
+    \    {'mode': '<c-p>'},
+    \    {'mode': '<c-n>'}
+    \]
+\}
+" tabnine priority (default: 0)
+" Defaults to lowest priority
+let g:completion_tabnine_priority = 0
+
+" tabnine binary path (default: expand("<sfile>:p:h:h") .. "/binaries/TabNine_Linux")
+"let g:completion_tabnine_tabnine_path = ""
+
+" max tabnine completion options(default: 7)
+let g:completion_tabnine_max_num_results=7
+
+" sort by tabnine score (default: 0)
+let g:completion_tabnine_sort_by_details=1
+
+" max line for tabnine input(default: 1000)
+" from current line -1000 ~ +1000 lines is passed as input
+let g:completion_tabnine_max_lines=1000
+
+" Statusline
+"function! LspStatus() abort
+  "if luaeval('#vim.lsp.buf_get_clients() > 0')
+    "return luaeval("require('lsp-status').status()")
+  "endif
+
+  "return ''
+"endfunction
 
 " Use <Tab> and <S-Tab> to navigate through popup menu
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -338,16 +403,14 @@ imap <expr> <cr>  pumvisible() ? complete_info()["selected"] != "-1" ?
                  \ "\<Plug>(completion_confirm_completion)"  : "\<c-e>\<CR>" :  "\<CR>"
 
 let g:completion_enable_snippet = 'UltiSnips'
-let g:diagnostic_enable_virtual_text = 1
-let g:diagnostic_insert_delay = 1
+
+augroup CompletionTriggerCharacter
+    autocmd!
+    autocmd BufEnter * let g:completion_trigger_character = ['.']
+    autocmd BufEnter *.c,*.cpp,*.rs,*.ino let g:completion_trigger_character = ['.', '::']
+augroup end
 
 sign define LspDiagnosticsErrorSign text=✖
 sign define LspDiagnosticsWarningSign text=⚠
 sign define LspDiagnosticsInformationSign text=ℹ
 sign define LspDiagnosticsHintSign text=➤
-
-augroup CompletionTriggerCharacter
-    autocmd!
-    autocmd BufEnter * let g:completion_trigger_character = ['.']
-    autocmd BufEnter *.c,*.cpp,*.rs let g:completion_trigger_character = ['.', '::']
-augroup end

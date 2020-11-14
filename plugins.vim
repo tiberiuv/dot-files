@@ -18,11 +18,9 @@ Plug 'janko-m/vim-test'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'puremourning/vimspector'
-Plug 'gruvbox-community/gruvbox'
 Plug 'antoinemadec/FixCursorHold.nvim'
-Plug 'RishabhRD/popfix'
-Plug 'RishabhRD/nvim-lsputils'
 Plug 'Raimondi/delimitMate'
+Plug 'gruvbox-community/gruvbox'
 
 " Languages and syntax highlighting
 Plug 'nvim-treesitter/nvim-treesitter'
@@ -30,16 +28,17 @@ Plug 'dense-analysis/ale'
 Plug 'chr4/nginx.vim'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
+Plug 'sheerun/vim-polyglot'
 
-" LSP & Snippets
+" LSP & Snippets & Completion
 Plug 'neovim/nvim-lsp'
 Plug 'neovim/nvim-lspconfig'
+"Plug 'nvim-lua/lsp-status.nvim'
 Plug 'nvim-lua/completion-nvim'
-Plug 'nvim-lua/diagnostic-nvim'
-Plug 'nvim-lua/lsp-status.nvim'
-
+Plug 'aca/completion-tabnine', { 'do': './install.sh' }
+Plug 'RishabhRD/popfix'
+Plug 'RishabhRD/nvim-lsputils'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-
 
 call plug#end()
