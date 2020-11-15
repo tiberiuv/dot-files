@@ -143,6 +143,8 @@ zinit light-mode for \
     zinit-zsh/z-a-submods \
     zdharma/declare-zsh
 
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
 zinit wait"0a" lucid light-mode for \
   atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
@@ -161,6 +163,24 @@ zinit wait lucid for \
   OMZL::git.zsh \
   atload"unalias grv" OMZP::git
 
+# Rust analyzer
+zinit ice as"program" atclone"cargo +nightly xtask install --server" \
+    atpull"%atclone"
+zinit light rust-analyzer/rust-analyzer
+
+# Alacritty
+zinit ice as"program" atclone"make app; cp -r target/release/osx/Alacritty.app /Applications/" \
+    atpull"%atclone"
+zinit light alacritty/alacritty
+
+# Neovim
+zinit ice as"program" atclone"make CMAKE_BUILD_TYPE=RelWithDebInfo; sudo make install
+" \
+    atpull"%atclone"
+zinit light neovim/neovim
+
+# Install rustup cargo rust etc
+zinit light zinit-zsh/z-a-rust
 
 #zstyle ':completion:*' menu select # select completions with arrow keys
 #zstyle ':completion:*' group-name '' # group results by category

@@ -33,7 +33,7 @@ Plug 'sheerun/vim-polyglot'
 " LSP & Snippets & Completion
 Plug 'neovim/nvim-lsp'
 Plug 'neovim/nvim-lspconfig'
-"Plug 'nvim-lua/lsp-status.nvim'
+Plug 'nvim-lua/lsp-status.nvim'
 Plug 'nvim-lua/completion-nvim'
 Plug 'aca/completion-tabnine', { 'do': './install.sh' }
 Plug 'RishabhRD/popfix'
