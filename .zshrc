@@ -26,7 +26,7 @@ export PYSPARK_PYTHON=python3
 export GOROOT="/usr/local/Cellar/go/1.11.1"
 export GOPATH="$HOME/go"
 export PYENV_ROOT=$(pyenv root)
-export FZF_BASE="/Users/tiberiusimionvoicu/.config/nvim/plugged/fzf"
+export FZF_BASE="/Users/tiberiusimionvoicu/.fzf"
 export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH="$PATH:$N_PREFIX/bin"
@@ -107,7 +107,7 @@ fi
 if type htop >/dev/null 2>&1; then
   alias top=htop
 fi
-
+alias ps=/bin/ps
 # ------------------------------------------------------------ #
 #
 # ------------------------------------------------------------ #
@@ -174,13 +174,17 @@ zinit ice as"program" atclone"make app; cp -r target/release/osx/Alacritty.app /
 zinit light alacritty/alacritty
 
 # Neovim
-zinit ice as"program" atclone"make CMAKE_BUILD_TYPE=RelWithDebInfo; sudo make install
+zinit ice as"program" atclone"make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++; sudo make install
 " \
     atpull"%atclone"
 zinit light neovim/neovim
 
 # Install rustup cargo rust etc
 zinit light zinit-zsh/z-a-rust
+
+# Install exa
+zinit ice rustup cargo'exa;bat;htop;procs;rg' as"command" pick"bin/(exa|bat|htop|procs|rg)"
+zinit load zdharma/null
 
 #zstyle ':completion:*' menu select # select completions with arrow keys
 #zstyle ':completion:*' group-name '' # group results by category

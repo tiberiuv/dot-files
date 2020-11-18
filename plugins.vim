@@ -31,10 +31,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'sheerun/vim-polyglot'
 
 " LSP & Snippets & Completion
-Plug 'neovim/nvim-lsp'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/lsp-status.nvim'
 Plug 'nvim-lua/completion-nvim'
+Plug 'nvim-treesitter/completion-treesitter'
 Plug 'aca/completion-tabnine', { 'do': './install.sh' }
 Plug 'RishabhRD/popfix'
 Plug 'RishabhRD/nvim-lsputils'

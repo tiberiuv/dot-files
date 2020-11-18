@@ -1,1 +1,1 @@
-source ./install_scripts/osx/setup.sh
+sh ./install_scripts/osx/setup.sh

@@ -253,8 +253,8 @@ EOF
 
 " LSP settings
 :lua << EOF
-  local nvim_lsp = require('nvim_lsp')
-  local configs = require'nvim_lsp/configs'
+  local nvim_lsp = require('lspconfig')
+  local configs = require('lspconfig/configs')
   vim.lsp.set_log_level("debug")
 
   local on_attach = function(_, bufnr)
@@ -343,13 +343,13 @@ EOF
 EOF
 
 " vimrc
-let g:completion_chain_complete_list = {
-    \ 'default': [
-    \    {'complete_items': ['lsp', 'snippet', 'tabnine' ]},
-    \    {'mode': '<c-p>'},
-    \    {'mode': '<c-n>'}
-    \]
-\}
+"let g:completion_chain_complete_list = {
+    "\ 'default': [
+    "\    {'complete_items': ['lsp', 'snippet', 'tabnine' ]},
+    "\    {'mode': '<c-p>'},
+    "\    {'mode': '<c-n>'}
+    "\]
+"\}
 " tabnine priority (default: 0)
 " Defaults to lowest priority
 let g:completion_tabnine_priority = 0
