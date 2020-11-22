@@ -55,3 +55,8 @@ brew install minikube \
     postgres \
 
 brew link --overwrite gnupg
+
+yarn global add  \
+    lua-fmt
+
+luarocks install luacheck

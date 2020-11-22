@@ -1,3 +1,4 @@
+#!/bin/zsh
 # Update App Store apps
 sudo softwareupdate -i -a
 

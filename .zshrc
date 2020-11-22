@@ -13,6 +13,7 @@ export PATH="$PATH:/Applications"
 export PATH="$PATH:/usr/local/opt/go/libexec/bin"
 export PATH="$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$PATH:/usr/local/opt/llvm/bin"
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -148,8 +149,6 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit wait"0a" lucid light-mode for \
   atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-
-#zicompinit; zicdreplay
 
 zinit light-mode for Aloxaf/fzf-tab
 
