@@ -21,24 +21,25 @@ Plug 'puremourning/vimspector'
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'Raimondi/delimitMate'
 Plug 'gruvbox-community/gruvbox'
+Plug 'nvim-lua/lsp_extensions.nvim'
+"Plug 'Yggdroot/indentLine'
 
 " Languages and syntax highlighting
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
 Plug 'dense-analysis/ale'
 Plug 'chr4/nginx.vim'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
-Plug 'sheerun/vim-polyglot'
+Plug 'wavded/vim-stylus'
 
 " LSP & Snippets & Completion
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/lsp-status.nvim'
 Plug 'nvim-lua/completion-nvim'
-Plug 'nvim-treesitter/completion-treesitter'
-Plug 'aca/completion-tabnine', { 'do': './install.sh' }
-Plug 'RishabhRD/popfix'
+"Plug 'aca/completion-tabnine', { 'do': './install.sh' }
+Plug 'RishabhRD/popfix', { 'do': 'make'}
 Plug 'RishabhRD/nvim-lsputils'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'hrsh7th/nvim-compe'
 
 call plug#end()

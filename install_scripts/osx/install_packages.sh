@@ -1,5 +1,6 @@
 mkdir ~/.config
 mkdir ~/.config/nvim
+mkdir ~/.config/nvim/lua
 mkdir ~/.config/alacritty
 mkdir ~/.tmux
 mkdir ~/.tmux/plugins
@@ -20,9 +21,8 @@ brew cask install vlc
 brew cask install firefox-developer-edition
 brew cask install spotify
 brew cask install adoptopenjdk
-brew cask install cmake
 
-brew install minikube \
+brew install
     llvm \
     wget \
     curl \
@@ -30,8 +30,6 @@ brew install minikube \
     diff-so-fancy \
     pyenv \
     autogen \
-    install \
-    clang \
     ninja \
     libtool \
     automake \
@@ -53,10 +51,21 @@ brew install minikube \
     kubectl \
     mysql \
     postgres \
+    htop \
+    openssl \
+    readline \
+    zlib \
+    coreutils \
+    cmake \
+    icu4c \
+    harfbuzz \
+    liblcms2 \
+    lcms2
 
 brew link --overwrite gnupg
 
-yarn global add  \
-    lua-fmt
+yarn global add lua-fmt
 
 luarocks install luacheck
+
+cargo install exa bat procs ripgrep diesel_cli

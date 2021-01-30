@@ -1,0 +1,214 @@
+local chain_complete_list = {
+    default = {
+        {complete_items = {"lsp", "snippet"}}
+    }
+}
+
+require "nvim-treesitter.configs".setup {
+    -- Modules and its options go here
+    ensure_installed = {
+        "rust",
+        "python",
+        "json",
+        "jsdoc",
+        "javascript",
+        "typescript",
+        "tsx",
+        "css",
+        "yaml",
+        "toml",
+        "bash",
+        "lua",
+        "html",
+        "c",
+        "cpp",
+        "java",
+        "go"
+    },
+    highlight = {enable = true},
+    incremental_selection = {enable = true},
+    refactor = {
+        smart_rename = {enable = true},
+        navigation = {enable = true}
+    },
+    textobjects = {enable = true}
+}
+
+local nvim_lsp = require("lspconfig")
+local configs = require("lspconfig/configs")
+vim.lsp.set_log_level("debug")
+
+local on_attach = function(_, bufnr)
+    require "completion".on_attach(
+        {
+            sorting = "alphabet",
+            matching_strategy_list = {"exact", "fuzzy"},
+            chain_complete_list = chain_complete_list
+        }
+    )
+    require "lsp_extensions".inlay_hints {
+        highlight = "Comment",
+        prefix = " > ",
+        aligned = false,
+        only_current_line = false,
+        enabled = {"ChainingHint"}
+    }
+    -- Mappings.
+    local opts = {noremap = true, silent = true}
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wl", "<cmd>lua vim.lsp.buf.list_workspace_folders()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(
+        bufnr,
+        "n",
+        "<leader>e",
+        "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
+        opts
+    )
+end
+
+configs.pyright = {
+    default_config = {
+        cmd = {"pyright-langserver", "--stdio"},
+        filetypes = {"python"},
+        root_dir = nvim_lsp.util.root_pattern(
+            "Pipfile",
+            "requirements.txt",
+            ".git",
+            "setup.py",
+            "setup.cfg",
+            "pyproject.toml"
+        ),
+        settings = {
+            analysis = {autoSearchPaths = true},
+            pyright = {
+                useLibraryCodeForTypes = true,
+                venvPath = "~/.local/share/virtualenvs",
+                reportMissingImports = true
+            }
+        }
+    }
+}
+
+nvim_lsp["tsserver"].setup {
+    on_attach = on_attach,
+    filetypes = {"typescript", "typescriptreact", "typescript.tsx"}
+}
+
+nvim_lsp["clangd"].setup {
+    on_attach = on_attach,
+    filetype = {"c", "ino", "cpp", ".ino"}
+}
+
+local system_name
+if vim.fn.has("mac") == 1 then
+  system_name = "macOS"
+elseif vim.fn.has("unix") == 1 then
+  system_name = "Linux"
+elseif vim.fn.has('win32') == 1 then
+  system_name = "Windows"
+else
+  print("Unsupported system for sumneko")
+end
+
+local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
+local sumneko_binary = sumneko_root_path.."/bin/"..system_name.."/lua-language-server"
+
+nvim_lsp["sumneko_lua"].setup {
+    on_attach = on_attach,
+    cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
+    settings = {
+        Lua = {
+            runtime = {
+                -- Get the language server to recognize LuaJIT globals like `jit` and `bit`
+                version = "LuaJIT",
+                -- Setup your lua path
+                path = vim.split(package.path, ";")
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = {"vim"}
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = {
+                    [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                    [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true
+                }
+            }
+        }
+    }
+}
+
+nvim_lsp.rust_analyzer.setup {
+    on_attach = on_attach,
+    root_dir = nvim_lsp.util.root_pattern(
+      "Cargo.toml",
+      ".git"
+    ),
+    settings = {
+        ["rust-analyzer"] = {
+            procMacro = {enable = true},
+            cargo = {loadOutDirsFromCheck = true},
+            diagnostics = {
+                enable = true,
+                enableExperimental = true
+            },
+            inlayHints = {
+                enable = true,
+                parameterHints = true,
+                typeHints = true
+            },
+            checkOnSave = {command = "clippy"}
+        }
+    }
+}
+
+local servers = {
+    "vimls",
+    "jsonls",
+    "html",
+    "flow",
+    "cssls",
+    "terraformls",
+    "dockerls",
+    "texlab",
+    "yamlls",
+    "pyright"
+}
+for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+        on_attach = on_attach
+    }
+end
+
+vim.lsp.handlers["textDocument/codeAction"] = require "lsputil.codeAction".code_action_handler
+vim.lsp.handlers["textDocument/references"] = require "lsputil.locations".references_handler
+vim.lsp.handlers["textDocument/definition"] = require "lsputil.locations".definition_handler
+vim.lsp.handlers["textDocument/declaration"] = require "lsputil.locations".declaration_handler
+vim.lsp.handlers["textDocument/typeDefinition"] = require "lsputil.locations".typeDefinition_handler
+vim.lsp.handlers["textDocument/implementation"] = require "lsputil.locations".implementation_handler
+vim.lsp.handlers["textDocument/documentSymbol"] = require "lsputil.symbols".document_handler
+vim.lsp.handlers["workspace/symbol"] = require "lsputil.symbols".workspace_handler
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] =
+    vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    {
+        underline = true,
+        virtual_text = true,
+        signs = true,
+        update_in_insert = false
+    }
+)
+-- ChadTree - tree file manager
+--vim.api.nvim_set_var("chadtree_settings", { use_icons = "emoji" })
