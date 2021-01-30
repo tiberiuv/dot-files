@@ -3,42 +3,51 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # ------------------------------------------------------------ #
-export GPG_TTY=$(tty)
+# Env vars
+# ------------------------------------------------------------ #
+export LANG=en_US.UTF-8
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+export SCALA_HOME=/usr/local/opt/scala/idea
+export SPARK_HOME=/usr/local/Cellar/apache-spark@2.4.6/2.4.6/libexec
+export PYSPARK_PYTHON=python3
+export GOROOT=/usr/local/Cellar/go/1.11.1
+export GOPATH=$HOME/go
+export PYENV_ROOT=$(pyenv root)
+export FZF_BASE=/Users/tiberiusimionvoicu/.fzf
+export N_PRESERVE_NPM=1
+export N_PREFIX=$HOME/.n
+export PATH=$PATH:$N_PREFIX/bin
+export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
+
+export EDITOR=nvim
+export GPG_TTY=tty
+# ssh
+export SSH_KEY_PATH=~/.ssh/rsa_id
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
 # Set Path
 # ------------------------------------------------------------ #
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
-export PATH="$PATH:$HOME/bin"
-export PATH="$PATH:$HOME/.cargo/bin"
-export PATH="$PATH:/Applications"
-export PATH="$PATH:/usr/local/opt/go/libexec/bin"
-export PATH="$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export PATH="$PATH:/usr/local/opt/llvm/bin"
+export PATH=$PATH:$HOME/bin
+export PATH=$PATH:/Applications
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export PATH=$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex
+export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
+export PATH=$PATH:/usr/local/opt/llvm/bin
+export PATH=$PATH:$JAVA_HOME/bin
+export PATH=$HOME/.cargo/bin:$PATH
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
-# Env vars
-# ------------------------------------------------------------ #
-export LANG="en_US.UTF-8"
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-13.0.2.jdk/Contents/Home"
-export SCALA_HOME="/usr/local/opt/scala/idea"
-export SPARK_HOME="/usr/local/Cellar/apache-spark/3.0.1/libexec"
-export PYSPARK_PYTHON=python3
-export GOROOT="/usr/local/Cellar/go/1.11.1"
-export GOPATH="$HOME/go"
-export PYENV_ROOT=$(pyenv root)
-export FZF_BASE="/Users/tiberiusimionvoicu/.fzf"
-export N_PRESERVE_NPM=1
-export N_PREFIX=$HOME/.n
-export PATH="$PATH:$N_PREFIX/bin"
 # ------------------------------------------------------------ #
 # Without the bindkey alt+right/left is broken it tmux
 # ------------------------------------------------------------ #
 bindkey -e
-bindkey '^[[1;9C' forward-word
-bindkey '^[[1;9D' backward-word
+bindkey "^[[1;9C" forward-word
+bindkey "^[[1;9D" backward-word
 
-WORDCHARS='*?[]~=&;!#$%^(){}<>'
+WORDCHARS="*?[]~=&;!#$%^(){}<>"
 # ------------------------------------------------------------ #
 COMPLETION_WAITING_DOTS=true
 DISABLE_MAGIC_FUNCTIONS=true
@@ -46,7 +55,6 @@ DISABLE_MAGIC_FUNCTIONS=true
 # FZF
 # ------------------------------------------------------------ #
 export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages --glob "!{node_modules,.git,*.lock,target,dist}"'
-
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
 
@@ -61,7 +69,6 @@ _fzf_compgen_dir() {
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # ------------------------------------------------------------ #
-
 setopt AUTO_CD              # Change directory without cd
 setopt AUTO_PUSHD           # Make cd push each old directory onto the stack
 setopt no_beep
@@ -85,14 +92,8 @@ setopt SHARE_HISTORY            # Constantly share history between shell instanc
 setopt path_dirs                # Perform Path Search Even On Command Names With Slashes.
 setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A Trailing Slash.
 
-export EDITOR='nvim'
-
-# ssh
-export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Aliases
-# ------------------------------------------------------------ #
-alias ssh='TERM=xterm-256color ssh'
+# ------------------------------ Aliases ------------------------------ #
+alias ssh="TERM=xterm-256color ssh"
 if type nvim > /dev/null 2>&1; then
   alias vim=nvim
 fi
@@ -108,7 +109,8 @@ fi
 if type htop >/dev/null 2>&1; then
   alias top=htop
 fi
-alias ps=/bin/ps
+# Forward port 80 and 443 from host to nginx running in kubernetes (minikube)
+alias forward_nginx='sudo kubectl port-forward svc/nginx 80:80 443:443'
 # ------------------------------------------------------------ #
 #
 # ------------------------------------------------------------ #
@@ -118,6 +120,9 @@ if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
     command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        pushd "$HOME/.zinit/bin" && \
+        git checkout c27bf53f060d4584333ebdff8cfcd6aed60ca430 && \
+        popd && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
@@ -153,7 +158,7 @@ export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 zinit light-mode for Aloxaf/fzf-tab
 
 zinit wait lucid light-mode for \
-  blockf atpull'zinit creinstall -q .' zsh-users/zsh-completions \
+  blockf atpull"zinit creinstall -q ." zsh-users/zsh-completions \
   zdharma/fast-syntax-highlighting
 
 zinit wait lucid light-mode for zsh-users/zsh-history-substring-search
@@ -173,30 +178,20 @@ zinit ice as"program" atclone"make app; cp -r target/release/osx/Alacritty.app /
 zinit light alacritty/alacritty
 
 # Neovim
-zinit ice as"program" atclone"make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++; sudo make install
+zinit ice as"program" atclone"rm -rf ./build; rm -rf ./.deps; make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++; sudo make install
 " \
     atpull"%atclone"
 zinit light neovim/neovim
 
-# Install rustup cargo rust etc
-zinit light zinit-zsh/z-a-rust
+zinit ice as"program" pick"bin/git-dsf"
+zinit light zdharma/zsh-diff-so-fancy
 
-# Install exa
-zinit ice rustup cargo'exa;bat;htop;procs;rg' as"command" pick"bin/(exa|bat|htop|procs|rg)"
-zinit load zdharma/null
-
-#zstyle ':completion:*' menu select # select completions with arrow keys
-#zstyle ':completion:*' group-name '' # group results by category
-zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
+zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:git-checkout:*" sort false
-zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-zstyle ':fzf-tab:*' fzf-command fzf
-#zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-#zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
+zstyle ":completion:*:descriptions" format '[%d]'
+zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
+zstyle ":fzf-tab:complete:cd:*" fzf-preview "exa -1 --color=always $realpath"
+zstyle ":fzf-tab:*" fzf-command fzf
 
 # In the line editor, number of matches to show before asking permission
 LISTMAX=9999
@@ -219,11 +214,10 @@ then
 fi
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tiberiusimionvoicu/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tiberiusimionvoicu/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/tiberiusimionvoicu/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tiberiusimionvoicu/google-cloud-sdk/completion.zsh.inc'; fi
-
+if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
