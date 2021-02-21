@@ -15,3 +15,5 @@ yarn global upgrade
 zinit self-update
 zinit update
 
+# Update nvim plugins
+nvim -c PlugUpdate
