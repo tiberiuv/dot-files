@@ -22,7 +22,7 @@ Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'Raimondi/delimitMate'
 Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-lua/lsp_extensions.nvim'
-"Plug 'Yggdroot/indentLine'
+Plug 'voldikss/vim-floaterm'
 
 " Languages and syntax highlighting
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
@@ -33,13 +33,12 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'wavded/vim-stylus'
 
 " LSP & Snippets & Completion
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
-"Plug 'aca/completion-tabnine', { 'do': './install.sh' }
 Plug 'RishabhRD/popfix', { 'do': 'make'}
 Plug 'RishabhRD/nvim-lsputils'
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/nvim-compe'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'hrsh7th/nvim-compe'
 
 call plug#end()

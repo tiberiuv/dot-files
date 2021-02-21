@@ -1,10 +1,4 @@
-local chain_complete_list = {
-    default = {
-        {complete_items = {"lsp", "snippet"}}
-    }
-}
-
-require "nvim-treesitter.configs".setup {
+require"nvim-treesitter.configs".setup {
     -- Modules and its options go here
     ensure_installed = {
         "rust",
@@ -36,16 +30,8 @@ require "nvim-treesitter.configs".setup {
 
 local nvim_lsp = require("lspconfig")
 local configs = require("lspconfig/configs")
-vim.lsp.set_log_level("debug")
 
 local on_attach = function(_, bufnr)
-    require "completion".on_attach(
-        {
-            sorting = "alphabet",
-            matching_strategy_list = {"exact", "fuzzy"},
-            chain_complete_list = chain_complete_list
-        }
-    )
     require "lsp_extensions".inlay_hints {
         highlight = "Comment",
         prefix = " > ",
@@ -53,10 +39,10 @@ local on_attach = function(_, bufnr)
         only_current_line = false,
         enabled = {"ChainingHint"}
     }
+
     -- Mappings.
     local opts = {noremap = true, silent = true}
     vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
@@ -78,7 +64,7 @@ end
 
 configs.pyright = {
     default_config = {
-        cmd = {"pyright-langserver", "--stdio"},
+        cmd = { "pyright-langserver", "--stdio"},
         filetypes = {"python"},
         root_dir = nvim_lsp.util.root_pattern(
             "Pipfile",
@@ -89,7 +75,10 @@ configs.pyright = {
             "pyproject.toml"
         ),
         settings = {
-            analysis = {autoSearchPaths = true},
+            analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true
+            },
             pyright = {
                 useLibraryCodeForTypes = true,
                 venvPath = "~/.local/share/virtualenvs",
@@ -99,31 +88,36 @@ configs.pyright = {
     }
 }
 
-nvim_lsp["tsserver"].setup {
+nvim_lsp.tsserver.setup {
     on_attach = on_attach,
     filetypes = {"typescript", "typescriptreact", "typescript.tsx"}
 }
 
-nvim_lsp["clangd"].setup {
+nvim_lsp.clangd.setup {
     on_attach = on_attach,
     filetype = {"c", "ino", "cpp", ".ino"}
 }
 
+nvim_lsp.metals.setup {
+    on_attach = on_attach,
+    filetype = {"scala", ".sc", ".scala"}
+}
+
 local system_name
 if vim.fn.has("mac") == 1 then
-  system_name = "macOS"
+    system_name = "macOS"
 elseif vim.fn.has("unix") == 1 then
-  system_name = "Linux"
-elseif vim.fn.has('win32') == 1 then
-  system_name = "Windows"
+    system_name = "Linux"
+elseif vim.fn.has("win32") == 1 then
+    system_name = "Windows"
 else
-  print("Unsupported system for sumneko")
+    print("Unsupported system for sumneko")
 end
 
-local sumneko_root_path = vim.fn.stdpath('cache')..'/lspconfig/sumneko_lua/lua-language-server'
-local sumneko_binary = sumneko_root_path.."/bin/"..system_name.."/lua-language-server"
+local sumneko_root_path = vim.fn.stdpath("cache") .. "/lspconfig/sumneko_lua/lua-language-server"
+local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
 
-nvim_lsp["sumneko_lua"].setup {
+nvim_lsp.sumneko_lua.setup {
     on_attach = on_attach,
     cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
     settings = {
@@ -151,14 +145,9 @@ nvim_lsp["sumneko_lua"].setup {
 
 nvim_lsp.rust_analyzer.setup {
     on_attach = on_attach,
-    root_dir = nvim_lsp.util.root_pattern(
-      "Cargo.toml",
-      ".git"
-    ),
+    root_dir = nvim_lsp.util.root_pattern("Cargo.toml", ".git"),
     settings = {
         ["rust-analyzer"] = {
-            procMacro = {enable = true},
-            cargo = {loadOutDirsFromCheck = true},
             diagnostics = {
                 enable = true,
                 enableExperimental = true
@@ -168,7 +157,15 @@ nvim_lsp.rust_analyzer.setup {
                 parameterHints = true,
                 typeHints = true
             },
-            checkOnSave = {command = "clippy"}
+            checkOnSave = {
+                command = "clippy"
+            },
+            cargo = {
+                loadOutDirsFromCheck = true
+            },
+            procMacro = {
+                enable = true
+            }
         }
     }
 }
@@ -183,8 +180,9 @@ local servers = {
     "dockerls",
     "texlab",
     "yamlls",
-    "pyright"
+    "pyright",
 }
+
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
         on_attach = on_attach
@@ -210,5 +208,73 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
         update_in_insert = false
     }
 )
--- ChadTree - tree file manager
---vim.api.nvim_set_var("chadtree_settings", { use_icons = "emoji" })
+
+require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = true;
+
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    vsnip = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+    spell = true;
+    tags = true;
+    snippets_nvim = true;
+    treesitter = true;
+  };
+}
+
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return true
+    else
+        return false
+    end
+end
+
+-- Use (s-)tab to:
+--- move to prev/next item in completion menuone
+--- jump to prev/next snippet's placeholder
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  elseif vim.fn.call("vsnip#available", {1}) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+    return t "<Plug>(vsnip-jump-prev)"
+  else
+    return t "<S-Tab>"
+  end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})

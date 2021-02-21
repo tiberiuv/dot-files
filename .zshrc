@@ -5,10 +5,16 @@ fi
 # ------------------------------------------------------------ #
 # Env vars
 # ------------------------------------------------------------ #
+# Minifort
+export KUBERNETES_PROVIDER=minikube
+# ------------------------------------------------------------ #
+
 export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
 export SCALA_HOME=/usr/local/opt/scala/idea
-export SPARK_HOME=/usr/local/Cellar/apache-spark@2.4.6/2.4.6/libexec
+#export SPARK_HOME=/usr/local/Cellar/apache-spark@2.4.6/2.4.6/libexec
+export SPARK_HOME=/usr/local/Cellar/apache-spark/3.0.1/libexec/
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/Cellar/go/1.11.1
 export GOPATH=$HOME/go
@@ -25,7 +31,7 @@ export GPG_TTY=tty
 export SSH_KEY_PATH=~/.ssh/rsa_id
 export CLICOLOR=1
 export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
-
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # Set Path
 # ------------------------------------------------------------ #
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
@@ -40,6 +46,7 @@ export PATH=$HOME/.cargo/bin:$PATH
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 # ------------------------------------------------------------ #
 # Without the bindkey alt+right/left is broken it tmux
 # ------------------------------------------------------------ #
@@ -94,6 +101,8 @@ setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A T
 
 # ------------------------------ Aliases ------------------------------ #
 alias ssh="TERM=xterm-256color ssh"
+# This must be source because its required for zinit commands
+alias update-all="source ~/icloud/dot-files/update.zsh"
 if type nvim > /dev/null 2>&1; then
   alias vim=nvim
 fi
@@ -130,11 +139,10 @@ fi
 source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-
 # ------------------------------------------------------------ #
 # THEME
 # ------------------------------------------------------------ #
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit depth=1 lucid light-mode nocd for romkatv/powerlevel10k
 POWERLEVEL10K_MODE="nerfont-complete"
 setopt promptsubst
 # ------------------------------------------------------------ #
@@ -149,13 +157,10 @@ zinit light-mode for \
     zinit-zsh/z-a-submods \
     zdharma/declare-zsh
 
-zinit ice depth=1; zinit light romkatv/powerlevel10k
-
 zinit wait"0a" lucid light-mode for \
   atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
-export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
-zinit light-mode for Aloxaf/fzf-tab
+zinit wait lucid light-mode for Aloxaf/fzf-tab
 
 zinit wait lucid light-mode for \
   blockf atpull"zinit creinstall -q ." zsh-users/zsh-completions \
@@ -167,24 +172,33 @@ zinit wait lucid for \
   OMZL::git.zsh \
   atload"unalias grv" OMZP::git
 
+# ------------------------------------------------------------ #
+# Programs
+# ------------------------------------------------------------ #
+
 # Rust analyzer
-zinit ice as"program" atclone"cargo +nightly xtask install --server" \
+zinit ice as"program" \
+    atclone"cargo +nightly xtask install --server" \
     atpull"%atclone"
 zinit light rust-analyzer/rust-analyzer
 
 # Alacritty
-zinit ice as"program" atclone"make app; cp -r target/release/osx/Alacritty.app /Applications/" \
+zinit ice as"program" \
+    atclone"make app; cp -r target/release/osx/Alacritty.app /Applications/" \
     atpull"%atclone"
 zinit light alacritty/alacritty
 
 # Neovim
-zinit ice as"program" atclone"rm -rf ./build; rm -rf ./.deps; make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++; sudo make install
-" \
+zinit ice as"program" \
+  atclone"rm -rf ./build; rm -rf ./.deps; make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++; sudo make install" \
     atpull"%atclone"
 zinit light neovim/neovim
 
+# Fancy diffs
 zinit ice as"program" pick"bin/git-dsf"
 zinit light zdharma/zsh-diff-so-fancy
+
+# ------------------------------------------------------------ #
 
 zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:git-checkout:*" sort false

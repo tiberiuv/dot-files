@@ -7,44 +7,35 @@ set nocompatible
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set expandtab
 set cmdheight=2
 set nowrap
 set expandtab
+set smarttab
 set backspace=indent,eol,start
-set number
 set nocursorline
 set wildmenu
-set autochdir
 " Display row and column number when last closed file
 set laststatus=2
 set showmatch
-set smarttab
 set wrap "Wrap lines
-set timeoutlen=500
-set ttimeoutlen=50
+"set timeoutlen=500
+"set ttimeoutlen=50
 set updatetime=200
-"set redrawtime=10000
 set autoread
-set number relativenumber
+set number
+set relativenumber
 set synmaxcol=200
 set ttyfast
 set lazyredraw
 set noshowcmd
 set noruler
 set completeopt=menuone,noinsert,noselect
-" Some servers have issues with backup files
-"set nobackup
-"set nowritebackup
-
-" ----------------SEARCH---------------------
-
+"----------------------- Search ------------------------
 set ignorecase
 set smartcase
 set incsearch
 set hlsearch
-
-"--------------------------------------------
+"-------------------------------------------------------
 
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set grepformat=%f:%l:%c:%m
@@ -62,33 +53,27 @@ set colorcolumn=100
 
 let g:cursorhold_updatetime = 100
 
+"---------------------- Vim Rooter -----------------------
+
 let g:rooter_patterns = [
   \ 'package.json',
   \ 'Cargo.toml',
   \ 'Pipfile',
+  \ 'pyproject.toml',
   \ 'Makefile',
   \ '.git',
   \]
 let g:rooter_silent_chdir = 1
 autocmd BufEnter * :Rooter
 
+"----------------- Source config files -------------------
+
 " Load plugins
 source ~/.config/nvim/plugins.vim
 " Load lua part of the config
 lua require("init")
 
-"---------------------------------------------
-
-" Return to last edit position when opening files
-augroup last_edit
-  autocmd!
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-augroup END
-
-"-------------------- Fzf --------------------
+"------------------------- Fzf --------------------------
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 " Use ctrl-p/f for search using fzf
@@ -100,12 +85,12 @@ command! -bang -nargs=* Rg
   \   'rg --column --line-number --no-heading --color=always --smart-case --glob "!{node_modules,.git,*.lock,target,flow-typed,dist}" -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 
-"-------------------- Smooth scroll --------------------
+"--------------------- Smooth scroll --------------------
 
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
 
-"-------------------- Key bindings --------------------
+"--------------------- Key bindings ---------------------
 
 nmap <S-Enter> O<Esc>
 nmap <CR> o<Esc>
@@ -125,7 +110,7 @@ call SetupCommandAlias("WQ", "wq")
 " run git blame
 nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
 
-"-------------------- NerdTree --------------------
+"----------------------- NerdTree -----------------------
 
 let g:NERDTreeIgnore=['__pycache__']
 let NERDTreeQuitOnOpen = 1
@@ -145,13 +130,6 @@ endfunction
 
 map <C-n> :call NERDTreeToggleInCurDir()<CR>
 
-augroup nerdtree
-    autocmd!
-    autocmd StdinReadPre * let s:std_in=1
-augroup END
-
-"map <C-n> <cmd>CHADopen<cr>
-
 let g:NERDTreeLimitedSyntax = 1
 let g:WebDevIconsOS = 'Darwin'
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
@@ -159,7 +137,12 @@ let g:DevIconsEnableFoldersOpenClose = 1
 let g:DevIconsEnableFolderExtensionPatternMatching = 1
 let g:NERDTreeHighlightCursorline = 0
 
-"-------------------- ALE --------------------
+augroup nerdtree
+    autocmd!
+    autocmd StdinReadPre * let s:std_in=1
+augroup END
+
+"----------------------- ALE -----------------------
 
 let g:ale_lint_delay = 200
 let g:ale_lint_on_enter = 0
@@ -184,7 +167,7 @@ let g:ale_linter_aliases = {
 
 let g:ale_linters = {
 \   'markdown': ['mdl', 'writegood'],
-\   'python': ['flake8', 'pyright'],
+\   'python': ['flake8'],
 \   'javascript': ['eslint'],
 \   'typescript': ['eslint'],
 \   'jsx': ['stylelint', 'eslint'],
@@ -198,7 +181,6 @@ let g:ale_fixers = {
 \   'yaml': ['prettier'],
 \   'javascript': ['prettier'],
 \   'typescript': ['prettier'],
-\   'python': ['black'],
 \   'rust': ['rustfmt'],
 \   'lua': ['luafmt'],
 \}
@@ -210,23 +192,21 @@ nmap <silent> ]g :ALEPrevious<cr>
 " run ale_fixers and save
 nnoremap <Leader>f :<C-u>ALEFix<CR> \| :w<CR>
 "-------------------- Autocmd --------------------
+
 autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
 autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
 autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 autocmd BufNewFile,BufRead *.ino,*.pde set filetype=cpp
+autocmd BufNewFile,BufRead *.sc setlocal filetype=scala
 autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWritePre <buffer> %s/\s\+$//e
 
-autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *
-\ lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment" }
-
-"-------------------- Settings --------------------
+"---------------------- Settings --------------------------
 
 let g:delimitMate_expand_cr = 1
 let g:rainbow_active = 1
 let g:airline_powerline_fonts = 1
-let g:WebDevIconsOS = 'Darwin'
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#nvimlsp#enabled = 1
 let g:python3_host_prog = '~/pynvim/bin/python'
@@ -236,9 +216,11 @@ let test#python#runner = 'pyunit'
 " Remove Highlight on esc
 nmap <silent><ESC> :noh<CR>
 
-"------------------- Color Scheme -----------------
+"----------------------------------------------------------
+" Color scheme
+"----------------------------------------------------------
 
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 if has("termguicolors")     " set true colors
     set t_8f=\[[38;2;%lu;%lu;%lum
     set t_8b=\[[48;2;%lu;%lu;%lum
@@ -252,45 +234,51 @@ let g:gruvbox_italicize_strings=1
 let g:diagnostic_enable_virtual_text=1
 silent colorscheme gruvbox
 
-" Use <Tab> and <S-Tab> to navigate through popup menu
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+"-----------------------------------------------------------
+" Completion
+"-----------------------------------------------------------
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' })
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+sign define LspDiagnosticsSignError text=✖
+sign define LspDiagnosticsSignWarning text=⚠
+sign define LspDiagnosticsSingInformation text=ℹ
+sign define LspDiagnosticsSignHint text=➤
 
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ completion#trigger_completion()
+"------------------------------------------------------------
+" Floating terminal
+"------------------------------------------------------------
 
-imap <silent> <c-p> <Plug>(completion_trigger)
+noremap  <C-t>  :FloatermToggle<CR>
+noremap! <C-t>  <Esc>:FloatermToggle<CR>
+tnoremap <C-t>  <C-\><C-n>:FloatermToggle<CR>
 
-if exists('*complete_info')
-  " Use `complete_info` if your (Neo)Vim version supports it.
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+let g:floaterm_width = 100
+let g:floaterm_height = 30
+let g:floaterm_winblend = 0
 
-" fix conflict between completion-nvim and autopairs
-let g:completion_confirm_key = ""
-imap <expr> <cr>  pumvisible() ? complete_info()["selected"] != "-1" ?
-                 \ "\<Plug>(completion_confirm_completion)"  : "\<c-e>\<CR>" :  "\<CR>"
+"------------------------ Indent lines ---------------------------
+let g:indentLine_char_list = ['┆']
+let g:indentLine_setColors = 0
+let g:indentLine_setConceal = 0
+let g:indentLine_enabled = 1
 
-let g:completion_enable_snippet = 'UltiSnips'
-
-augroup CompletionTriggerCharacter
-    autocmd!
-    autocmd BufEnter * let g:completion_trigger_character = ['.']
-    autocmd BufEnter *.c,*.cpp,*.rs,*.ino let g:completion_trigger_character = ['.', '::']
+" Only enable for python
+augroup identline
+  au BufRead,BufNewFile *.py,*.rb let g:indentLine_enabled = 1
+  au BufRead,BufNewFile *.py,*.rb let g:indentLine_setConceal = 2
 augroup end
 
-sign define LspDiagnosticsErrorSign text=✖
-sign define LspDiagnosticsWarningSign text=⚠
-sign define LspDiagnosticsInformationSign text=ℹ
-sign define LspDiagnosticsHintSign text=➤
+"-----------------------------------------------------------------
 
-let g:indentLine_char_list = ['┆']
+" Return to last edit position when opening files
+augroup last_edit
+  autocmd!
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+augroup END
