@@ -85,3 +85,6 @@ mv coursier ~/bin
   -o /usr/local/bin/metals-vim -f
 
 mv /usr/local/bin/metals-vim /usr/local/bin/metals
+
+# Install nvim plugins
+nvim -c PlugInstall
