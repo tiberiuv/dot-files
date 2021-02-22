@@ -282,3 +282,5 @@ augroup last_edit
     \   exe "normal! g`\"" |
     \ endif
 augroup END
+
+let g:omni_sql_no_default_maps = 1

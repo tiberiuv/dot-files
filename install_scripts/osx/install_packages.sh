@@ -60,7 +60,8 @@ brew install
     icu4c \
     harfbuzz \
     liblcms2 \
-    lcms2
+    lcms2 \
+    go
 
 brew link --overwrite gnupg
 
@@ -69,22 +70,3 @@ yarn global add lua-fmt
 luarocks install luacheck
 
 cargo install exa bat procs ripgrep diesel_cli
-
-curl -L -o coursier https://git.io/coursier-cli
-chmod +x coursier
-mv coursier ~/bin
-
-# Install metals scala lsp server
-./coursier bootstrap \
-  --java-opt -Xss4m \
-  --java-opt -Xms100m \
-  --java-opt -Dmetals.client=vim-lsc \
-  org.scalameta:metals_2.12:0.9.10 \
-  -r bintray:scalacenter/releases \
-  -r sonatype:snapshots \
-  -o /usr/local/bin/metals-vim -f
-
-mv /usr/local/bin/metals-vim /usr/local/bin/metals
-
-# Install nvim plugins
-nvim -c PlugInstall

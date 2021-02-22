@@ -16,7 +16,7 @@ export SCALA_HOME=/usr/local/opt/scala/idea
 #export SPARK_HOME=/usr/local/Cellar/apache-spark@2.4.6/2.4.6/libexec
 export SPARK_HOME=/usr/local/Cellar/apache-spark/3.0.1/libexec/
 export PYSPARK_PYTHON=python3
-export GOROOT=/usr/local/Cellar/go/1.11.1
+export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
 export PYENV_ROOT=$(pyenv root)
 export FZF_BASE=/Users/tiberiusimionvoicu/.fzf
@@ -43,6 +43,8 @@ export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH=$PATH:/usr/local/opt/llvm/bin
 export PATH=$PATH:$JAVA_HOME/bin
 export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #

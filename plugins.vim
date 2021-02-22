@@ -23,6 +23,8 @@ Plug 'Raimondi/delimitMate'
 Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'voldikss/vim-floaterm'
+Plug 'vim-scripts/dbext.vim'
+Plug 'nanotee/sqls.nvim'
 
 " Languages and syntax highlighting
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
