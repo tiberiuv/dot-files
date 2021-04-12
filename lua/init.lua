@@ -17,10 +17,12 @@ require "nvim-treesitter.configs".setup {
         "c",
         "cpp",
         "java",
-        "go"
+        "go",
+        "scala"
     },
     highlight = {enable = true},
     incremental_selection = {enable = true},
+    indent = {enable = true},
     refactor = {
         smart_rename = {enable = true},
         navigation = {enable = true}
@@ -111,7 +113,7 @@ nvim_lsp.sqls.setup {
                 {
                     drive = "postgresql",
                     --dataSourceName = "newuser:password@tcp(127.0.0.1:5430)/watcher"
-                    dataSourceName = "host=127.0.0.1 port=5430 user=newuser password=password dbname=watcher sslmode=disable",
+                    dataSourceName = "host=postgres port=5430 user=newuser password=password dbname=core sslmode=disable"
                 }
             }
         }
@@ -212,7 +214,6 @@ vim.lsp.handlers["textDocument/typeDefinition"] = require "lsputil.locations".ty
 vim.lsp.handlers["textDocument/implementation"] = require "lsputil.locations".implementation_handler
 vim.lsp.handlers["textDocument/documentSymbol"] = require "lsputil.symbols".document_handler
 vim.lsp.handlers["workspace/symbol"] = require "lsputil.symbols".workspace_handler
-
 vim.lsp.handlers["textDocument/publishDiagnostics"] =
     vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics,
@@ -233,8 +234,8 @@ require "compe".setup {
     throttle_time = 80,
     source_timeout = 200,
     incomplete_delay = 400,
-    max_abbr_width = 100,
-    max_kind_width = 100,
+    --max_abbr_width = 100,
+    --max_kind_width = 100,
     max_menu_width = 100,
     documentation = true,
     source = {
@@ -292,3 +293,4 @@ vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<CR>", [[compe#confirm('<CR>')]], {expr = true})

@@ -7,34 +7,37 @@ set nocompatible
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set cmdheight=2
-set nowrap
 set expandtab
 set smarttab
+set cmdheight=2
+set wrap
 set backspace=indent,eol,start
-set nocursorline
+set cursorline
 set wildmenu
 " Display row and column number when last closed file
 set laststatus=2
 set showmatch
-set wrap "Wrap lines
 "set timeoutlen=500
 "set ttimeoutlen=50
 set updatetime=200
 set autoread
-set number
-set relativenumber
+set number relativenumber
 set synmaxcol=200
 set ttyfast
 set lazyredraw
 set noshowcmd
 set noruler
 set completeopt=menuone,noinsert,noselect
+"set foldmethod=expr
+"set foldexpr=nvim_treesitter#foldexpr()
+
 "----------------------- Search ------------------------
+
 set ignorecase
 set smartcase
 set incsearch
 set hlsearch
+
 "-------------------------------------------------------
 
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
@@ -128,7 +131,7 @@ function! NERDTreeToggleInCurDir()
   endif
 endfunction
 
-map <C-n> :call NERDTreeToggleInCurDir()<CR>
+map <silent> <C-n> :call NERDTreeToggleInCurDir()<CR>
 
 let g:NERDTreeLimitedSyntax = 1
 let g:WebDevIconsOS = 'Darwin'
@@ -141,6 +144,13 @@ augroup nerdtree
     autocmd!
     autocmd StdinReadPre * let s:std_in=1
 augroup END
+
+"----------------------- NvimTree -----------------------
+"let g:nvim_tree_quit_on_open = 1
+"let g:nvim_tree_indent_markers = 1
+"let g:nvim_tree_git_hl = 1
+
+"map <silent> <C-n> :NvimTreeToggle<CR>
 
 "----------------------- ALE -----------------------
 
@@ -191,6 +201,9 @@ nmap <silent> ]g :ALEPrevious<cr>
 
 " run ale_fixers and save
 nnoremap <Leader>f :<C-u>ALEFix<CR> \| :w<CR>
+noremap Zz <c-w>_ \| <c-w>\|
+noremap Zo <c-w>=
+
 "-------------------- Autocmd --------------------
 
 autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
@@ -202,9 +215,15 @@ autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWritePre <buffer> %s/\s\+$//e
 
+"---------------------- DelimitMate --------------------------
+
+let g:delimitMate_expand_cr = 2
+let g:delimitMate_expand_space = 1
+"let g:delimitMate_expand_inside_quotes = 1
+"let g:delimitMate_nesting_quotes = ['"','`', "'"]
+
 "---------------------- Settings --------------------------
 
-let g:delimitMate_expand_cr = 1
 let g:rainbow_active = 1
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#ale#enabled = 1
@@ -216,9 +235,7 @@ let test#python#runner = 'pyunit'
 " Remove Highlight on esc
 nmap <silent><ESC> :noh<CR>
 
-"----------------------------------------------------------
-" Color scheme
-"----------------------------------------------------------
+"----------------------- Color scheme ----------------------
 
 let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 if has("termguicolors")     " set true colors
@@ -234,23 +251,18 @@ let g:gruvbox_italicize_strings=1
 let g:diagnostic_enable_virtual_text=1
 silent colorscheme gruvbox
 
-"-----------------------------------------------------------
-" Completion
-"-----------------------------------------------------------
+"----------------------- Completion -------------------------
+
 inoremap <silent><expr> <C-Space> compe#complete()
 inoremap <silent><expr> <CR>      compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' })
 inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
 sign define LspDiagnosticsSignError text=✖
 sign define LspDiagnosticsSignWarning text=⚠
 sign define LspDiagnosticsSingInformation text=ℹ
 sign define LspDiagnosticsSignHint text=➤
 
-"------------------------------------------------------------
-" Floating terminal
-"------------------------------------------------------------
+"--------------------- Floating terminal --------------------
 
 noremap  <C-t>  :FloatermToggle<CR>
 noremap! <C-t>  <Esc>:FloatermToggle<CR>
@@ -261,6 +273,7 @@ let g:floaterm_height = 30
 let g:floaterm_winblend = 0
 
 "------------------------ Indent lines ---------------------------
+
 let g:indentLine_char_list = ['┆']
 let g:indentLine_setColors = 0
 let g:indentLine_setConceal = 0

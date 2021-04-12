@@ -54,7 +54,7 @@ colors:
   # Default colors
   cursor:
     text: '0x000000'
-    cursor: '0xffffff'
+    #cursor: '0xffffff'
 
     unfocused_hollow: true
 

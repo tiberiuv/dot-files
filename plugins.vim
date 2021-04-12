@@ -6,6 +6,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-repeat'
 Plug 'preservim/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'ryanoasis/vim-devicons'
 Plug 'preservim/nerdcommenter'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'airblade/vim-rooter'
@@ -24,22 +26,21 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'voldikss/vim-floaterm'
 Plug 'vim-scripts/dbext.vim'
-Plug 'nanotee/sqls.nvim'
+"Plug 'nanotee/sqls.nvim'
+Plug 'lighttiger2505/sqls.vim'
 
 " Languages and syntax highlighting
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
 Plug 'dense-analysis/ale'
 Plug 'chr4/nginx.vim'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'ryanoasis/vim-devicons'
 Plug 'wavded/vim-stylus'
 
 " LSP & Snippets & Completion
 Plug 'RishabhRD/popfix', { 'do': 'make'}
 Plug 'RishabhRD/nvim-lsputils'
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/nvim-compe'
+Plug 'hrsh7th/vim-vsnip'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 

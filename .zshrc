@@ -7,14 +7,15 @@ fi
 # ------------------------------------------------------------ #
 # Minifort
 export KUBERNETES_PROVIDER=minikube
+alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone europe-west1-b
 # ------------------------------------------------------------ #
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
-export SCALA_HOME=/usr/local/opt/scala/idea
-#export SPARK_HOME=/usr/local/Cellar/apache-spark@2.4.6/2.4.6/libexec
-export SPARK_HOME=/usr/local/Cellar/apache-spark/3.0.1/libexec/
+export SCALA_HOME=/usr/local/opt/scala@2.12/idea
+export SPARK_HOME=/usr/local/Cellar/apache-spark@2.4.6/2.4.6/libexec
+#export SPARK_HOME=/usr/local/Cellar/apache-spark/3.0.1/libexec/
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
@@ -33,11 +34,11 @@ export CLICOLOR=1
 export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # Set Path
-# ------------------------------------------------------------ #
+# ------------------------------------------------------------
+# default PATH
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/Applications
-export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export PATH=$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex
 export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH=$PATH:/usr/local/opt/llvm/bin
@@ -45,6 +46,7 @@ export PATH=$PATH:$JAVA_HOME/bin
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
+export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -190,13 +192,18 @@ zinit ice as"program" \
     atpull"%atclone"
 zinit light alacritty/alacritty
 
+zinit ice as"program" \
+    atclone"make app; cp -r kitty.app /Applications/" \
+    atpull"%atclone"
+zinit light kovidgoyal/kitty
+
 # Neovim
 zinit ice as"program" \
   atclone"rm -rf ./build; rm -rf ./.deps; make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++; sudo make install" \
     atpull"%atclone"
 zinit light neovim/neovim
 
-# Fancy diffs
+# Colorful diffs
 zinit ice as"program" pick"bin/git-dsf"
 zinit light zdharma/zsh-diff-so-fancy
 
