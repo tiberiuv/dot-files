@@ -18,11 +18,14 @@ font:
     family: JetbrainsMono Nerd Font
     style: Bold Italic
 
-  size: 16.0
+  size: 17.0
 
   offset:
     x: 1
     y: 1
+
+# Mac only
+use_thin_strokes: true
 
 window:
   dimensions:
@@ -30,7 +33,7 @@ window:
     lines: 34
 
   padding:
-    x: 4
+    x: 0
     y: 0
 
   decorations: full
@@ -43,7 +46,7 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
   # When set to `true`, selected text will be copied to the primary clipboard.
-  save_to_clipboard: false
+  save_to_clipboard: true
 
 live_config_reload: true
 background_opacity: 1

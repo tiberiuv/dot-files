@@ -14,8 +14,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
 export SCALA_HOME=/usr/local/opt/scala@2.12/idea
-export SPARK_HOME=/usr/local/Cellar/apache-spark@2.4.6/2.4.6/libexec
-#export SPARK_HOME=/usr/local/Cellar/apache-spark/3.0.1/libexec/
+export SPARK_HOME=/usr/local/Cellar/apache-spark/3.1.1/libexec/
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
@@ -188,20 +187,31 @@ zinit light rust-analyzer/rust-analyzer
 
 # Alacritty
 zinit ice as"program" \
-    atclone"make app; cp -r target/release/osx/Alacritty.app /Applications/" \
+    atclone"make app;
+            cp -r target/release/osx/Alacritty.app /Applications/" \
     atpull"%atclone"
 zinit light alacritty/alacritty
 
-zinit ice as"program" \
-    atclone"make app; cp -r kitty.app /Applications/" \
-    atpull"%atclone"
-zinit light kovidgoyal/kitty
+#zinit ice as"program" \
+    #atclone"make app; cp -r kitty.app /Applications/" \
+    #atpull"%atclone"
+#zinit light kovidgoyal/kitty
 
 # Neovim
 zinit ice as"program" \
-  atclone"rm -rf ./build; rm -rf ./.deps; make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++; sudo make install" \
+  atclone"sudo rm -rf ./build;
+          rm -rf ./.deps;
+          make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
+          sudo make install" \
     atpull"%atclone"
 zinit light neovim/neovim
+
+# Tmux 
+zinit ice as"program" \
+  atclone"sh autogen.sh;
+          ./configure && make" \
+  atpull"%atclone"
+zinit light tmux/tmux
 
 # Colorful diffs
 zinit ice as"program" pick"bin/git-dsf"
@@ -236,10 +246,10 @@ then
   fi
 fi
 
-# The next line updates PATH for the Google Cloud SDK.
+# updates PATH for the Google Cloud SDK.
 if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
 
-# The next line enables shell command completion for gcloud.
+# enables shell command completion for gcloud.
 if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

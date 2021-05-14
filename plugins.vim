@@ -18,7 +18,7 @@ Plug 'mhinz/vim-signify'
 Plug 'zivyangll/git-blame.vim'
 Plug 'janko-m/vim-test'
 Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'tmux-plugins/vim-tmux-focus-events'
+"Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'puremourning/vimspector'
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'Raimondi/delimitMate'
@@ -27,13 +27,15 @@ Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'voldikss/vim-floaterm'
 Plug 'vim-scripts/dbext.vim'
 "Plug 'nanotee/sqls.nvim'
-Plug 'lighttiger2505/sqls.vim'
+"Plug 'lighttiger2505/sqls.vim'
 
 " Languages and syntax highlighting
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
 Plug 'dense-analysis/ale'
 Plug 'chr4/nginx.vim'
 Plug 'wavded/vim-stylus'
+Plug 'tomlion/vim-solidity'
+"Plug 'glepnir/lspsaga.nvim'
 
 " LSP & Snippets & Completion
 Plug 'RishabhRD/popfix', { 'do': 'make'}

@@ -161,7 +161,9 @@ let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 0
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
+
 let g:ale_python_flake8_args="--max-line-length=100"
+let g:ale_rust_rustfmt_options = '--edition 2018'
 
 let g:ale_sign_priority = 100
 let g:ale_lint_on_text_changed = 0
@@ -297,3 +299,15 @@ augroup last_edit
 augroup END
 
 let g:omni_sql_no_default_maps = 1
+
+" Disable Arrow keys in Normal mode
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Disable Arrow keys in Insert mode
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
