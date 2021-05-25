@@ -35,7 +35,7 @@ Plug 'dense-analysis/ale'
 Plug 'chr4/nginx.vim'
 Plug 'wavded/vim-stylus'
 Plug 'tomlion/vim-solidity'
-"Plug 'glepnir/lspsaga.nvim'
+Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
 
 " LSP & Snippets & Completion
 Plug 'RishabhRD/popfix', { 'do': 'make'}

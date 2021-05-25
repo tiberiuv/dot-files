@@ -34,12 +34,12 @@ local on_attach = function(_, bufnr)
         opts
     )
     -- Lsp saga key binds
-    --vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-    --vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
-    --vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-    --vim.api.nvim_buf_set_keymap(bufnr, "n", "vd", "<cmd>lua require'lspsaga.provider'.preview_definition()<CR>", opts)
-    --vim.api.nvim_buf_set_keymap(bufnr, "n", "[e", "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>", opts)
-    --vim.api.nvim_buf_set_keymap(bufnr, "n", "]e", "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "vd", "<cmd>lua require'lspsaga.provider'.preview_definition()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "[e", "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "]e", "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>", opts)
 end
 
 configs.pyright = {
@@ -204,6 +204,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
     }
 )
 
---local saga = require 'lspsaga'
+local saga = require 'lspsaga'
 
---saga.init_lsp_saga {}
+saga.init_lsp_saga {}

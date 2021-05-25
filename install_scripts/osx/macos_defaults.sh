@@ -15,7 +15,7 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 # Disable quote substitution
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
-# Disable smooth font
+# Font smoothing
 defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
 defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
 

@@ -192,10 +192,10 @@ zinit ice as"program" \
     atpull"%atclone"
 zinit light alacritty/alacritty
 
-#zinit ice as"program" \
-    #atclone"make app; cp -r kitty.app /Applications/" \
-    #atpull"%atclone"
-#zinit light kovidgoyal/kitty
+zinit ice as"program" \
+    atclone"make app; cp -r kitty.app /Applications/" \
+    atpull"%atclone"
+zinit light kovidgoyal/kitty
 
 # Neovim
 zinit ice as"program" \
