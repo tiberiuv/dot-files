@@ -11,7 +11,9 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'preservim/nerdcommenter'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'airblade/vim-rooter'
+
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+
 Plug 'vim-airline/vim-airline'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'mhinz/vim-signify'
@@ -45,5 +47,10 @@ Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+
+" Database management and competion
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-completion'
+Plug 'kristijanhusak/vim-dadbod-ui'
 
 call plug#end()

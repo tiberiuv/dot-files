@@ -29,3 +29,6 @@ require "nvim-treesitter.configs".setup {
     },
     textobjects = {enable = true}
 }
+
+--require('tree-sitter-typescript').typescript
+--require('tree-sitter-typescript').tsx

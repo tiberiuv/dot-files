@@ -1,5 +1,6 @@
 #---------- Create various symlinks ---------- 
 
+# Assumes directories actually exist on new host
 ln -s ../../.zshrc ~/.zshrc
 ln -s ../../.alacritty.yml ~/.config/alacritty/alacritty.yml
 ln -s ../../.tmux.conf ~/.tmux.conf

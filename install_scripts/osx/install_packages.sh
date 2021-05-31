@@ -5,23 +5,27 @@ mkdir ~/.config/alacritty
 mkdir ~/.tmux
 mkdir ~/.tmux/plugins
 
+# Install tmux tpm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-# install brew - package/program manager for osx
+# Install brew - package/app for osx
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
-# install zinit - package manager for zsh shell
+# Install zinit - package manager for zsh shell
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 
+# Add other repos to brew
 brew tap homebrew/cask
 brew tap homebrew/cask-versions
 brew tap AdoptOpenJDK/openjdk
 
+# Instal brew gui apps
 brew cask install vlc
 brew cask install firefox-developer-edition
 brew cask install spotify
 brew cask install adoptopenjdk
 
+# Install brew packages
 brew install
     llvm \
     wget \
@@ -64,10 +68,15 @@ brew install
 
 brew link --overwrite gnupg
 
-yarn global add lua-fmt
 
+# Install global node modules
+# mainly linters etc.
+yarn global add lua-fmt typescript-language-server pyright
+
+# Install Lua linter
 luarocks install luacheck
 
+# Install Rust cli tools
 cargo install exa bat procs ripgrep diesel_cli
 
 curl -L -o coursier https://git.io/coursier-cli
@@ -88,3 +97,6 @@ mv /usr/local/bin/metals-vim /usr/local/bin/metals
 
 # Install nvim plugins
 nvim -c PlugInstall
+
+### Install tmux tpm plugins
+~/.tmux/plugins/tpm/scripts/install_plugins.sh

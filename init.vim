@@ -159,8 +159,8 @@ let g:ale_lint_on_enter = 0
 let g:ale_linters_explicit = 1
 let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 0
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
+"let g:ale_sign_error = '❌'
+"let g:ale_sign_warning = '⚠️'
 
 let g:ale_python_flake8_args="--max-line-length=100"
 let g:ale_rust_rustfmt_options = '--edition 2018'
@@ -311,3 +311,6 @@ imap <up> <nop>
 imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
+
+let g:vim_markdown_conceal = 1
+let g:vim_markdown_conceal_code_blocks = 1

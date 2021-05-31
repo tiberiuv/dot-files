@@ -23,8 +23,9 @@ require "compe".setup {
         tags = true,
         snippets_nvim = true,
         -- may be laggy with compe
-        treesitter = false ,
+        treesitter = false,
         buffer = false,
+        vim_dadbod_completion = true
     }
 }
 
