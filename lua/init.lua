@@ -1,5 +1,8 @@
+require("options")
+require("plugins")
 require("treesitter")
 require("compe_setup")
+require("nvim-ale-diagnostic")
 
 local nvim_lsp = require("lspconfig")
 local configs = require("lspconfig/configs")
@@ -204,6 +207,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
         update_in_insert = false
     }
 )
+
 
 local saga = require 'lspsaga'
 

@@ -1,61 +1,3 @@
-filetype plugin on
-filetype indent on
-set encoding=UTF-8
-set hidden
-set autoindent
-set nocompatible
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
-set smarttab
-set cmdheight=2
-set wrap
-set backspace=indent,eol,start
-set cursorline
-set wildmenu
-" Display row and column number when last closed file
-set laststatus=2
-set showmatch
-"set timeoutlen=500
-"set ttimeoutlen=50
-set updatetime=200
-set autoread
-set number relativenumber
-set synmaxcol=200
-set ttyfast
-set lazyredraw
-set noshowcmd
-set noruler
-set completeopt=menuone,noinsert,noselect
-"set foldmethod=expr
-"set foldexpr=nvim_treesitter#foldexpr()
-
-"----------------------- Search ------------------------
-
-set ignorecase
-set smartcase
-set incsearch
-set hlsearch
-
-"-------------------------------------------------------
-
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
-set grepformat=%f:%l:%c:%m
-
-" Keep backups in different directory
-set backupdir=~/.cache/vim/backup//
-set directory=~/.cache/vim/swap//
-set undodir=~/.cache/vim/undo//
-set undofile
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-set signcolumn=yes  " Always show the signcolumn
-set colorcolumn=100
-
-let g:cursorhold_updatetime = 100
-
 "---------------------- Vim Rooter -----------------------
 
 let g:rooter_patterns = [
@@ -72,7 +14,7 @@ autocmd BufEnter * :Rooter
 "----------------- Source config files -------------------
 
 " Load plugins
-source ~/.config/nvim/plugins.vim
+"source ~/.config/nvim/plugins.vim
 " Load lua part of the config
 lua require("init")
 
@@ -159,8 +101,10 @@ let g:ale_lint_on_enter = 0
 let g:ale_linters_explicit = 1
 let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 0
-"let g:ale_sign_error = '❌'
-"let g:ale_sign_warning = '⚠️'
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+highlight ALEErrorSign ctermbg=NONE ctermfg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 
 let g:ale_python_flake8_args="--max-line-length=100"
 let g:ale_rust_rustfmt_options = '--edition 2018'

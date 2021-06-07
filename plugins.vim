@@ -33,13 +33,12 @@ Plug 'vim-scripts/dbext.vim'
 
 " Languages and syntax highlighting
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
-Plug 'dense-analysis/ale'
 Plug 'chr4/nginx.vim'
 Plug 'wavded/vim-stylus'
 Plug 'tomlion/vim-solidity'
 Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
 
-" LSP & Snippets & Completion
+" LSP & Linting & Snippets & Completion
 Plug 'RishabhRD/popfix', { 'do': 'make'}
 Plug 'RishabhRD/nvim-lsputils'
 Plug 'neovim/nvim-lspconfig'
@@ -47,6 +46,8 @@ Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'nathunsmitty/nvim-ale-diagnostic'
+Plug 'dense-analysis/ale'
 
 " Database management and competion
 Plug 'tpope/vim-dadbod'
