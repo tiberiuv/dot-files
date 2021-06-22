@@ -17,4 +17,4 @@ zinit self-update
 zinit update
 
 # Update nvim plugins
-nvim -c PlugUpdate
+nvim -c PackerUpdate

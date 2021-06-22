@@ -161,13 +161,6 @@ autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWritePre <buffer> %s/\s\+$//e
 
-"---------------------- DelimitMate --------------------------
-
-let g:delimitMate_expand_cr = 2
-let g:delimitMate_expand_space = 1
-"let g:delimitMate_expand_inside_quotes = 1
-"let g:delimitMate_nesting_quotes = ['"','`', "'"]
-
 "---------------------- Settings --------------------------
 
 let g:rainbow_active = 1
@@ -197,11 +190,7 @@ let g:gruvbox_italicize_strings=1
 let g:diagnostic_enable_virtual_text=1
 silent colorscheme gruvbox
 
-"----------------------- Completion -------------------------
-
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR>      compe#confirm({ 'keys': "\<Plug>delimitMateCR", 'mode': '' })
-inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+"----------------------- Diagnostic -------------------------
 
 sign define LspDiagnosticsSignError text=✖
 sign define LspDiagnosticsSignWarning text=⚠

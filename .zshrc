@@ -26,7 +26,7 @@ export PATH=$PATH:$N_PREFIX/bin
 export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
 
 export EDITOR=nvim
-export GPG_TTY=tty
+export GPG_TTY=$(tty)
 # ssh
 export SSH_KEY_PATH=~/.ssh/rsa_id
 export CLICOLOR=1

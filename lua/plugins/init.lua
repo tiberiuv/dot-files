@@ -39,9 +39,11 @@ return require('packer').startup(function()
     use 'nathunsmitty/nvim-ale-diagnostic'
     use { 'glepnir/lspsaga.nvim', branch = 'main' }
     use 'dense-analysis/ale'
-    
+
+    -- Project Search
     use { 'junegunn/fzf', run = "./install -all && mv . ~/.fzf" }
     use 'junegunn/fzf.vim'
+
     use 'tpope/vim-surround'
     use 'tpope/vim-sleuth'
     use 'tpope/vim-repeat'
@@ -60,10 +62,8 @@ return require('packer').startup(function()
     use 'zivyangll/git-blame.vim'
     use 'janko-m/vim-test'
     use 'Vimjas/vim-python-pep8-indent'
-    --use 'tmux-useins/vim-tmux-focus-events'
     use 'puremourning/vimspector'
     use 'antoinemadec/FixCursorHold.nvim'
-    use 'Raimondi/delimitMate'
     use 'nvim-lua/lsp_extensions.nvim'
     use 'voldikss/vim-floaterm'
     use 'vim-scripts/dbext.vim'
