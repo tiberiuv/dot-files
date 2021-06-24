@@ -20,7 +20,6 @@ o.encoding = "UTF-8"
 o.smarttab = true
 o.backspace = "indent,eol,start"
 o.ruler = false
-o.completeopt = "menu,noinsert,noselect"
 o.showcmd = false
 
 -- Search

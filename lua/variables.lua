@@ -1,0 +1,18 @@
+local vim = vim
+
+vim.g.floaterm_width = 100
+vim.g.floater_height = 30
+vim.g.floaterm_winblend = 0
+
+vim.g.omni_sql_no_defaults_maps = 1
+vim.g.vim_markdown_conceal = 1
+vim.g.vim_markdown_conceal_code_blocks = 1
+
+vim.g.python3_host_prog = "~/pynvim/bin/python"
+vim.g["EditorConfig_exclude_patterns"] = {"fugitive://.*"}
+vim.g["test#python#runner"] = "pyunit"
+
+vim.g["WebDevIconsOS"] = "Darwin"
+vim.g["WebDevIconsUnicodeDecorateFolderNodes"] = 1
+vim.g["DevIconsEnableFoldersOpenClose"] = 1
+vim.g["DevIconsEnableFolderExtensionPatternMatching"] = 1

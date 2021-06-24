@@ -7,3 +7,4 @@ ln -s ../../.tmux.conf ~/.tmux.conf
 ln -s ../../init.vim ~/.config/nvim/init.vim
 ln -s ../../lua ~/.config/nvim/lua
 ln -s ../../plugins.vim ~/.config/nvim/plugins.vim
+ln -s ../../init.lua ~/.config/nvim/init.lua

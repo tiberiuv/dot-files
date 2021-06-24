@@ -1,7 +1,10 @@
+local map = require("utils").map
+
+-- Use ctrl-p/f for search using fzf
+map("n", "<C-p>", ":Files<CR>", {noremap = true, silent = true})
+map("n", "<C-f>", ":Rg<CR>", {noremap = true, silent = true})
+
+map("n", "<S-Enter>", "O<Esc>")
+map("n", "<CR>", "o<Esc>")
+
 --vim.g["fzf_layout"] = { 'window' = { 'width' = 0.9, 'height': 06 } }
-
-
---local opts = {noremap = true, silent = true}
----- Use ctrl-p/f for search using fzf
---vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-p>", "<Cmd> :Files<CR>", opts)
---vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-f>", "<Cmd> :Rg<CR>", opts)

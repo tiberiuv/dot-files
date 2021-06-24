@@ -1,8 +1,10 @@
-require("options")
-require("plugins")
-require("treesitter")
-require("compe_setup")
-require("nvim-ale-diagnostic")
+local require_reset = require("utils").require_reset
+
+require_reset("options")
+require_reset("keybinds")
+require_reset("plugins")
+require_reset("autocmd")
+require_reset("variables")
 
 local nvim_lsp = require("lspconfig")
 local configs = require("lspconfig/configs")
