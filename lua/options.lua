@@ -1,57 +1,47 @@
-local o = vim.o
-local wo = vim.wo
-local bo = vim.bo
-local cmd = vim.cmd
-
-cmd "syntax enable"
-cmd "filetype plugin indent on"
+local opt = require("utils").opt
 
 -- Global
 -----------------------------------------------
-o.cmdheight = 2
-o.hidden = true
-o.wildmenu = true
-o.laststatus = 2
-o.showmatch = true
-o.updatetime = 200
-o.autoread = true
-o.lazyredraw = true
-o.encoding = "UTF-8"
-o.smarttab = true
-o.backspace = "indent,eol,start"
-o.ruler = false
-o.showcmd = false
+opt.cmdheight = 2
+opt.hidden = true
+opt.wildmenu = true
+opt.laststatus = 2
+opt.showmatch = true
+opt.updatetime = 200
+opt.autoread = true
+opt.lazyredraw = true
+opt.encoding = "UTF-8"
+opt.smarttab = true
+opt.backspace = "indent,eol,start"
+opt.ruler = false
+opt.showcmd = false
 
 -- Search
-o.ignorecase = true
-o.smartcase = true
-o.incsearch = true
-o.hlsearch = true
+opt.ignorecase = true
+opt.smartcase = true
+opt.incsearch = true
+opt.hlsearch = true
 
-o.grepprg = "rg --vimgrep --no-heading --smart-case"
-o.grepformat = "%f:%l:%c:%m"
-o.undofile = true
+opt.grepprg = "rg --vimgrep --no-heading --smart-case"
+opt.grepformat = "%f:%l:%c:%m"
+opt.undofile = true
 
-o.shortmess = vim.o.shortmess .. "c"
-o.colorcolumn = "100"
+opt.shortmess = vim.o.shortmess .. "c"
+opt.colorcolumn = "100"
 
 -- Window local
 -----------------------------------------------
-wo.wrap = true
-wo.cursorline = true
-wo.number = true
-wo.relativenumber = true
-wo.signcolumn = "yes"
+opt.wrap = true
+opt.cursorline = true
+opt.number = true
+opt.relativenumber = true
+opt.signcolumn = "yes"
 
 -- Buffer local
 -----------------------------------------------
-bo.autoindent = true
-bo.tabstop = 4
-bo.shiftwidth = 4
-bo.softtabstop = 4
-bo.expandtab = true
-bo.synmaxcol = 200
-
--- Global vars
------------------------------------------------
-vim.g["cursorhold_updatetime"] = 100
+opt.autoindent = true
+opt.tabstop = 4
+opt.shiftwidth = 4
+opt.softtabstop = 4
+opt.expandtab = true
+opt.synmaxcol = 200
