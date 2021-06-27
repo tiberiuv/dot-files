@@ -12,9 +12,4 @@ vim.g.python3_host_prog = "~/pynvim/bin/python"
 vim.g["EditorConfig_exclude_patterns"] = {"fugitive://.*"}
 vim.g["test#python#runner"] = "pyunit"
 
-vim.g["WebDevIconsOS"] = "Darwin"
-vim.g["WebDevIconsUnicodeDecorateFolderNodes"] = 1
-vim.g["DevIconsEnableFoldersOpenClose"] = 1
-vim.g["DevIconsEnableFolderExtensionPatternMatching"] = 1
-
 vim.g["cursorhold_updatetime"] = 100

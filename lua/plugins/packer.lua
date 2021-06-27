@@ -58,8 +58,6 @@ return require("packer").startup(
         use "tpope/vim-surround"
         use "tpope/vim-sleuth"
         use "tpope/vim-repeat"
-        use "preservim/nerdtree"
-        use "tiagofumo/vim-nerdtree-syntax-highlight"
         use "preservim/nerdcommenter"
         use "editorconfig/editorconfig-vim"
         use "airblade/vim-rooter"
@@ -77,8 +75,6 @@ return require("packer").startup(
         use "vim-scripts/dbext.vim"
         use "akinsho/nvim-toggleterm.lua"
         use "kabouzeid/nvim-lspinstall"
-        --use 'nanotee/sqls.nvim'
-        --use 'lighttiger2505/sqls.vim'
 
         -- Database management and competion
         --use 'tpope/vim-dadbod'
@@ -86,7 +82,8 @@ return require("packer").startup(
         --use 'kristijanhusak/vim-dadbod-ui'
         use {
             "hoob3rt/lualine.nvim",
-            requires = {"ryanoasis/vim-devicons", opt = true}
+            requires = {"kyazdani42/nvim-web-devicons", opt = true}
         }
+        use 'kyazdani42/nvim-tree.lua'
     end
 )
