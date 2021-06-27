@@ -24,6 +24,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/i
 brew tap homebrew/cask
 brew tap homebrew/cask-versions
 brew tap AdoptOpenJDK/openjdk
+brew tap homebrew/cask-fonts
 
 # Instal brew gui apps
 brew install --cask vlc
@@ -67,7 +68,8 @@ brew install \
     cmake \
     icu4c \
     harfbuzz \
-    lcms2
+    lcms2 \
+    font-jetbrains-mono-nerd-font
 
 brew link --overwrite gnupg
 

@@ -17,14 +17,13 @@ export SPARK_HOME=/usr/local/Cellar/apache-spark/3.1.1/libexec/
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
-export PYENV_ROOT=$(pyenv root)
 export FZF_BASE=/Users/tiberiusimionvoicu/.fzf
 export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH=$PATH:$N_PREFIX/bin
 export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
 export KITTY_CONFIG_DIRECTORY=~/.confi/kitty/kitty.conf
-
+export CARGO_NET_GIT_FETCH_WITH_CLI=true
 export EDITOR=nvim
 export GPG_TTY=$(tty)
 # ssh
@@ -47,6 +46,8 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
 export PATH=/opt/homebrew/bin:$PATH
+
+export PYENV_ROOT=$(pyenv root)
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -194,7 +195,7 @@ zinit ice as"program" \
 zinit light alacritty/alacritty
 
 zinit ice as"program" \
-    atclone"make app; cp -r kitty.app /Applications/" \
+    atclone"make app; rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
     atpull"%atclone"
 zinit light kovidgoyal/kitty
 

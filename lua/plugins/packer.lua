@@ -60,17 +60,12 @@ return require("packer").startup(
         use "tpope/vim-repeat"
         use "preservim/nerdtree"
         use "tiagofumo/vim-nerdtree-syntax-highlight"
-        use "ryanoasis/vim-devicons"
         use "preservim/nerdcommenter"
         use "editorconfig/editorconfig-vim"
         use "airblade/vim-rooter"
 
         use {"iamcco/markdown-preview.nvim", run = "cd app && yarn install", cmd = "MarkdownPreview"}
 
-        use {
-            "hoob3rt/lualine.nvim",
-            requires = {"ryanoasis/vim-devicons", opt = true}
-        }
         use "terryma/vim-smooth-scroll"
         use "mhinz/vim-signify"
         use "zivyangll/git-blame.vim"
@@ -81,6 +76,7 @@ return require("packer").startup(
         use "nvim-lua/lsp_extensions.nvim"
         use "vim-scripts/dbext.vim"
         use "akinsho/nvim-toggleterm.lua"
+        use "kabouzeid/nvim-lspinstall"
         --use 'nanotee/sqls.nvim'
         --use 'lighttiger2505/sqls.vim'
 
@@ -88,5 +84,9 @@ return require("packer").startup(
         --use 'tpope/vim-dadbod'
         --use 'kristijanhusak/vim-dadbod-completion'
         --use 'kristijanhusak/vim-dadbod-ui'
+        use {
+            "hoob3rt/lualine.nvim",
+            requires = {"ryanoasis/vim-devicons", opt = true}
+        }
     end
 )
