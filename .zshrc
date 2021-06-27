@@ -183,21 +183,30 @@ zinit wait lucid for \
 
 # Rust analyzer
 zinit ice as"program" \
-    atclone"cargo +nightly xtask install --server" \
-    atpull"%atclone"
+  atclone"cargo +nightly xtask install --server" \
+  atpull"%atclone"
 zinit light rust-analyzer/rust-analyzer
 
 # Alacritty
 zinit ice as"program" \
-    atclone"make app;
+  atclone"make app;
             cp -r target/release/osx/Alacritty.app /Applications/" \
-    atpull"%atclone"
+  atpull"%atclone"
 zinit light alacritty/alacritty
 
 zinit ice as"program" \
-    atclone"make app; rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
-    atpull"%atclone"
+  atclone"make app; rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
+  atpull"%atclone"
 zinit light kovidgoyal/kitty
+
+zinit ice as"program" \
+  atclone"git submodule update --init --recursive;
+          cd 3rd/luamake;
+          compile/install.sh;
+          cd ../..;
+          ./3rd/luamake/luamake rebuild;" \
+  atpull"%atclone"
+zinit light sumneko/lua-language-server
 
 # Neovim
 zinit ice as"program" \
@@ -205,10 +214,10 @@ zinit ice as"program" \
           rm -rf ./.deps;
           make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
           sudo make install" \
-    atpull"%atclone"
+  atpull"%atclone"
 zinit light neovim/neovim
 
-# Tmux 
+# Tmux
 zinit ice as"program" \
   atclone"sh autogen.sh;
           ./configure && make" \

@@ -11,6 +11,6 @@ vim.g.rooter_patterns = {
     "Pipfile",
     "pyproject.toml",
     "Makefile",
-    ".git",
+    ".git"
 }
 vim.g.rooter_silent_chdir = 1

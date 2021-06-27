@@ -7,7 +7,7 @@ require_reset("variables")
 require_reset("colourscheme")
 
 -- Install lsp servers
-require'lspinstall'.setup()
+require "lspinstall".setup()
 local nvim_lsp = require("lspconfig")
 local configs = require("lspconfig/configs")
 
@@ -43,11 +43,29 @@ local on_attach = function(_, bufnr)
     )
     -- Lsp saga key binds
     vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(
+        bufnr,
+        "n",
+        "<leader>ca",
+        "<cmd>lua require('lspsaga.codeaction').code_action()<CR>",
+        opts
+    )
     vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
     vim.api.nvim_buf_set_keymap(bufnr, "n", "vd", "<cmd>lua require'lspsaga.provider'.preview_definition()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "[e", "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "]e", "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(
+        bufnr,
+        "n",
+        "[e",
+        "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>",
+        opts
+    )
+    vim.api.nvim_buf_set_keymap(
+        bufnr,
+        "n",
+        "]e",
+        "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>",
+        opts
+    )
 end
 
 configs.pyright = {
@@ -117,7 +135,7 @@ else
     print("Unsupported system for sumneko")
 end
 
-local sumneko_root_path = vim.fn.stdpath("cache") .. "/lspconfig/sumneko_lua/lua-language-server"
+local sumneko_root_path = os.getenv("HOME") .. "/.zinit/plugins/sumneko---lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
 
 nvim_lsp.sumneko_lua.setup {
@@ -212,12 +230,11 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
     }
 )
 
-
-local saga = require 'lspsaga'
+local saga = require "lspsaga"
 
 saga.init_lsp_saga {}
 
-vim.cmd[[
+vim.cmd [[
     augroup last_edit
       autocmd!
       autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif

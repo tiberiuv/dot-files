@@ -45,14 +45,14 @@ return require("packer").startup(
         use "dense-analysis/ale"
 
         -- Project Search
-        use {"junegunn/fzf", dir = '~/.fzf', run = "./install -all"}
+        use {"junegunn/fzf", dir = "~/.fzf", run = "./install -all"}
         use "junegunn/fzf.vim"
         use {
-            'ojroques/nvim-lspfuzzy',
+            "ojroques/nvim-lspfuzzy",
             requires = {
-                {'junegunn/fzf'},
-                {'junegunn/fzf.vim'},  -- to enable preview (optional)
-            },
+                {"junegunn/fzf"},
+                {"junegunn/fzf.vim"} -- to enable preview (optional)
+            }
         }
 
         use "tpope/vim-surround"
@@ -84,6 +84,6 @@ return require("packer").startup(
             "hoob3rt/lualine.nvim",
             requires = {"kyazdani42/nvim-web-devicons", opt = true}
         }
-        use 'kyazdani42/nvim-tree.lua'
+        use "kyazdani42/nvim-tree.lua"
     end
 )

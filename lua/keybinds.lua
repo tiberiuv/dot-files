@@ -15,7 +15,7 @@ map("n", "<Leader>s", ":<C-u>call gitblame#echo()<CR>", {noremap = true})
 -- Remove Highlight on esc
 map("n", "<ESC>", ":noh<CR>", {silent = true})
 
-vim.cmd[[
+vim.cmd [[
    fun! SetupCommandAlias(from, to)
         exec 'cnoreabbrev <expr> '.a:from .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")' .'? ("'.a:to.'") : ("'.a:from.'"))'
     endfun
@@ -27,7 +27,7 @@ vim.cmd[[
     call SetupCommandAlias("WQ", "wq")
 ]]
 
-vim.cmd[[
+vim.cmd [[
     augroup last_edit
       autocmd!
       autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif

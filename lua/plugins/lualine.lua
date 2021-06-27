@@ -2,15 +2,8 @@ require "lualine".setup {
     options = {theme = "gruvbox"},
     sections = {
         lualine_a = {"mode"},
-        lualine_b = {"branch"},
-        lualine_c = {
-            {
-                "filename",
-                path = 1 -- 0 = just filename, 1 = relative path, 2 = absolute path
-            }
-        },
-        lualine_x = {"encoding", "fileformat", "filetype"},
-        lualine_y = {
+        lualine_b = {
+            "branch",
             {
                 "diff",
                 colored = true, -- displays diff status in color if set to true
@@ -21,9 +14,11 @@ require "lualine".setup {
                 symbols = {added = "+", modified = "~", removed = "-"} -- changes diff symbols
             }
         },
-        lualine_z = {
-            "progres",
-            "location",
+        lualine_c = {
+            {
+                "filename",
+                path = 1 -- 0 = just filename, 1 = relative path, 2 = absolute path
+            },
             {
                 "diagnostics",
                 -- table of diagnostic sources, available sources:
@@ -38,6 +33,10 @@ require "lualine".setup {
                 color_hint = nil, -- Changes diagnostic's hint foreground color
                 symbols = {error = "E", warn = "W", info = "I", hint = "H"}
             }
-        }
-    }
+        },
+        lualine_x = {"encoding", "fileformat", "filetype"},
+        lualine_y = {"progres"},
+        lualine_z = {"location"}
+    },
+    extensions = {"nvim-tree"}
 }
