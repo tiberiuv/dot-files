@@ -32,3 +32,5 @@ require "nvim-treesitter.configs".setup {
 
 --require('tree-sitter-typescript').typescript
 --require('tree-sitter-typescript').tsx
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.typescript.used_by = "javascriptflow"

@@ -6,10 +6,9 @@ fi
 # Env vars
 # ------------------------------------------------------------ #
 # Minifort
-export KUBERNETES_PROVIDER=minikube
+#export KUBERNETES_PROVIDER=minikube
 alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone europe-west1-b
 # ------------------------------------------------------------ #
-
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
@@ -24,6 +23,7 @@ export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH=$PATH:$N_PREFIX/bin
 export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
+export KITTY_CONFIG_DIRECTORY=~/.confi/kitty/kitty.conf
 
 export EDITOR=nvim
 export GPG_TTY=$(tty)
@@ -46,6 +46,7 @@ export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
+export PATH=/opt/homebrew/bin:$PATH
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -248,9 +249,11 @@ fi
 
 # updates PATH for the Google Cloud SDK.
 if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
 
 # enables shell command completion for gcloud.
 if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
+if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

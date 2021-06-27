@@ -11,6 +11,12 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # Install brew - package/app for osx
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
+if [ "$(arch)" = "arm64" ]; then
+  eval $(/opt/homebrew/bin/brew shellenv);
+else
+  eval $(/usr/local/bin/brew shellenv);
+fi
+
 # Install zinit - package manager for zsh shell
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 
@@ -20,13 +26,13 @@ brew tap homebrew/cask-versions
 brew tap AdoptOpenJDK/openjdk
 
 # Instal brew gui apps
-brew cask install vlc
-brew cask install firefox-developer-edition
-brew cask install spotify
-brew cask install adoptopenjdk
+brew install --cask vlc
+brew install --cask firefox-developer-edition
+brew install --cask spotify
+brew install --cask adoptopenjdk
 
 # Install brew packages
-brew install
+brew install \
     llvm \
     wget \
     curl \
@@ -47,11 +53,9 @@ brew install
     node \
     yarn \
     scala \
-    pinentry \
     pinentry-mac \
     gnupg \
-    gpg \
-    gpg2 \
+    gpg-agent \
     kubectl \
     mysql \
     postgres \
@@ -63,7 +67,6 @@ brew install
     cmake \
     icu4c \
     harfbuzz \
-    liblcms2 \
     lcms2
 
 brew link --overwrite gnupg
@@ -96,7 +99,8 @@ mv coursier ~/bin
 mv /usr/local/bin/metals-vim /usr/local/bin/metals
 
 # Install nvim plugins
-nvim -c PlugInstall
+nvim -c PackerInstall
+
 
 ### Install tmux tpm plugins
 ~/.tmux/plugins/tpm/scripts/install_plugins.sh

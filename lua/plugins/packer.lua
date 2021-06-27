@@ -8,7 +8,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
     execute "packadd packer.nvim"
 end
 
-vim.cmd "autocmd BufWritePost plugins/init.lua PackerCompile" -- Auto compile when there are changes in plugins.lua
+vim.cmd "autocmd BufWritePost plugins/packer.lua PackerCompile" -- Auto compile when there are changes in plugins.lua
 
 local packer = require "packer"
 local util = require "packer.util"
@@ -45,7 +45,7 @@ return require("packer").startup(
         use "dense-analysis/ale"
 
         -- Project Search
-        use {"junegunn/fzf", run = "./install -all && mv . ~/.fzf"}
+        use {"junegunn/fzf", dir = '~/.fzf', run = "./install -all"}
         use "junegunn/fzf.vim"
         use {
             'ojroques/nvim-lspfuzzy',

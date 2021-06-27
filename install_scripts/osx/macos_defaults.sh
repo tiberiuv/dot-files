@@ -20,4 +20,4 @@ defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO
 defaults -currentHost write -globalDomain AppleFontSmoothing -int 2
 
 # Don't write ds store files
-defaults write com.apple.desktopservices DSDontWriteNetworkStores false
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true

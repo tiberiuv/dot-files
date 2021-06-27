@@ -12,6 +12,7 @@ require_reset("plugins/smooth_scroll")
 require_reset("plugins/identline")
 require_reset("plugins/toggle_term")
 require_reset("plugins/ale")
+require_reset("plugins/nerdtree")
 -----------------------------------------
 
 -- No config plugin imports

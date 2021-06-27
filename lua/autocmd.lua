@@ -1,6 +1,6 @@
 vim.api.nvim_command("augroup file_types")
 vim.api.nvim_command("autocmd!")
-vim.api.nvim_command("autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx")
+--vim.api.nvim_command("autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx")
 vim.api.nvim_command("autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx")
 vim.api.nvim_command("autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript")
 vim.api.nvim_command("autocmd BufNewFile,BufRead *.ino,*.pde set filetype=cpp")
