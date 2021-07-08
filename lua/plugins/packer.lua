@@ -27,26 +27,56 @@ return require("packer").startup(
         use "gruvbox-community/gruvbox"
 
         -- Languages and syntax highlighting
-        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
-        use "chr4/nginx.vim"
-        use "wavded/vim-stylus"
-        use "tomlion/vim-solidity"
+        use {
+            "nvim-treesitter/nvim-treesitter",
+            run = ":TSUpdate",
+            config = "require('plugins.treesitter')"
+        }
+        use {"chr4/nginx.vim", ft = {".conf"}}
+        use {"wavded/vim-stylus", ft = {".stylus"}}
+        use {"tomlion/vim-solidity", ft = {".sol"}}
 
         -- LSP & Linting & Snippets & Completion
         use {"RishabhRD/popfix", run = "make"}
         use "RishabhRD/nvim-lsputils"
         use "neovim/nvim-lspconfig"
-        use "hrsh7th/nvim-compe"
-        use "hrsh7th/vim-vsnip"
-        use "SirVer/ultisnips"
-        use "honza/vim-snippets"
+        use {
+            "hrsh7th/nvim-compe",
+            requires = {
+                {"hrsh7th/vim-vsnip"},
+                {"SirVer/ultisnips"},
+                {"honza/vim-snippets"}
+            },
+            config = "require('plugins.compe_setup')"
+        }
         use "nathunsmitty/nvim-ale-diagnostic"
         use {"glepnir/lspsaga.nvim", branch = "main"}
-        use "dense-analysis/ale"
+        use {
+            "dense-analysis/ale",
+            config = "require('plugins.ale')"
+        }
 
         -- Project Search
-        use {"junegunn/fzf", dir = "~/.fzf", run = "./install -all"}
-        use "junegunn/fzf.vim"
+        use {
+            "junegunn/fzf",
+            dir = "~/.fzf",
+            run = "./install -all",
+            keys = {"<C-f>", "<C-p>"},
+            config = "require('plugins.fzf')",
+            opt = true,
+            cmd = {
+                "FzfFiles",
+                "FzfGFiles",
+                "FzfBuffers",
+                "FzfHelptags",
+                "FzfBLines",
+                "FzfRg",
+                "FzfRG"
+            }
+        }
+        use {
+            "junegunn/fzf.vim"
+        }
         use {
             "ojroques/nvim-lspfuzzy",
             requires = {
@@ -58,32 +88,66 @@ return require("packer").startup(
         use "tpope/vim-surround"
         use "tpope/vim-sleuth"
         use "tpope/vim-repeat"
-        use "preservim/nerdcommenter"
+
+        use {"b3nj5m1n/kommentary"}
         use "editorconfig/editorconfig-vim"
-        use "airblade/vim-rooter"
+        use {
+            "airblade/vim-rooter",
+            config = "require('plugins.rooter')"
+        }
 
         use {"iamcco/markdown-preview.nvim", run = "cd app && yarn install", cmd = "MarkdownPreview"}
 
-        use "terryma/vim-smooth-scroll"
+        use {
+            "terryma/vim-smooth-scroll",
+            opt = true,
+            config = "require('plugins.smooth_scroll')",
+            keys = {"<C-u>", "<C-d>"}
+        }
         use "mhinz/vim-signify"
-        use "zivyangll/git-blame.vim"
-        use "janko-m/vim-test"
-        use "Vimjas/vim-python-pep8-indent"
-        use "puremourning/vimspector"
+        use {
+            "zivyangll/git-blame.vim",
+            opt = true,
+            keys = "<leader>s"
+        }
+        use {
+            "janko-m/vim-test",
+            cmd = {"TestNearest", "TestFile", "TestSuite", "TestLatest"}
+        }
+        use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
+        --use "puremourning/vimspector"
         use "antoinemadec/FixCursorHold.nvim"
         use "nvim-lua/lsp_extensions.nvim"
-        use "vim-scripts/dbext.vim"
-        use "akinsho/nvim-toggleterm.lua"
-        use "kabouzeid/nvim-lspinstall"
+        use {
+            "akinsho/nvim-toggleterm.lua",
+            keys = "<C-t>",
+            config = "require('plugins.toggle_term')"
+        }
+        use {"kabouzeid/nvim-lspinstall"}
 
         -- Database management and competion
         --use 'tpope/vim-dadbod'
         --use 'kristijanhusak/vim-dadbod-completion'
         --use 'kristijanhusak/vim-dadbod-ui'
+
+        use {
+            "folke/which-key.nvim",
+            config = function()
+                require("which-key").setup {}
+            end
+        }
+
         use {
             "hoob3rt/lualine.nvim",
-            requires = {"kyazdani42/nvim-web-devicons", opt = true}
+            requires = {"kyazdani42/nvim-web-devicons"},
+            config = "require('plugins.lualine')"
         }
-        use "kyazdani42/nvim-tree.lua"
+
+        use {
+            "kyazdani42/nvim-tree.lua",
+            keys = {"<C-n>"},
+            config = "require('plugins.nvimtree')",
+            cmd = "NvimTreeOpen"
+        }
     end
 )

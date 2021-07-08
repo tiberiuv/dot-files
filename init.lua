@@ -69,6 +69,7 @@ local on_attach = function(_, bufnr)
 end
 
 configs.pyright = {
+    filetypes = {"python", ".py"},
     default_config = {
         cmd = {"pyright-langserver", "--stdio"},
         filetypes = {"python"},
@@ -101,12 +102,12 @@ nvim_lsp.tsserver.setup {
 
 nvim_lsp.clangd.setup {
     on_attach = on_attach,
-    filetype = {"c", "ino", "cpp", ".ino"}
+    filetypes = {"c", "ino", "cpp", ".ino"}
 }
 
 nvim_lsp.metals.setup {
     on_attach = on_attach,
-    filetype = {"scala", ".sc", ".scala"}
+    filetypes = {"scala", ".sc", ".scala"}
 }
 
 nvim_lsp.sqls.setup {
@@ -139,6 +140,7 @@ local sumneko_root_path = os.getenv("HOME") .. "/.zinit/plugins/sumneko---lua-la
 local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
 
 nvim_lsp.sumneko_lua.setup {
+    filetypes = { "lua", ".lua" },
     on_attach = on_attach,
     cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
     settings = {
@@ -165,6 +167,7 @@ nvim_lsp.sumneko_lua.setup {
 }
 
 nvim_lsp.rust_analyzer.setup {
+    filetypes = {"rust", ".rs"},
     on_attach = on_attach,
     root_dir = nvim_lsp.util.root_pattern("Cargo.toml", ".git"),
     settings = {
