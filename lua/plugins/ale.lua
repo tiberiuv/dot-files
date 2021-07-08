@@ -32,6 +32,8 @@ vim.g.ale_linters = {
     python = {"flake8"},
     javascript = {"eslint"},
     typescript = {"eslint"},
+    javascriptreact = {"stylelint", "eslint"},
+    typescriptreact = {"stylelint", "eslint"},
     jsx = {"stylelint", "eslint"},
     tsx = {"stylelint", "eslint"},
     lua = {"luacheck"}
@@ -43,6 +45,8 @@ vim.g.ale_fixers = {
     yaml = {"prettier"},
     javascript = {"prettier"},
     typescript = {"prettier"},
+    javascriptreact = {"prettier"},
+    typescriptreact = {"prettier"},
     rust = {"rustfmt"},
     lua = {"luafmt"}
 }

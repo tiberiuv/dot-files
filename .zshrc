@@ -7,6 +7,7 @@ fi
 # ------------------------------------------------------------ #
 # Minifort
 #export KUBERNETES_PROVIDER=minikube
+export KUBERNETES_PROVIDER=docker
 alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone europe-west1-b
 # ------------------------------------------------------------ #
 export LANG=en_US.UTF-8
