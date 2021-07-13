@@ -212,8 +212,8 @@ zinit light sumneko/lua-language-server
 # Neovim
 zinit ice as"program" \
   atclone"sudo rm -rf ./build;
-          sudo rm -rf ./.deps;
-          sudo make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
+          rm -rf ./.deps;
+          make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
           sudo make install" \
   atpull"%atclone"
 zinit light neovim/neovim

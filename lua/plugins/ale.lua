@@ -57,6 +57,6 @@ map("n", "]g", ":ALENext<cr>", {silent = true})
 
 --Run ale_fixers and save
 
-map("n", "<Leader>f", ":<C-u>ALEFix<CR> :w<CR>", {noremap = true, silent = true})
+map("n", "<leader>f", ":<C-u>ALEFix<CR> :w<CR>", {noremap = true, silent = true})
 map("n", "Zz", "<c-w>_ <c-w>", {noremap = true, silent = true})
 map("n", "Zo", "<c-w>=", {noremap = true, silent = true})

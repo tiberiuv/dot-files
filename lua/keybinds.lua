@@ -10,7 +10,10 @@ map("i", "<down>", "<nop>")
 map("i", "<left>", "<nop>")
 map("i", "<right>", "<nop>")
 
-map("n", "<Leader>s", ":<C-u>call gitblame#echo()<CR>", {noremap = true})
+map("n", "<S-Enter>", "O<Esc>")
+map("n", "<CR>", "o<Esc>")
+
+map("n", "<leader>s", "<cmd>lua require'gitsigns'.blame_line(true)<CR>", {noremap = true})
 
 -- Remove Highlight on esc
 map("n", "<ESC>", ":noh<CR>", {silent = true})

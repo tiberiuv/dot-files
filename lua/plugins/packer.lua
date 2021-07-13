@@ -59,11 +59,9 @@ return require("packer").startup(
         -- Project Search
         use {
             "junegunn/fzf",
-            dir = "~/.fzf",
-            run = "./install -all",
+            run = "./install && mv ./ ~/.fzf",
             keys = {"<C-f>", "<C-p>"},
             config = "require('plugins.fzf')",
-            opt = true,
             cmd = {
                 "FzfFiles",
                 "FzfGFiles",
@@ -100,22 +98,24 @@ return require("packer").startup(
 
         use {
             "terryma/vim-smooth-scroll",
-            opt = true,
             config = "require('plugins.smooth_scroll')",
             keys = {"<C-u>", "<C-d>"}
         }
-        use "mhinz/vim-signify"
+
         use {
-            "zivyangll/git-blame.vim",
-            opt = true,
-            keys = "<leader>s"
+            "lewis6991/gitsigns.nvim",
+            requires = {
+                "nvim-lua/plenary.nvim"
+            },
+            config = function()
+                require("gitsigns").setup()
+            end
         }
         use {
             "janko-m/vim-test",
             cmd = {"TestNearest", "TestFile", "TestSuite", "TestLatest"}
         }
         use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
-        --use "puremourning/vimspector"
         use "antoinemadec/FixCursorHold.nvim"
         use "nvim-lua/lsp_extensions.nvim"
         use {
@@ -124,18 +124,6 @@ return require("packer").startup(
             config = "require('plugins.toggle_term')"
         }
         use {"kabouzeid/nvim-lspinstall"}
-
-        -- Database management and competion
-        --use 'tpope/vim-dadbod'
-        --use 'kristijanhusak/vim-dadbod-completion'
-        --use 'kristijanhusak/vim-dadbod-ui'
-
-        use {
-            "folke/which-key.nvim",
-            config = function()
-                require("which-key").setup {}
-            end
-        }
 
         use {
             "hoob3rt/lualine.nvim",
@@ -147,7 +135,7 @@ return require("packer").startup(
             "kyazdani42/nvim-tree.lua",
             keys = {"<C-n>"},
             config = "require('plugins.nvimtree')",
-            cmd = "NvimTreeOpen"
+            cmd = {"NvimTreeOpen", "NvimTreeToggle"}
         }
     end
 )
