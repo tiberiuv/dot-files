@@ -69,7 +69,8 @@ brew install \
     icu4c \
     harfbuzz \
     lcms2 \
-    font-jetbrains-mono-nerd-font
+    font-jetbrains-mono-nerd-font \
+    fuse
 
 brew link --overwrite gnupg
 

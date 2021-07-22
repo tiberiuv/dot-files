@@ -12,7 +12,8 @@ alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone
 # ------------------------------------------------------------ #
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+# export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-16.jdk/Contents/Home
 export SCALA_HOME=/usr/local/opt/scala@2.12/idea
 export SPARK_HOME=/usr/local/Cellar/apache-spark/3.1.1/libexec/
 export PYSPARK_PYTHON=python3

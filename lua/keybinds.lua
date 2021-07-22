@@ -29,10 +29,3 @@ vim.cmd [[
     call SetupCommandAlias("Wq", "wq")
     call SetupCommandAlias("WQ", "wq")
 ]]
-
-vim.cmd [[
-    augroup last_edit
-      autocmd!
-      autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-    augroup END
-]]

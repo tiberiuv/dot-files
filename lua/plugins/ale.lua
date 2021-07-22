@@ -9,17 +9,15 @@ vim.g.ale_fix_on_save = 0
 vim.g.ale_sign_error = "✘"
 vim.g.ale_sign_warning = "⚠"
 
-vim.cmd "highlight ALEErrorSign ctermbg=NONE ctermfg=red"
-vim.cmd "highlight ALEWarningSign ctermbg=NONE ctermfg=yellow"
-
 vim.g.ale_python_flake8_args = "--max-line-length=100"
 vim.g.ale_rust_rustfmt_options = "--edition 2018"
 
 vim.g.ale_sign_priority = 100
-vim.g.ale_lint_on_text_changed = 0
+vim.g.ale_lint_on_text_changed = 1
 vim.g.ale_sign_column_always = 1
 vim.g.ale_python_auto_pipenv = 1
 vim.g.ale_disable_lsp = 1
+vim.g.ale_completion_enabled = 0
 
 vim.g.ale_virtualenv_dir_names = {"pynvim"}
 vim.g.ale_linter_aliases = {

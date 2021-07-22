@@ -107,6 +107,9 @@ return require("packer").startup(
             requires = {
                 "nvim-lua/plenary.nvim"
             },
+            numhl = true,
+            linehl = true,
+            sign_priority = 10,
             config = function()
                 require("gitsigns").setup()
             end
