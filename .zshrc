@@ -6,16 +6,15 @@ fi
 # Env vars
 # ------------------------------------------------------------ #
 # Minifort
-#export KUBERNETES_PROVIDER=minikube
 export KUBERNETES_PROVIDER=docker
 alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone europe-west1-b
 # ------------------------------------------------------------ #
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-16.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
 export SCALA_HOME=/usr/local/opt/scala@2.12/idea
-export SPARK_HOME=/usr/local/Cellar/apache-spark/3.1.1/libexec/
+export SPARK_HOME=/usr/local/Cellar/apache-spark/3.1.2/libexec/
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
@@ -49,7 +48,7 @@ export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
 export PATH=/opt/homebrew/bin:$PATH
 
-export PYENV_ROOT=$(pyenv root)
+# export PYENV_ROOT=$(pyenv root)
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -108,8 +107,8 @@ setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A T
 
 # ------------------------------ Aliases ------------------------------ #
 alias ssh="TERM=xterm-256color ssh"
-# This must be source because its required for zinit commands
 alias update-all="source ~/icloud/dot-files/update.zsh"
+
 if type nvim > /dev/null 2>&1; then
   alias vim=nvim
 fi
@@ -183,6 +182,17 @@ zinit wait lucid for \
 # Programs
 # ------------------------------------------------------------ #
 
+# Just install rust and make it available globally in the system
+zinit ice id-as"rust" wait"0" lucid rustup as"command" \
+            pick"bin/rustc" atload="export \
+                CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup"
+zinit load zdharma/null
+
+# Installs rust and then the `exa' and `lsd' crates
+# and exposes their binaries by altering $PATH
+zinit ice rustup cargo'exa;bat;procs;ripgrep;diesel_cli' as"command" pick"bin/(exa|bat|procs|rg|diesel)"
+zinit load zdharma/null
+
 # Rust analyzer
 zinit ice as"program" \
   atclone"cargo +nightly xtask install --server" \
@@ -192,15 +202,18 @@ zinit light rust-analyzer/rust-analyzer
 # Alacritty
 zinit ice as"program" \
   atclone"make app;
-            cp -r target/release/osx/Alacritty.app /Applications/" \
+          cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
 zinit light alacritty/alacritty
 
+# Kitty
 zinit ice as"program" \
-  atclone"make app; rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
+  atclone"make app;
+          rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
   atpull"%atclone"
 zinit light kovidgoyal/kitty
 
+# Lua lsp
 zinit ice as"program" \
   atclone"git submodule update --init --recursive;
           cd 3rd/luamake;
@@ -271,3 +284,5 @@ if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/complet
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 printf "\e[?1042l"
+
+export PATH="/usr/local/p/versions/python:$PATH"

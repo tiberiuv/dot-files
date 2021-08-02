@@ -74,10 +74,9 @@ brew install \
 
 brew link --overwrite gnupg
 
-
 # Install global node modules
 # mainly linters etc.
-yarn global add lua-fmt typescript-language-server pyright
+yarn global add lua-fmt typescript-language-server pyright pyvm
 
 # Install Lua linter
 luarocks install luacheck
@@ -103,7 +102,6 @@ mv /usr/local/bin/metals-vim /usr/local/bin/metals
 
 # Install nvim plugins
 nvim -c PackerInstall
-
 
 ### Install tmux tpm plugins
 ~/.tmux/plugins/tpm/scripts/install_plugins.sh
