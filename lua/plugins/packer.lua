@@ -33,7 +33,7 @@ return require("packer").startup(
             config = "require('plugins.treesitter')"
         }
         use {"chr4/nginx.vim", ft = {".conf"}}
-        use {"wavded/vim-stylus", ft = {".stylus"}}
+        use {"wavded/vim-stylus", ft = {".styl"}}
         use {"tomlion/vim-solidity", ft = {".sol"}}
 
         -- LSP & Linting & Snippets & Completion
@@ -49,7 +49,10 @@ return require("packer").startup(
             },
             config = "require('plugins.compe_setup')"
         }
-        use "nathunsmitty/nvim-ale-diagnostic"
+        use {
+            "nathunsmitty/nvim-ale-diagnostic",
+            config = "require('nvim-ale-diagnostic')"
+        }
         use {"glepnir/lspsaga.nvim", branch = "main"}
         use {
             "dense-analysis/ale",
