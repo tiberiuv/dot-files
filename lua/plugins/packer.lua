@@ -47,7 +47,8 @@ return require("packer").startup(
                 {"SirVer/ultisnips"},
                 {"honza/vim-snippets"}
             },
-            config = "require('plugins.compe_setup')"
+            config = "require('plugins.compe_setup')",
+            event = "InsertEnter"
         }
         use {
             "nathunsmitty/nvim-ale-diagnostic",
@@ -110,11 +111,13 @@ return require("packer").startup(
             requires = {
                 "nvim-lua/plenary.nvim"
             },
-            numhl = true,
-            linehl = true,
-            sign_priority = 10,
             config = function()
-                require("gitsigns").setup()
+                require("gitsigns").setup(
+                    {
+                        -- numhl = true,
+                        sign_priority = 10
+                    }
+                )
             end
         }
         use {
