@@ -1,6 +1,7 @@
 local vim = vim
 local execute = vim.api.nvim_command
 local fn = vim.fn
+
 -- ensure that packer is installed
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
@@ -23,8 +24,8 @@ return require("packer").startup(
     function()
         local use = use
         use {"wbthomason/packer.nvim"}
-
-        use "gruvbox-community/gruvbox"
+        -- use "gruvbox-community/gruvbox"
+        use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
 
         -- Languages and syntax highlighting
         use {
@@ -32,6 +33,7 @@ return require("packer").startup(
             run = ":TSUpdate",
             config = "require('plugins.treesitter')"
         }
+
         use {"chr4/nginx.vim", ft = {".conf"}}
         use {"wavded/vim-stylus", ft = {".styl"}}
         use {"tomlion/vim-solidity", ft = {".sol"}}
@@ -40,25 +42,28 @@ return require("packer").startup(
         -- LSP & Linting & Snippets & Completion
         use {"RishabhRD/popfix", run = "make"}
         use "RishabhRD/nvim-lsputils"
+
         use "neovim/nvim-lspconfig"
         use {
             "hrsh7th/nvim-compe",
             requires = {
+                {"SirVer/ultisnips"},
                 {"hrsh7th/vim-vsnip", event = "InsertCharPre"},
-                {"SirVer/ultisnips", event = "InsertCharPre"},
                 {"honza/vim-snippets", event = "InsertCharPre"}
             },
             config = "require('plugins.compe_setup')",
             event = "InsertEnter"
         }
-        use {
-            "nathunsmitty/nvim-ale-diagnostic",
-            config = "require('nvim-ale-diagnostic')"
-        }
 
         use {
             "dense-analysis/ale",
-            config = "require('plugins.ale')"
+            config = "require('plugins.ale')",
+            requires = {
+                {
+                    "nathunsmitty/nvim-ale-diagnostic",
+                    config = "require('nvim-ale-diagnostic')"
+                }
+            }
         }
 
         -- Project Search
@@ -77,9 +82,11 @@ return require("packer").startup(
                 "FzfRG"
             }
         }
+
         use {
             "junegunn/fzf.vim"
         }
+
         use {
             "ojroques/nvim-lspfuzzy",
             requires = {
@@ -88,15 +95,9 @@ return require("packer").startup(
             }
         }
 
-        use {
-            "tpope/vim-surround",
-            keys = {"cs", "cst", "ds", "ys"}
-        }
-        use "tpope/vim-sleuth"
-        use {
-            "tpope/vim-repeat",
-            keys = {"."}
-        }
+        use {"tpope/vim-surround"}
+        use {"tpope/vim-sleuth"}
+        use {"tpope/vim-repeat"}
 
         use {
             "b3nj5m1n/kommentary",
@@ -111,7 +112,11 @@ return require("packer").startup(
             event = "VimEnter"
         }
 
-        use {"iamcco/markdown-preview.nvim", run = "cd app && yarn install", cmd = "MarkdownPreview"}
+        use {
+            "iamcco/markdown-preview.nvim",
+            run = "cd app && yarn install",
+            cmd = "MarkdownPreview"
+        }
 
         use {
             "terryma/vim-smooth-scroll",
@@ -133,15 +138,19 @@ return require("packer").startup(
                 )
             end
         }
+
         use {
             "janko-m/vim-test",
             cmd = {"TestNearest", "TestFile", "TestSuite", "TestLatest"}
         }
+
         use {
             "antoinemadec/FixCursorHold.nvim",
             event = "CursorHold"
         }
+
         use "nvim-lua/lsp_extensions.nvim"
+
         use {
             "akinsho/nvim-toggleterm.lua",
             keys = "<C-t>",
