@@ -1,5 +1,4 @@
 -- Install lsp servers
-require "lspinstall".setup()
 local nvim_lsp = require("lspconfig")
 local configs = require("lspconfig/configs")
 
@@ -34,7 +33,7 @@ local on_attach = function(_, bufnr)
         opts
     )
     -- Lsp saga key binds
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
+    --[[ vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
     vim.api.nvim_buf_set_keymap(
         bufnr,
         "n",
@@ -57,7 +56,7 @@ local on_attach = function(_, bufnr)
         "]e",
         "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>",
         opts
-    )
+    ) ]]
 end
 
 configs.pyright = {
@@ -224,7 +223,3 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
         update_in_insert = false
     }
 )
-
-local saga = require "lspsaga"
-
-saga.init_lsp_saga {}

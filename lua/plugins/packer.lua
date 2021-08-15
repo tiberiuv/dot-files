@@ -35,6 +35,7 @@ return require("packer").startup(
         use {"chr4/nginx.vim", ft = {".conf"}}
         use {"wavded/vim-stylus", ft = {".styl"}}
         use {"tomlion/vim-solidity", ft = {".sol"}}
+        use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
 
         -- LSP & Linting & Snippets & Completion
         use {"RishabhRD/popfix", run = "make"}
@@ -43,9 +44,9 @@ return require("packer").startup(
         use {
             "hrsh7th/nvim-compe",
             requires = {
-                {"hrsh7th/vim-vsnip"},
-                {"SirVer/ultisnips"},
-                {"honza/vim-snippets"}
+                {"hrsh7th/vim-vsnip", event = "InsertCharPre"},
+                {"SirVer/ultisnips", event = "InsertCharPre"},
+                {"honza/vim-snippets", event = "InsertCharPre"}
             },
             config = "require('plugins.compe_setup')",
             event = "InsertEnter"
@@ -54,7 +55,7 @@ return require("packer").startup(
             "nathunsmitty/nvim-ale-diagnostic",
             config = "require('nvim-ale-diagnostic')"
         }
-        use {"glepnir/lspsaga.nvim", branch = "main"}
+
         use {
             "dense-analysis/ale",
             config = "require('plugins.ale')"
@@ -87,15 +88,27 @@ return require("packer").startup(
             }
         }
 
-        use "tpope/vim-surround"
-        use "tpope/vim-sleuth"
-        use "tpope/vim-repeat"
-
-        use {"b3nj5m1n/kommentary"}
-        use "editorconfig/editorconfig-vim"
         use {
-            "airblade/vim-rooter",
-            config = "require('plugins.rooter')"
+            "tpope/vim-surround",
+            keys = {"cs", "cst", "ds", "ys"}
+        }
+        use "tpope/vim-sleuth"
+        use {
+            "tpope/vim-repeat",
+            keys = {"."}
+        }
+
+        use {
+            "b3nj5m1n/kommentary",
+            keys = {"gc", "gcc"}
+        }
+
+        use "editorconfig/editorconfig-vim"
+
+        use {
+            "ahmedkhalf/project.nvim",
+            config = "require('plugins.project')",
+            event = "VimEnter"
         }
 
         use {"iamcco/markdown-preview.nvim", run = "cd app && yarn install", cmd = "MarkdownPreview"}
@@ -124,20 +137,26 @@ return require("packer").startup(
             "janko-m/vim-test",
             cmd = {"TestNearest", "TestFile", "TestSuite", "TestLatest"}
         }
-        use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
-        use "antoinemadec/FixCursorHold.nvim"
+        use {
+            "antoinemadec/FixCursorHold.nvim",
+            event = "CursorHold"
+        }
         use "nvim-lua/lsp_extensions.nvim"
         use {
             "akinsho/nvim-toggleterm.lua",
             keys = "<C-t>",
             config = "require('plugins.toggle_term')"
         }
-        use {"kabouzeid/nvim-lspinstall"}
+        use {
+            "kabouzeid/nvim-lspinstall",
+            cmd = {"LspInstall", "LspUninstall"}
+        }
 
         use {
             "hoob3rt/lualine.nvim",
             requires = {"kyazdani42/nvim-web-devicons"},
-            config = "require('plugins.lualine')"
+            config = "require('plugins.lualine')",
+            event = "VimEnter"
         }
 
         use {
