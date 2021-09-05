@@ -23,14 +23,13 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/i
 # Add other repos to brew
 brew tap homebrew/cask
 brew tap homebrew/cask-versions
-brew tap AdoptOpenJDK/openjdk
 brew tap homebrew/cask-fonts
 
 # Instal brew gui apps
 brew install --cask vlc
 brew install --cask firefox-developer-edition
 brew install --cask spotify
-brew install --cask adoptopenjdk
+brew install --cask temurin11
 
 # Install brew packages
 brew install \

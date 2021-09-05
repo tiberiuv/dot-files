@@ -30,5 +30,6 @@ require "nvim-treesitter.configs".setup {
     textobjects = {enable = true}
 }
 
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.typescript.used_by = "javascriptflow"
+-- local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+--[[ parser_config.tsx.used_by = "javascriptflow.js"
+parser_config.typescript.used_by = "javascriptflow.js" ]]

@@ -1,9 +1,9 @@
 require "lualine".setup {
     options = {theme = "gruvbox"},
     sections = {
-        lualine_a = {"mode"},
+        lualine_a = {{"mode", lower = true}},
         lualine_b = {
-            "branch",
+            {"branch", icon = ""},
             {
                 "diff",
                 colored = true, -- displays diff status in color if set to true
@@ -34,9 +34,9 @@ require "lualine".setup {
                 symbols = {error = "E", warn = "W", info = "I", hint = "H"}
             }
         },
-        lualine_x = {"encoding", "fileformat", "filetype"},
+        lualine_x = {"encoding", "fileformat", {"filetype", colored = true}},
         lualine_y = {"progres"},
         lualine_z = {"location"}
     },
-    extensions = {"nvim-tree"}
+    extensions = {"nvim-tree", "fzf"}
 }

@@ -1,5 +1,4 @@
 local map = require("utils").map
-local vim = vim
 
 vim.g.ale_lint_delay = 200
 vim.g.ale_lint_on_enter = 0

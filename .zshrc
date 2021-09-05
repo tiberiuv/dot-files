@@ -11,10 +11,16 @@ alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone
 # ------------------------------------------------------------ #
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-# export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
+export HOMEBREW_HOME="/usr/local/Cellar"
+export SPARK_HOME="$HOMEBREW_HOME/apache-spark/3.1.2/libexec"
+
+if [[ $(uname -m) == arm64 ]]; then
+  export HOMEBREW_HOME="/opt/homebrew/opt"
+  export SPARK_HOME="$HOMEBREW_HOME/apache-spark/libexec"
+fi
+
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
 export SCALA_HOME=/usr/local/opt/scala@2.12/idea
-export SPARK_HOME=/usr/local/Cellar/apache-spark/3.1.2/libexec/
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
@@ -39,13 +45,13 @@ export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/Applications
 export PATH=$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex
-export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH=$PATH:/usr/local/opt/llvm/bin
 export PATH=$PATH:$JAVA_HOME/bin
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
+export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH=/opt/homebrew/bin:$PATH
 
 # export PYENV_ROOT=$(pyenv root)
@@ -286,3 +292,8 @@ if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/complet
 printf "\e[?1042l"
 
 export PATH="/usr/local/p/versions/python:$PATH"
+
+
+# BEGIN_KITTY_SHELL_INTEGRATION
+if test -e "/Applications/kitty.app/Contents/Resources/kitty/shell-integration/kitty.zsh"; then source "/Applications/kitty.app/Contents/Resources/kitty/shell-integration/kitty.zsh"; fi
+# END_KITTY_SHELL_INTEGRATION

@@ -8,7 +8,8 @@ local on_attach = function(_, bufnr)
         prefix = " > ",
         aligned = false,
         only_current_line = false,
-        enabled = {"ChainingHint"}
+        enabled = {"ChainingHint"},
+        use_languagetree = true
     }
 
     -- Mappings.
@@ -33,7 +34,7 @@ local on_attach = function(_, bufnr)
         opts
     )
     -- Lsp saga key binds
-    --[[ vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
     vim.api.nvim_buf_set_keymap(
         bufnr,
         "n",
@@ -56,7 +57,7 @@ local on_attach = function(_, bufnr)
         "]e",
         "<cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>",
         opts
-    ) ]]
+    )
 end
 
 configs.pyright = {
@@ -101,6 +102,11 @@ nvim_lsp.metals.setup {
     filetypes = {"scala", ".sc", ".scala"}
 }
 
+nvim_lsp.flow.setup {
+    on_attach = on_attach
+    -- filetypes = {"javascriptflow.jsx", "javascriptflow.js"}
+}
+
 nvim_lsp.sqls.setup {
     on_attach = on_attach,
     settings = {
@@ -131,7 +137,7 @@ local sumneko_root_path = os.getenv("HOME") .. "/.zinit/plugins/sumneko---lua-la
 local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
 
 nvim_lsp.sumneko_lua.setup {
-    filetypes = { "lua", ".lua" },
+    filetypes = {"lua", ".lua"},
     on_attach = on_attach,
     cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
     settings = {
@@ -190,7 +196,6 @@ local servers = {
     "vimls",
     "jsonls",
     "html",
-    "flow",
     "cssls",
     "terraformls",
     "dockerls",

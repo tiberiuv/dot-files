@@ -1,5 +1,3 @@
-local vim = vim
-
 vim.g.floaterm_width = 100
 vim.g.floater_height = 30
 vim.g.floaterm_winblend = 0

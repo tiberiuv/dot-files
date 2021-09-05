@@ -1,4 +1,3 @@
-local vim = vim
 local execute = vim.api.nvim_command
 local fn = vim.fn
 
@@ -25,7 +24,10 @@ return require("packer").startup(
         local use = use
         use {"wbthomason/packer.nvim"}
         -- use "gruvbox-community/gruvbox"
-        use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+        use {
+            "npxbr/gruvbox.nvim",
+            requires = {"rktjmp/lush.nvim"}
+        }
 
         -- Languages and syntax highlighting
         use {
@@ -46,11 +48,7 @@ return require("packer").startup(
         use "neovim/nvim-lspconfig"
         use {
             "hrsh7th/nvim-compe",
-            requires = {
-                {"SirVer/ultisnips"},
-                {"hrsh7th/vim-vsnip", event = "InsertCharPre"},
-                {"honza/vim-snippets", event = "InsertCharPre"}
-            },
+            requires = {"SirVer/ultisnips"},
             config = "require('plugins.compe_setup')",
             event = "InsertEnter"
         }
@@ -126,17 +124,8 @@ return require("packer").startup(
 
         use {
             "lewis6991/gitsigns.nvim",
-            requires = {
-                "nvim-lua/plenary.nvim"
-            },
-            config = function()
-                require("gitsigns").setup(
-                    {
-                        -- numhl = true,
-                        sign_priority = 10
-                    }
-                )
-            end
+            requires = {"nvim-lua/plenary.nvim"},
+            config = "require('gitsigns')"
         }
 
         use {
@@ -173,6 +162,11 @@ return require("packer").startup(
             keys = {"<C-n>"},
             config = "require('plugins.nvimtree')",
             cmd = {"NvimTreeOpen", "NvimTreeToggle"}
+        }
+
+        use {
+            "glepnir/lspsaga.nvim",
+            config = "require('lspsaga')"
         }
     end
 )
