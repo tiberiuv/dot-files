@@ -1,8 +1,5 @@
 #!/bin/zsh
 
-# Update App Store apps
-#sudo softwareupdate -i -a
-
 rustup update
 
 # Update Homebrew (Cask) & packages
