@@ -125,7 +125,7 @@ return require("packer").startup(
         use {
             "lewis6991/gitsigns.nvim",
             requires = {"nvim-lua/plenary.nvim"},
-            config = "require('gitsigns')"
+            config = "require('plugins.gitsigns')"
         }
 
         use {
@@ -166,7 +166,7 @@ return require("packer").startup(
 
         use {
             "glepnir/lspsaga.nvim",
-            config = "require('lspsaga')"
+            config = "require('plugins.lspsaga')"
         }
     end
 )
