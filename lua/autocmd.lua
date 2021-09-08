@@ -1,4 +1,3 @@
--- vim.api.nvim_command("autocmd FileType rust,python,javascript,typescript,yaml,yml,json autocmd BufWritePre <buffer> %s/\s\+$//e")
 vim.cmd [[
     augroup file_types
         autocmd!

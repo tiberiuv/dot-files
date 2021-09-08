@@ -46,11 +46,16 @@ return require("packer").startup(
         use "RishabhRD/nvim-lsputils"
 
         use "neovim/nvim-lspconfig"
+
         use {
-            "hrsh7th/nvim-compe",
-            requires = {"SirVer/ultisnips"},
-            config = "require('plugins.compe_setup')",
-            event = "InsertEnter"
+            "hrsh7th/nvim-cmp",
+            requires = {
+                "hrsh7th/cmp-nvim-lsp",
+                "L3MON4D3/LuaSnip",
+                -- "SirVer/ultisnips",
+            },
+            config = "require('plugins.cmp_config')",
+            -- event = "InsertEnter"
         }
 
         use {
