@@ -22,7 +22,7 @@ require "nvim-treesitter.configs".setup {
     },
     highlight = {enable = true},
     incremental_selection = {enable = true},
-    indent = {enable = true},
+    indent = {enable = false},
     refactor = {
         smart_rename = {enable = true},
         navigation = {enable = true}

@@ -51,10 +51,12 @@ return require("packer").startup(
             "hrsh7th/nvim-cmp",
             requires = {
                 "hrsh7th/cmp-nvim-lsp",
+                "hrsh7th/cmp-path",
+                "hrsh7th/cmp-buffer",
                 "L3MON4D3/LuaSnip",
-                -- "SirVer/ultisnips",
+                "saadparwaiz1/cmp_luasnip"
             },
-            config = "require('plugins.cmp_config')",
+            config = "require('plugins.cmp_config')"
             -- event = "InsertEnter"
         }
 

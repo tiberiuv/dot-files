@@ -193,7 +193,11 @@ nvim_lsp.rust_analyzer.setup {
             },
             checkOnSave = {
                 command = "clippy",
-                allTarget = true
+                allTargets = true
+            },
+            assist = {
+                importGranularity = "module",
+                importPrefix = "by_self"
             },
             cargo = {
                 loadOutDirsFromCheck = true
@@ -203,7 +207,7 @@ nvim_lsp.rust_analyzer.setup {
             }
         }
     },
-    -- capabilities = capabilities
+    capabilities = capabilities
 }
 
 local servers = {

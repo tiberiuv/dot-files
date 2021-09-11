@@ -241,7 +241,7 @@ zinit light neovim/neovim
 # Tmux
 zinit ice as"program" \
   atclone"sh autogen.sh;
-          ./configure && make" \
+          ./configure --enable-utf8proc && make -j 8" \
   atpull"%atclone"
 zinit light tmux/tmux
 
