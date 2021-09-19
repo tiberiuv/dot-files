@@ -40,7 +40,7 @@ local lspkind_comparator = function(conf)
                 return nil
             end
         end
-        local kind1 = lsp_types.CompletionItemKind[entry1.kind()]
+        local kind1 = lsp_types.CompletionItemKind[entry1:get_kind()]
         local kind2 = lsp_types.CompletionItemKind[entry2:get_kind()]
 
         local priority1 = conf[kind1].order or 0
@@ -59,54 +59,56 @@ end
 local luasnip = require("luasnip")
 local cmp = require "cmp"
 
+local has_words_before = function()
+    if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+        return false
+    end
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local tab = function(fallback)
+    if vim.fn.pumvisible() == 1 then
+        vim.fn.feedkeys(t "<C-n>", "n")
+    elseif luasnip.expand_or_jumpable() then
+        vim.fn.feedkeys(t("<Plug>luasnip-expand-or-jump"), "")
+    else
+        fallback()
+    end
+end
+
+local stab = function(fallback)
+    if vim.fn.pumvisible() == 1 then
+        vim.fn.feedkeys(t "<C-p>", "n")
+    elseif luasnip.jumpable(-1) then
+        vim.fn.feedkeys(t("<Plug>luasnip-jump-prev"), "")
+    else
+        fallback()
+    end
+end
+
 local mapping = {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-n>"] = cmp.mapping.select_next_item(),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.close(),
     ["<CR>"] = cmp.mapping.confirm(),
-    ["<Tab>"] = cmp.mapping(
-        function(fallback)
-            if vim.fn.pumvisible() == 1 then
-                vim.fn.feedkeys(t "<C-n>", "n")
-            elseif luasnip.expand_or_jumpable() then
-                vim.fn.feedkeys(t("<Plug>luasnip-expand-or-jump"), "")
-            else
-                fallback()
-            end
-        end,
-        {
-            "i",
-            "s"
-        }
-    ),
-    ["<S-Tab>"] = cmp.mapping(
-        function(fallback)
-            if vim.fn.pumvisible() == 1 then
-                vim.fn.feedkeys(t "<C-p>", "n")
-            elseif luasnip.jumpable(-1) then
-                vim.fn.feedkeys(t("<Plug>luasnip-jump-prev"), "")
-            else
-                fallback()
-            end
-        end,
-        {
-            "i",
-            "s"
-        }
-    )
+    ["<Tab>"] = cmp.mapping(tab, {"i", "s"}),
+    ["<S-Tab>"] = cmp.mapping(stab, {"i", "s"})
 }
 
 cmp.setup {
     mapping = mapping,
     completion = {
-        completeopt = "menu,menuone,noselect"
+        completeopt = "menu,menuone,noselect",
+        keyword_length = 2
     },
     sources = {
         {name = "nvim_lsp"},
         {name = "luasnip"},
-        {name = "cmp_path"},
-        {name = "cmp_buffer"}
+        {name = "path"}
+        -- {name = "treesitter"}
+        -- {name = "buffer"}
     },
     snippet = {
         expand = function(args)
@@ -125,14 +127,17 @@ cmp.setup {
                 path = "[Pth]",
                 calc = "[Clc]",
                 spell = "[Spl]",
-                emoji = "[Emj]"
+                emoji = "[Emj]",
+                treesitter = "[Trs]"
             })[entry.source.name]
 
             return vim_item
         end
     },
-    comparators = {
-        lspkind_comparator(cmp_kinds),
-        label_comparator
+    sorting = {
+        comparators = {
+            lspkind_comparator(cmp_kinds),
+            label_comparator
+        }
     }
 }

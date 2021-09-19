@@ -69,7 +69,9 @@ brew install \
     harfbuzz \
     lcms2 \
     font-jetbrains-mono-nerd-font \
-    fuse
+    fuse \
+    librsync \
+    ImageMagick
 
 brew link --overwrite gnupg
 

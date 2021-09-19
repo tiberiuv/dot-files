@@ -23,7 +23,6 @@ return require("packer").startup(
     function()
         local use = use
         use {"wbthomason/packer.nvim"}
-        -- use "gruvbox-community/gruvbox"
         use {
             "npxbr/gruvbox.nvim",
             requires = {"rktjmp/lush.nvim"}
@@ -41,10 +40,6 @@ return require("packer").startup(
         use {"tomlion/vim-solidity", ft = {".sol"}}
         use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
 
-        -- LSP & Linting & Snippets & Completion
-        use {"RishabhRD/popfix", run = "make"}
-        use "RishabhRD/nvim-lsputils"
-
         use "neovim/nvim-lspconfig"
 
         use {
@@ -52,12 +47,15 @@ return require("packer").startup(
             requires = {
                 "hrsh7th/cmp-nvim-lsp",
                 "hrsh7th/cmp-path",
-                "hrsh7th/cmp-buffer",
                 "L3MON4D3/LuaSnip",
                 "saadparwaiz1/cmp_luasnip"
             },
             config = "require('plugins.cmp_config')"
-            -- event = "InsertEnter"
+        }
+
+        use {
+            "mfussenegger/nvim-dap",
+            keys = "<Leader>d"
         }
 
         use {
@@ -89,13 +87,8 @@ return require("packer").startup(
         }
 
         use {
-            "junegunn/fzf.vim"
-        }
-
-        use {
             "ojroques/nvim-lspfuzzy",
             requires = {
-                {"junegunn/fzf"},
                 {"junegunn/fzf.vim"} -- to enable preview (optional)
             }
         }
@@ -130,8 +123,12 @@ return require("packer").startup(
         }
 
         use {
+            "nvim-lua/plenary.nvim",
+            module = "plenary"
+        }
+
+        use {
             "lewis6991/gitsigns.nvim",
-            requires = {"nvim-lua/plenary.nvim"},
             config = "require('plugins.gitsigns')"
         }
 
@@ -169,11 +166,6 @@ return require("packer").startup(
             keys = {"<C-n>"},
             config = "require('plugins.nvimtree')",
             cmd = {"NvimTreeOpen", "NvimTreeToggle"}
-        }
-
-        use {
-            "glepnir/lspsaga.nvim",
-            config = "require('plugins.lspsaga')"
         }
     end
 )

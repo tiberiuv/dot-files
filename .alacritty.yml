@@ -1,5 +1,6 @@
 env:
   TERM: alacritty
+  # TERM: xterm-256color
 
 font:
   normal:
@@ -28,6 +29,7 @@ font:
 use_thin_strokes: true
 
 window:
+  opacity: 1
   dimensions:
     columns: 140
     lines: 34
@@ -49,7 +51,6 @@ selection:
   save_to_clipboard: true
 
 live_config_reload: true
-background_opacity: 1
 custom_cursor_colors: true
 
 # Colors (Gruvbox dark)

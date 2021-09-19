@@ -36,37 +36,10 @@ local on_attach = function(_, bufnr)
         "<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
         opts
     )
-    -- Lsp saga key binds
-    vim.api.nvim_buf_set_keymap(
-        bufnr,
-        "n",
-        "<leader>ca",
-        "<cmd>lua require('lspsaga.codeaction').code_action()<CR>",
-        opts
-    )
-    -- Broken until lsp saga is updated, following nvim nightly breakage
-    -- https://github.com/neovim/neovim/pull/15504
-
-    -- vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, "n", "vd", "<Cmd>lua require'lspsaga.provider'.preview_definition()<CR>", opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<Cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(
-        bufnr,
-        "n",
-        "[e",
-        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>",
-        opts
-    )
-    vim.api.nvim_buf_set_keymap(
-        bufnr,
-        "n",
-        "]e",
-        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>",
-        opts
-    )
 end
 
 configs.pyright = {
+    on_attach = on_attach,
     filetypes = {"python", ".py"},
     default_config = {
         cmd = {"pyright-langserver", "--stdio"},
@@ -91,35 +64,51 @@ configs.pyright = {
             }
         }
     },
-    capabilities = capabilities
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 nvim_lsp.tsserver.setup {
     on_attach = on_attach,
     filetypes = {"typescript", "typescriptreact", "typescript.tsx"},
-    capabilities = capabilities
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 nvim_lsp.clangd.setup {
     on_attach = on_attach,
     filetypes = {"c", "ino", "cpp", ".ino"},
-    capabilities = capabilities
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 nvim_lsp.metals.setup {
     on_attach = on_attach,
     filetypes = {"scala", ".sc", ".scala"},
-    capabilities = capabilities
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 nvim_lsp.flow.setup {
     on_attach = on_attach,
-    capabilities = capabilities
     -- filetypes = {"javascriptflow.jsx", "javascriptflow.js"}
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 nvim_lsp.sqls.setup {
     on_attach = on_attach,
+    filetypes = {"sql", ".sql"},
     settings = {
         sqls = {
             connections = {
@@ -131,7 +120,10 @@ nvim_lsp.sqls.setup {
             }
         }
     },
-    capabilities = capabilities
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 local system_name
@@ -149,8 +141,8 @@ local sumneko_root_path = os.getenv("HOME") .. "/.zinit/plugins/sumneko---lua-la
 local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
 
 nvim_lsp.sumneko_lua.setup {
-    filetypes = {"lua", ".lua"},
     on_attach = on_attach,
+    filetypes = {"lua", ".lua"},
     cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
     settings = {
         Lua = {
@@ -173,18 +165,21 @@ nvim_lsp.sumneko_lua.setup {
             }
         }
     },
-    capabilities = capabilities
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 nvim_lsp.rust_analyzer.setup {
-    filetypes = {"rust", ".rs"},
     on_attach = on_attach,
+    filetypes = {"rust", ".rs"},
     root_dir = nvim_lsp.util.root_pattern("Cargo.toml", ".git"),
     settings = {
         ["rust-analyzer"] = {
             diagnostics = {
-                enable = true,
-                enableExperimental = true
+                enable = true
+                -- enableExperimental = true
             },
             inlayHints = {
                 enable = true,
@@ -193,21 +188,25 @@ nvim_lsp.rust_analyzer.setup {
             },
             checkOnSave = {
                 command = "clippy",
-                allTargets = true
+                allTargets = false
             },
             assist = {
                 importGranularity = "module",
                 importPrefix = "by_self"
             },
             cargo = {
-                loadOutDirsFromCheck = true
+                loadOutDirsFromCheck = true,
+                target = "x86_64-apple-darwin"
             },
             procMacro = {
                 enable = true
             }
         }
     },
-    capabilities = capabilities
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150
+    }
 }
 
 local servers = {
@@ -225,19 +224,17 @@ local servers = {
 for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup {
         on_attach = on_attach,
-        capabilities = capabilities
+        capabilities = capabilities,
+        flags = {
+            debounce_text_changes = 150
+        }
     }
 end
 
-vim.lsp.handlers["textDocument/codeAction"] = require "lsputil.codeAction".code_action_handler
-vim.lsp.handlers["textDocument/references"] = require "lsputil.locations".references_handler
-vim.lsp.handlers["textDocument/definition"] = require "lsputil.locations".definition_handler
-vim.lsp.handlers["textDocument/declaration"] = require "lsputil.locations".declaration_handler
-vim.lsp.handlers["textDocument/typeDefinition"] = require "lsputil.locations".typeDefinition_handler
-vim.lsp.handlers["textDocument/implementation"] = require "lsputil.locations".implementation_handler
-vim.lsp.handlers["textDocument/documentSymbol"] = require "lsputil.symbols".document_handler
-vim.lsp.handlers["workspace/symbol"] = require "lsputil.symbols".workspace_handler
-vim.lsp.handlers["textDocument/publishDiagnostics"] =
+local handlers = vim.lsp.handlers
+local pop_opts = {border = "single", max_width = 100}
+
+handlers["textDocument/publishDiagnostics"] =
     vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics,
     {
@@ -247,3 +244,5 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
         update_in_insert = false
     }
 )
+handlers["textDocument/hover"] = vim.lsp.with(handlers.hover, pop_opts)
+handlers["textDocument/signatureHelp"] = vim.lsp.with(handlers.signature_help, pop_opts)
