@@ -22,7 +22,10 @@ packer.init(
 return require("packer").startup(
     function()
         local use = use
-        use {"wbthomason/packer.nvim"}
+        use {
+            "wbthomason/packer.nvim"
+        }
+
         use {
             "npxbr/gruvbox.nvim",
             requires = {"rktjmp/lush.nvim"}
@@ -32,7 +35,8 @@ return require("packer").startup(
         use {
             "nvim-treesitter/nvim-treesitter",
             run = ":TSUpdate",
-            config = "require('plugins.treesitter')"
+            config = "require('plugins.treesitter')",
+            event = "BufEnter"
         }
 
         use {"chr4/nginx.vim", ft = {".conf"}}
@@ -45,13 +49,14 @@ return require("packer").startup(
         use {
             "hrsh7th/nvim-cmp",
             requires = {
-                "hrsh7th/cmp-nvim-lsp",
-                "hrsh7th/cmp-path",
-                "L3MON4D3/LuaSnip",
-                "saadparwaiz1/cmp_luasnip"
+                {"L3MON4D3/LuaSnip"}
             },
             config = "require('plugins.cmp_config')"
         }
+
+        use {"hrsh7th/cmp-nvim-lsp"}
+        use {"hrsh7th/cmp-path", after = "nvim-cmp"}
+        use {"saadparwaiz1/cmp_luasnip", after = "nvim-cmp"}
 
         use {
             "mfussenegger/nvim-dap",
@@ -66,7 +71,8 @@ return require("packer").startup(
                     "nathunsmitty/nvim-ale-diagnostic",
                     config = "require('nvim-ale-diagnostic')"
                 }
-            }
+            },
+            event = "VimEnter"
         }
 
         -- Project Search
@@ -87,10 +93,8 @@ return require("packer").startup(
         }
 
         use {
-            "ojroques/nvim-lspfuzzy",
-            requires = {
-                {"junegunn/fzf.vim"} -- to enable preview (optional)
-            }
+            "junegunn/fzf.vim",
+            after = "fzf"
         }
 
         use {"tpope/vim-surround"}
@@ -129,7 +133,8 @@ return require("packer").startup(
 
         use {
             "lewis6991/gitsigns.nvim",
-            config = "require('plugins.gitsigns')"
+            config = "require('plugins.gitsigns')",
+            event = "BufRead"
         }
 
         use {
@@ -151,7 +156,8 @@ return require("packer").startup(
         }
         use {
             "kabouzeid/nvim-lspinstall",
-            cmd = {"LspInstall", "LspUninstall"}
+            cmd = {"LspInstall", "LspUninstall"},
+            event = "BufEnter"
         }
 
         use {

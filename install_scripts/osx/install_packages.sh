@@ -1,3 +1,5 @@
+set -e
+
 mkdir ~/.config
 mkdir ~/.config/nvim
 mkdir ~/.config/nvim/lua
@@ -34,6 +36,7 @@ brew install --cask temurin11
 # Install brew packages
 brew install \
     llvm \
+    gcc \ 
     wget \
     curl \
     watch \
@@ -106,3 +109,6 @@ nvim -c PackerInstall
 
 ### Install tmux tpm plugins
 ~/.tmux/plugins/tpm/scripts/install_plugins.sh
+
+### Install zinit 
+zinit update

@@ -9,16 +9,18 @@ fi
 export KUBERNETES_PROVIDER=docker
 alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone europe-west1-b
 # ------------------------------------------------------------ #
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export HOMEBREW_HOME="/usr/local/Cellar"
-export SPARK_HOME="$HOMEBREW_HOME/apache-spark/3.1.2/libexec"
-
 if [[ $(uname -m) == arm64 ]]; then
+  eval $(/opt/homebrew/bin/brew shellenv)
   export HOMEBREW_HOME="/opt/homebrew/opt"
   export SPARK_HOME="$HOMEBREW_HOME/apache-spark/libexec"
+else
+  export HOMEBREW_HOME="/usr/local/Cellar"
+  export SPARK_HOME="$HOMEBREW_HOME/apache-spark/3.1.2/libexec"
+  eval $(/usr/local/bin/brew shellenv)
 fi
 
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
 export SCALA_HOME=/usr/local/opt/scala@2.12/idea
 export PYSPARK_PYTHON=python3
@@ -29,7 +31,7 @@ export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH=$PATH:$N_PREFIX/bin
 export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
-export KITTY_CONFIG_DIRECTORY=~/.confi/kitty/kitty.conf
+export KITTY_CONFIG_DIRECTORY=~/.config/kitty/kitty.conf
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 export EDITOR=nvim
 export GPG_TTY=$(tty)
@@ -44,21 +46,21 @@ export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/Applications
-export PATH=$PATH:/usr/local/texlive/2019/texmf-dist/tex/xelatex
-export PATH=$PATH:/usr/local/opt/llvm/bin
+export PATH=$PATH:$HOMEBREW_PREFIX/texlive/2019/texmf-dist/tex/xelatex
 export PATH=$PATH:$JAVA_HOME/bin
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
 export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
-export PATH=/opt/homebrew/bin:$PATH
-
-# export PYENV_ROOT=$(pyenv root)
+export PATH=$HOMEBREW_PREFIX/bin:$PATH
+export PATH=$HOMEBREW_PREFIX/sbin:$PATH
+export PATH="/usr/local/p/versions/python:$PATH"
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
-export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
+export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/opt/openssl/lib/
+export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/lib/
 # ------------------------------------------------------------ #
 # Without the bindkey alt+right/left is broken it tmux
 # ------------------------------------------------------------ #
@@ -290,8 +292,6 @@ if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/complet
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 printf "\e[?1042l"
-
-export PATH="/usr/local/p/versions/python:$PATH"
 
 
 # BEGIN_KITTY_SHELL_INTEGRATION
