@@ -59,8 +59,8 @@ export PATH="/usr/local/p/versions/python:$PATH"
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
-export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/opt/openssl/lib/
-export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/lib/
+# export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/opt/openssl/lib/
+# export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/lib/
 # ------------------------------------------------------------ #
 # Without the bindkey alt+right/left is broken it tmux
 # ------------------------------------------------------------ #

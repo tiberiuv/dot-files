@@ -51,7 +51,8 @@ return require("packer").startup(
             requires = {
                 {"L3MON4D3/LuaSnip"}
             },
-            config = "require('plugins.cmp_config')"
+            config = "require('plugins.cmp_config')",
+            event = "InsertEnter"
         }
 
         use {"hrsh7th/cmp-nvim-lsp"}
@@ -106,8 +107,6 @@ return require("packer").startup(
             keys = {"gc", "gcc"}
         }
 
-        use "editorconfig/editorconfig-vim"
-
         use {
             "ahmedkhalf/project.nvim",
             config = "require('plugins.project')",
@@ -118,12 +117,6 @@ return require("packer").startup(
             "iamcco/markdown-preview.nvim",
             run = "cd app && yarn install",
             cmd = "MarkdownPreview"
-        }
-
-        use {
-            "terryma/vim-smooth-scroll",
-            config = "require('plugins.smooth_scroll')",
-            keys = {"<C-u>", "<C-d>"}
         }
 
         use {
@@ -147,7 +140,10 @@ return require("packer").startup(
             event = "CursorHold"
         }
 
-        use "nvim-lua/lsp_extensions.nvim"
+        use {
+            "nvim-lua/lsp_extensions.nvim",
+            event = "BufEnter"
+        }
 
         use {
             "akinsho/nvim-toggleterm.lua",
@@ -172,6 +168,12 @@ return require("packer").startup(
             keys = {"<C-n>"},
             config = "require('plugins.nvimtree')",
             cmd = {"NvimTreeOpen", "NvimTreeToggle"}
+        }
+
+        use {
+            "karb94/neoscroll.nvim",
+            keys = {"<C-u>", "<C-d>"},
+            config = "require('plugins.neoscroll')"
         }
     end
 )

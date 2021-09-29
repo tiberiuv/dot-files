@@ -2,7 +2,6 @@ local map = require("utils").map
 
 map("n", "<C-n>", ":NvimTreeToggle<CR>", {noremap = true, silent = true})
 
-vim.g.nvim_tree_highlight_opened_files = 1
 vim.g.nvim_tree_quit_on_open = 1
 vim.g.nvim_tree_show_icons = {
     git = 1,
