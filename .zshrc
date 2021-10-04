@@ -14,9 +14,9 @@ if [[ $(uname -m) == arm64 ]]; then
   export HOMEBREW_HOME="/opt/homebrew/opt"
   export SPARK_HOME="$HOMEBREW_HOME/apache-spark/libexec"
 else
+  eval $(/usr/local/bin/brew shellenv)
   export HOMEBREW_HOME="/usr/local/Cellar"
   export SPARK_HOME="$HOMEBREW_HOME/apache-spark/3.1.2/libexec"
-  eval $(/usr/local/bin/brew shellenv)
 fi
 
 export LANG=en_US.UTF-8
@@ -198,7 +198,9 @@ zinit load zdharma/null
 
 # Installs rust and then the `exa' and `lsd' crates
 # and exposes their binaries by altering $PATH
-zinit ice rustup cargo'exa;bat;procs;ripgrep;diesel_cli' as"command" pick"bin/(exa|bat|procs|rg|diesel)"
+zinit ice rustup as"command" \
+  cargo'exa;bat;procs;ripgrep;diesel_cli' \
+  pick"bin/(exa|bat|procs|rg|diesel)"
 zinit load zdharma/null
 
 # Rust analyzer
@@ -215,11 +217,11 @@ zinit ice as"program" \
 zinit light alacritty/alacritty
 
 # Kitty
-zinit ice as"program" \
-  atclone"make app;
-          rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
-  atpull"%atclone"
-zinit light kovidgoyal/kitty
+# zinit ice as"program" \
+#   atclone"make app;
+#           rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
+#   atpull"%atclone"
+# zinit light kovidgoyal/kitty
 
 # Lua lsp
 zinit ice as"program" \
@@ -292,8 +294,3 @@ if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/complet
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 printf "\e[?1042l"
-
-
-# BEGIN_KITTY_SHELL_INTEGRATION
-if test -e "/Applications/kitty.app/Contents/Resources/kitty/shell-integration/kitty.zsh"; then source "/Applications/kitty.app/Contents/Resources/kitty/shell-integration/kitty.zsh"; fi
-# END_KITTY_SHELL_INTEGRATION

@@ -150,6 +150,7 @@ return require("packer").startup(
             keys = "<C-t>",
             config = "require('plugins.toggle_term')"
         }
+
         use {
             "kabouzeid/nvim-lspinstall",
             cmd = {"LspInstall", "LspUninstall"},
@@ -157,8 +158,12 @@ return require("packer").startup(
         }
 
         use {
+            "kyazdani42/nvim-web-devicons",
+            module = "nvim-web-devicons"
+        }
+
+        use {
             "hoob3rt/lualine.nvim",
-            requires = {"kyazdani42/nvim-web-devicons"},
             config = "require('plugins.lualine')",
             event = "VimEnter"
         }

@@ -1,5 +1,4 @@
 #!/bin/zsh
-# set -e
 
 rustup update
 

@@ -1,5 +1,3 @@
-set -e
-
 mkdir ~/.config
 mkdir ~/.config/nvim
 mkdir ~/.config/nvim/lua
@@ -86,7 +84,10 @@ yarn global add lua-fmt typescript-language-server pyright pyvm vscode-langserve
 luarocks install luacheck
 
 # Install Rust cli tools
-cargo install exa bat procs ripgrep diesel_cli
+cargo install exa bat procs ripgrep diesel_cli trunk wasm-bindgen-cli
+
+# Add wasm target for rust
+rustup target add wasm32-unknown-unknown
 
 curl -L -o coursier https://git.io/coursier-cli
 chmod +x coursier
