@@ -13,10 +13,12 @@ if [[ $(uname -m) == arm64 ]]; then
   eval $(/opt/homebrew/bin/brew shellenv)
   export HOMEBREW_HOME="/opt/homebrew/opt"
   export SPARK_HOME="$HOMEBREW_HOME/apache-spark/libexec"
+  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
 else
   eval $(/usr/local/bin/brew shellenv)
   export HOMEBREW_HOME="/usr/local/Cellar"
   export SPARK_HOME="$HOMEBREW_HOME/apache-spark/3.1.2/libexec"
+  export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
 fi
 
 export LANG=en_US.UTF-8

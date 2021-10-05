@@ -64,18 +64,6 @@ return require("packer").startup(
             keys = "<Leader>d"
         }
 
-        use {
-            "dense-analysis/ale",
-            config = "require('plugins.ale')",
-            requires = {
-                {
-                    "nathunsmitty/nvim-ale-diagnostic",
-                    config = "require('nvim-ale-diagnostic')"
-                }
-            },
-            event = "VimEnter"
-        }
-
         -- Project Search
         use {
             "junegunn/fzf",

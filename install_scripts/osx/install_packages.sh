@@ -78,7 +78,14 @@ brew link --overwrite gnupg
 
 # Install global node modules
 # mainly linters etc.
-yarn global add lua-fmt typescript-language-server pyright pyvm vscode-langservers-extracted
+yarn global add \
+  lua-fmt \
+  typescript-language-server \
+  pyright \
+  pyvm \
+  vscode-langservers-extracted \
+  diagnostic-languageserver \
+  stylelint
 
 # Install Lua linter
 luarocks install luacheck
