@@ -5,6 +5,7 @@ rustup update
 # Update Homebrew (Cask) & packages
 brew update
 brew upgrade
+brew upgrade --cask
 
 # Update yarn packages
 yarn global upgrade

@@ -1,7 +1,8 @@
--- Install lsp servers
-local nvim_lsp = require("lspconfig")
 local configs = require("lspconfig/configs")
+local nvim_lsp = require("lspconfig")
 local buf_set_keymap = vim.api.nvim_buf_set_keymap
+
+local common_flags = require("lsp.common")
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
@@ -33,115 +34,8 @@ local on_attach = function(_, bufnr)
     buf_set_keymap(bufnr, "n", "[e", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
     buf_set_keymap(bufnr, "n", "]e", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
     buf_set_keymap(bufnr, "n", "<leader>e", "<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
-    buf_set_keymap(bufnr, "n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+    buf_set_keymap(bufnr, "n", "<leader>f", ":w<CR> <cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 end
-
-local debounce = 150
-local common_flags = {
-    debounce_text_changes = debounce
-}
-
-local filetypes = {
-    javascript = {"eslint", "stylelint"},
-    typescript = {"eslint", "stylelint"},
-    typescriptreact = {"eslint", "stylelint"},
-    javascriptreact = {"eslint", "stylelint"},
-    python = {"flake8"}
-}
-
-local linters = {
-    eslint = {
-        sourceName = "eslint",
-        command = "eslint_d",
-        rootPatterns = {".eslintrc.js", ".eslintrc.js", "package.json"},
-        debounce = debounce,
-        args = {"--stdin", "--stdin-filename", "%filepath", "--format", "json"},
-        parseJson = {
-            errorsRoot = "[0].messages",
-            line = "line",
-            column = "column",
-            endLine = "endLine",
-            endColumn = "endColumn",
-            message = "${message} [${ruleId}]",
-            security = "severity"
-        },
-        securities = {[2] = "error", [1] = "warning"}
-    },
-    stylelint = {
-        sourceName = "stylelint",
-        command = "stylelint",
-        args = {"--formatter", "compact", "%filepath"},
-        rootPatterns = {".stylelintrc"},
-        debounce = debounce,
-        formatPattern = {
-            [[: line (\d+), col (\d+), (warning|error) - (.+?) \((.+)\)]],
-            {
-                line = 1,
-                column = 2,
-                security = 3,
-                message = {4, " [", 5, "]"}
-            }
-        },
-        securities = {
-            warning = "warning",
-            error = "error"
-        }
-    },
-    flake8 = {
-        command = "flake8",
-        args = {"--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s", "-"},
-        debounce = debounce,
-        rootPatterns = {".flake8", "setup.cfg", "tox.ini"},
-        offsetLine = 0,
-        offsetColumn = 0,
-        sourceName = "flake8",
-        formatLines = 1,
-        formatPattern = {
-            "(\\d+),(\\d+),([A-Z]),(.*)(\\r|\\n)*$",
-            {
-                line = 1,
-                column = 2,
-                security = 3,
-                message = 4
-            }
-        },
-        securities = {
-            W = "warning",
-            E = "error",
-            F = "error",
-            C = "error",
-            N = "error"
-        }
-    }
-}
-
-local formatFiletypes = {
-    javascript = "prettier",
-    typescript = "prettier",
-    javascriptreact = "prettier",
-    typescriptreact = "prettier",
-    json = "prettier",
-    yaml = "prettier",
-    rust = "rustfmt",
-    lua = "luafmt"
-}
-
-local formatters = {
-    prettier = {command = "prettier", args = {"--stdin-filepath", "%filepath"}},
-    rustfmt = {command = "rustfmt", args = {"--edition 2018", "%filepath"}},
-    luafmt = {command = "luafmt", args = {"%filepath"}}
-}
-
-nvim_lsp.diagnosticls.setup {
-    on_attach = on_attach,
-    filetypes = vim.tbl_keys(formatFiletypes),
-    init_options = {
-        filetypes = filetypes,
-        linters = linters,
-        formatters = formatters,
-        formatFiletypes = formatFiletypes
-    }
-}
 
 configs.pyright = {
     on_attach = on_attach,
@@ -326,21 +220,16 @@ for _, lsp in ipairs(servers) do
     }
 end
 
-local handlers = vim.lsp.handlers
-local pop_opts = {border = "single", max_width = 100}
+local linters = require("lsp.linters")
+local formatters = require("lsp.formatters")
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] =
-    vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {
-        virtual_text = true,
-        signs = true,
-        underline = true,
-        update_in_insert = false
+nvim_lsp.diagnosticls.setup {
+    on_attach = on_attach,
+    filetypes = vim.tbl_keys(formatters.formatFiletypes),
+    init_options = {
+        filetypes = linters.linter_filetypes,
+        linters = linters.linters,
+        formatters = formatters.formatters,
+        formatFiletypes = formatters.formatFiletypes
     }
-)
-handlers["textDocument/hover"] = vim.lsp.with(handlers.hover, pop_opts)
-handlers["textDocument/signatureHelp"] = vim.lsp.with(handlers.signature_help, pop_opts)
-
-vim.g.ale_sign_error = "✘"
-vim.g.ale_sign_warning = "⚠"
+}
