@@ -1,3 +1,3 @@
 require("gitsigns").setup {
-    sign_priority = 10
+    sign_priority = 4
 }

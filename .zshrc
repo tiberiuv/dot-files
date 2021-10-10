@@ -28,7 +28,7 @@ export SCALA_HOME=/usr/local/opt/scala@2.12/idea
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
-export FZF_BASE=/Users/tiberiusimionvoicu/.fzf
+export FZF_BASE=~/.fzf
 export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH=$PATH:$N_PREFIX/bin
@@ -43,7 +43,7 @@ export CLICOLOR=1
 export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # Set Path
-# ------------------------------------------------------------
+# ------------------------------------------------------------ #
 # default PATH
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
@@ -116,7 +116,7 @@ setopt path_dirs                # Perform Path Search Even On Command Names With
 setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A Trailing Slash.
 
 # ------------------------------ Aliases ------------------------------ #
-alias ssh="TERM=xterm-256color ssh"
+# alias ssh="TERM=xterm-256color ssh"
 alias update-all="source ~/icloud/dot-files/update.zsh"
 
 if type nvim > /dev/null 2>&1; then
@@ -205,6 +205,12 @@ zinit ice rustup as"command" \
   pick"bin/(exa|bat|procs|rg|diesel)"
 zinit load zdharma/null
 
+# Fzf
+zinit ice as"program" mv"fzf-* -> ~/.fzf" \
+  atclone"./install" \
+  atpull"%atclone"
+zinit light junegunn/fzf
+
 # Rust analyzer
 zinit ice as"program" \
   atclone"cargo +nightly xtask install --server" \
@@ -217,13 +223,6 @@ zinit ice as"program" \
           cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
 zinit light alacritty/alacritty
-
-# Kitty
-# zinit ice as"program" \
-#   atclone"make app;
-#           rm -r /Applications/kitty.app; cp -r kitty.app /Applications/" \
-#   atpull"%atclone"
-# zinit light kovidgoyal/kitty
 
 # Lua lsp
 zinit ice as"program" \

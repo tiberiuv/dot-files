@@ -64,28 +64,6 @@ return require("packer").startup(
             keys = "<Leader>d"
         }
 
-        -- Project Search
-        use {
-            "junegunn/fzf",
-            run = "./install && mv ./ ~/.fzf",
-            keys = {"<C-f>", "<C-p>"},
-            config = "require('plugins.fzf')",
-            cmd = {
-                "FzfFiles",
-                "FzfGFiles",
-                "FzfBuffers",
-                "FzfHelptags",
-                "FzfBLines",
-                "FzfRg",
-                "FzfRG"
-            }
-        }
-
-        use {
-            "junegunn/fzf.vim",
-            after = "fzf"
-        }
-
         use {"tpope/vim-surround"}
         use {"tpope/vim-sleuth"}
         use {"tpope/vim-repeat"}
@@ -110,6 +88,14 @@ return require("packer").startup(
         use {
             "nvim-lua/plenary.nvim",
             module = "plenary"
+        }
+
+        use {"nvim-telescope/telescope-fzf-native.nvim", run = "make"}
+        use {"gbrlsnchs/telescope-lsp-handlers.nvim"}
+
+        use {
+            "nvim-telescope/telescope.nvim",
+            config = "require('plugins.telescope')"
         }
 
         use {
