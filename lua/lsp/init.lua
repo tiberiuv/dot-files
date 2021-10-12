@@ -222,6 +222,11 @@ nvim_lsp.rust_analyzer.setup {
     flags = common_flags
 }
 
+nvim_lsp.bashls.setup {
+    filetypes = {"bash", "zsh"},
+    on_attach = on_attach
+}
+
 local servers = {
     "vimls",
     "jsonls",
@@ -231,7 +236,7 @@ local servers = {
     "dockerls",
     "texlab",
     "yamlls",
-    "pyright"
+    "pyright",
 }
 
 for _, lsp in ipairs(servers) do

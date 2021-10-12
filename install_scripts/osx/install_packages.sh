@@ -26,10 +26,7 @@ brew tap homebrew/cask-versions
 brew tap homebrew/cask-fonts
 
 # Instal brew gui apps
-brew install --cask vlc
-brew install --cask firefox-developer-edition
-brew install --cask spotify
-brew install --cask temurin11
+brew install --cask vlc firefox-developer-edition spotify temurin11
 
 # Install brew packages
 brew install \
@@ -72,7 +69,8 @@ brew install \
     font-jetbrains-mono-nerd-font \
     fuse \
     librsync \
-    ImageMagick
+    ImageMagick \
+    utf8proc
 
 brew link --overwrite gnupg
 

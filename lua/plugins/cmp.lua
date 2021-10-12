@@ -1,7 +1,3 @@
-local t = function(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
 local cmp_kinds = {
     Field = {icon = "ﰠ", order = 11},
     Property = {icon = "ﰠ", order = 11},
@@ -84,10 +80,7 @@ local mapping = {
     ["<C-n>"] = cmp.mapping.select_next_item(),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.close(),
-    ["<CR>"] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true
-    },
+    ["<CR>"] = cmp.mapping.confirm(),
     ["<Tab>"] = cmp.mapping(tab, {"i", "s"}),
     ["<S-Tab>"] = cmp.mapping(stab, {"i", "s"})
 }

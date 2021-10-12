@@ -51,7 +51,7 @@ return require("packer").startup(
             requires = {
                 {"L3MON4D3/LuaSnip"}
             },
-            config = "require('plugins.cmp_config')",
+            config = "require('plugins.cmp')",
             event = "InsertEnter"
         }
 
@@ -145,7 +145,7 @@ return require("packer").startup(
         use {
             "kyazdani42/nvim-tree.lua",
             keys = {"<C-n>"},
-            config = "require('plugins.nvimtree')",
+            config = "require('plugins.nvim-tree')",
             cmd = {"NvimTreeOpen", "NvimTreeToggle"}
         }
 

@@ -11,13 +11,11 @@ alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone
 # ------------------------------------------------------------ #
 if [[ $(uname -m) == arm64 ]]; then
   eval $(/opt/homebrew/bin/brew shellenv)
-  export HOMEBREW_HOME="/opt/homebrew/opt"
-  export SPARK_HOME="$HOMEBREW_HOME/apache-spark/libexec"
+  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
   export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
 else
   eval $(/usr/local/bin/brew shellenv)
-  export HOMEBREW_HOME="/usr/local/Cellar"
-  export SPARK_HOME="$HOMEBREW_HOME/apache-spark/3.1.2/libexec"
+  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.1.2/libexec"
   export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
 fi
 
@@ -28,7 +26,6 @@ export SCALA_HOME=/usr/local/opt/scala@2.12/idea
 export PYSPARK_PYTHON=python3
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
-export FZF_BASE=~/.fzf
 export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
 export PATH=$PATH:$N_PREFIX/bin
@@ -176,7 +173,6 @@ zinit light-mode for \
 zinit wait"0a" lucid light-mode for \
   atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 
-zinit wait lucid light-mode for Aloxaf/fzf-tab
 
 zinit wait lucid light-mode for \
   blockf atpull"zinit creinstall -q ." zsh-users/zsh-completions \
@@ -206,10 +202,12 @@ zinit ice rustup as"command" \
 zinit load zdharma/null
 
 # Fzf
-zinit ice as"program" mv"fzf-* -> ~/.fzf" \
-  atclone"./install" \
+zinit ice depth"1" as"program" pick"bin/fzf" \
+  atclone"./install --all" \
   atpull"%atclone"
 zinit light junegunn/fzf
+
+zinit wait lucid light-mode for Aloxaf/fzf-tab
 
 # Rust analyzer
 zinit ice as"program" \
@@ -218,14 +216,14 @@ zinit ice as"program" \
 zinit light rust-analyzer/rust-analyzer
 
 # Alacritty
-zinit ice as"program" \
+zinit ice \
   atclone"make app;
           cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
 zinit light alacritty/alacritty
 
 # Lua lsp
-zinit ice as"program" \
+zinit ice as"program" pick"bin/macOs" \
   atclone"git submodule update --init --recursive;
           cd 3rd/luamake;
           compile/install.sh;
@@ -235,7 +233,7 @@ zinit ice as"program" \
 zinit light sumneko/lua-language-server
 
 # Neovim
-zinit ice as"program" \
+zinit ice as"program" pick"build/bin/nvim" \
   atclone"sudo rm -rf ./build;
           sudo rm -rf ./.deps;
           make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
@@ -244,9 +242,11 @@ zinit ice as"program" \
 zinit light neovim/neovim
 
 # Tmux
-zinit ice as"program" \
-  atclone"sh autogen.sh;
-          ./configure --enable-utf8proc && make -j 8" \
+zinit ice as"program" pick"tmux" \
+  atclone'sh autogen.sh;
+          CPPFLAGS="-I/opt/homebrew/include" \
+          LDFLAGS="-L/opt/homebrew/lib" \
+          ./configure --enable-utf8proc && make -j 8' \
   atpull"%atclone"
 zinit light tmux/tmux
 
