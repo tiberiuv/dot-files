@@ -1,5 +1,4 @@
 local map = require("utils").map
-
 local telescope = require("telescope")
 local actions = require("telescope.actions")
 
@@ -12,9 +11,11 @@ telescope.setup {
         }
     }
 }
-
-map("n", "<C-f>", "<cmd>lua require('telescope.builtin').live_grep()<CR>", {noremap = true, silent = true})
-map("n", "<C-p>", "<cmd>lua require('telescope.builtin').find_files()<CR>", {noremap = true, silent = true})
-
 telescope.load_extension("fzf")
 telescope.load_extension("lsp_handlers")
+telescope.load_extension("projects")
+
+local opts = {noremap = true, silent = true}
+
+map("n", "<C-f>", "<cmd>lua require('telescope.builtin').live_grep()<CR>", opts)
+map("n", "<C-p>", "<cmd>lua require('telescope.builtin').find_files()<CR>", opts)

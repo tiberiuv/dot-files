@@ -7,7 +7,5 @@ vim.g.vim_markdown_conceal = 1
 vim.g.vim_markdown_conceal_code_blocks = 1
 
 vim.g.python3_host_prog = "~/pynvim/bin/python"
-vim.g["EditorConfig_exclude_patterns"] = {"fugitive://.*"}
-vim.g["test#python#runner"] = "pyunit"
 
-vim.g["cursorhold_updatetime"] = 100
+vim.g.cursorhold_updatetime = 100

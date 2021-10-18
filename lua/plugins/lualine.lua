@@ -36,5 +36,5 @@ require "lualine".setup {
         lualine_y = {"progres"},
         lualine_z = {"location"}
     },
-    extensions = {"nvim-tree", "fzf"}
+    extensions = {"nvim-tree"}
 }

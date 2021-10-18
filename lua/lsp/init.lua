@@ -127,7 +127,6 @@ nvim_lsp.sqls.setup {
             connections = {
                 {
                     drive = "postgresql",
-                    --dataSourceName = "newuser:password@tcp(127.0.0.1:5430)/watcher"
                     dataSourceName = "host=postgres port=5430 user=newuser password=password dbname=core sslmode=disable"
                 }
             }
@@ -236,7 +235,7 @@ local servers = {
     "dockerls",
     "texlab",
     "yamlls",
-    "pyright",
+    "pyright"
 }
 
 for _, lsp in ipairs(servers) do

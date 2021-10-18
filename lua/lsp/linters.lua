@@ -4,8 +4,8 @@ return {
     linters = {
         eslint = {
             sourceName = "eslint",
-            command = "eslint_d",
-            rootPatterns = {".eslintrc.js", ".eslintrc.js", "package.json"},
+            command = "eslint",
+            rootPatterns = {".eslintrc.js", "package.json"},
             debounce = debounce,
             args = {"--stdin", "--stdin-filename", "%filepath", "--format", "json"},
             parseJson = {

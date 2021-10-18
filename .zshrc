@@ -22,9 +22,9 @@ fi
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
-export SCALA_HOME=/usr/local/opt/scala@2.12/idea
+export SCALA_HOME=$HOMEBREW_PREFIX/opt/scala@2.12/idea
 export PYSPARK_PYTHON=python3
-export GOROOT=/usr/local/opt/go/libexec
+export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
 export GOPATH=$HOME/go
 export N_PRESERVE_NPM=1
 export N_PREFIX=$HOME/.n
@@ -54,7 +54,8 @@ export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
 export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH=$HOMEBREW_PREFIX/bin:$PATH
 export PATH=$HOMEBREW_PREFIX/sbin:$PATH
-export PATH="/usr/local/p/versions/python:$PATH"
+export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
+export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -113,12 +114,10 @@ setopt path_dirs                # Perform Path Search Even On Command Names With
 setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A Trailing Slash.
 
 # ------------------------------ Aliases ------------------------------ #
-# alias ssh="TERM=xterm-256color ssh"
+alias ssh="TERM=xterm-256color ssh"
 alias update-all="source ~/icloud/dot-files/update.zsh"
 
-if type nvim > /dev/null 2>&1; then
-  alias vim=nvim
-fi
+alias vim=nvim
 if type exa >/dev/null 2>&1; then
   alias ls=exa
 fi
@@ -187,7 +186,6 @@ zinit wait lucid for \
 # ------------------------------------------------------------ #
 # Programs
 # ------------------------------------------------------------ #
-
 # Just install rust and make it available globally in the system
 zinit ice id-as"rust" wait"0" lucid rustup as"command" \
             pick"bin/rustc" atload="export \
@@ -203,7 +201,7 @@ zinit load zdharma/null
 
 # Fzf
 zinit ice depth"1" as"program" pick"bin/fzf" \
-  atclone"./install --all" \
+  atclone"make install" \
   atpull"%atclone"
 zinit light junegunn/fzf
 
@@ -211,7 +209,7 @@ zinit wait lucid light-mode for Aloxaf/fzf-tab
 
 # Rust analyzer
 zinit ice as"program" \
-  atclone"cargo +nightly xtask install --server" \
+  atclone"cargo +nightly xtask install --server && rm -rf target" \
   atpull"%atclone"
 zinit light rust-analyzer/rust-analyzer
 
@@ -244,8 +242,8 @@ zinit light neovim/neovim
 # Tmux
 zinit ice as"program" pick"tmux" \
   atclone'sh autogen.sh;
-          CPPFLAGS="-I/opt/homebrew/include" \
-          LDFLAGS="-L/opt/homebrew/lib" \
+          CPPFLAGS="-I$HOMEBREW_PREFIX/include" \
+          LDFLAGS="-L$HOMEBREW_PREFIX/lib" \
           ./configure --enable-utf8proc && make -j 8' \
   atpull"%atclone"
 zinit light tmux/tmux
@@ -284,12 +282,10 @@ then
 fi
 
 # updates PATH for the Google Cloud SDK.
-if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
-if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
 
 # enables shell command completion for gcloud.
-if [ -f "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
-if [ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
+if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

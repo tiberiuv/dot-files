@@ -11,6 +11,7 @@ vim.g.nvim_tree_show_icons = {
 }
 vim.g.nvim_tree_add_trailing = 1
 vim.g.nvim_tree_respect_buf_cwd = 1
+vim.g.nvim_tree_highlight_opened_files = 1
 
 require "nvim-tree".setup {
     auto_close = true,

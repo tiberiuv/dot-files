@@ -1,3 +1,5 @@
+vim.g.nvim_tree_respect_buf_cwd = 1
+
 require("project_nvim").setup {
     patterns = {
         "package.json",
@@ -8,5 +10,12 @@ require("project_nvim").setup {
         ".git"
     },
     detection_methods = {"lsp", "pattern"},
-    silent_chdir = true
+    silent_chdir = true,
+    update_cwd = true,
+    update_focused_file = {
+        enable = true,
+        update_cwd = true
+    }
 }
+
+require('telescope').load_extension('projects')

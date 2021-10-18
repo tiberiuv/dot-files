@@ -30,3 +30,15 @@ dap.configurations.rust = {
         runInTerminal = false
     }
 }
+
+dap.configurations.python = {
+    {
+        type = "python",
+        request = "launch",
+        name = "Launch file",
+        program = "${file}",
+        pythonPath = function()
+            return "/usr/bin/python"
+        end
+    }
+}

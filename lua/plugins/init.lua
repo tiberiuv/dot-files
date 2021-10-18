@@ -39,10 +39,11 @@ return require("packer").startup(
             event = "BufEnter"
         }
 
-        use {"chr4/nginx.vim", ft = {".conf"}}
-        use {"wavded/vim-stylus", ft = {".styl"}}
-        use {"tomlion/vim-solidity", ft = {".sol"}}
+        use {"chr4/nginx.vim", ft = ".conf"}
+        use {"wavded/vim-stylus", ft = ".styl"}
+        use {"tomlion/vim-solidity", ft = ".sol"}
         use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
+        use {"hashivim/vim-terraform", ft = {".hcl", ".tf", ".tfvars", ".terraformrc"}}
 
         use "neovim/nvim-lspconfig"
 
@@ -61,7 +62,8 @@ return require("packer").startup(
 
         use {
             "mfussenegger/nvim-dap",
-            keys = "<Leader>d"
+            keys = "<Leader>d",
+            config = "require('plugins.dap')"
         }
 
         use {"tpope/vim-surround"}
@@ -76,7 +78,6 @@ return require("packer").startup(
         use {
             "ahmedkhalf/project.nvim",
             config = "require('plugins.project')",
-            event = "VimEnter"
         }
 
         use {

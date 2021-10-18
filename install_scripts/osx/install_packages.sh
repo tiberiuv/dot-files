@@ -70,7 +70,8 @@ brew install \
     fuse \
     librsync \
     ImageMagick \
-    utf8proc
+    utf8proc \
+    go
 
 brew link --overwrite gnupg
 
