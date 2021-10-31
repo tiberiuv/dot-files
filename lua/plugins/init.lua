@@ -8,7 +8,8 @@ if fn.empty(fn.glob(install_path)) > 0 then
     execute "packadd packer.nvim"
 end
 
-vim.cmd "autocmd BufWritePost plugins/packer.lua PackerCompile" -- Auto compile when there are changes in plugins.lua
+-- Auto compile when there are changes in plugins.lua
+vim.cmd "autocmd BufWritePost plugins/packer.lua PackerCompile"
 
 local packer = require "packer"
 local util = require "packer.util"
@@ -43,22 +44,24 @@ return require("packer").startup(
         use {"wavded/vim-stylus", ft = ".styl"}
         use {"tomlion/vim-solidity", ft = ".sol"}
         use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
-        use {"hashivim/vim-terraform", ft = {".hcl", ".tf", ".tfvars", ".terraformrc"}}
+        use {
+            "hashivim/vim-terraform",
+            ft = {".hcl", ".tf", ".tfvars", ".terraformrc"}
+        }
 
         use "neovim/nvim-lspconfig"
 
         use {
             "hrsh7th/nvim-cmp",
             requires = {
-                {"L3MON4D3/LuaSnip"}
+                {"L3MON4D3/LuaSnip"},
+                {"hrsh7th/cmp-nvim-lsp"},
+                {"hrsh7th/cmp-path", after = "nvim-cmp"},
+                {"saadparwaiz1/cmp_luasnip", after = "nvim-cmp"}
             },
             config = "require('plugins.cmp')",
             event = "InsertEnter"
         }
-
-        use {"hrsh7th/cmp-nvim-lsp"}
-        use {"hrsh7th/cmp-path", after = "nvim-cmp"}
-        use {"saadparwaiz1/cmp_luasnip", after = "nvim-cmp"}
 
         use {
             "mfussenegger/nvim-dap",
@@ -77,7 +80,7 @@ return require("packer").startup(
 
         use {
             "ahmedkhalf/project.nvim",
-            config = "require('plugins.project')",
+            config = "require('plugins.project')"
         }
 
         use {
