@@ -4,7 +4,10 @@ local fn = vim.fn
 -- ensure that packer is installed
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", install_path})
+    fn.system({
+        "git", "clone", "https://github.com/wbthomason/packer.nvim",
+        install_path
+    })
     execute "packadd packer.nvim"
 end
 
@@ -14,149 +17,127 @@ vim.cmd "autocmd BufWritePost plugins/packer.lua PackerCompile"
 local packer = require "packer"
 local util = require "packer.util"
 
-packer.init(
-    {
-        package_root = util.join_paths(vim.fn.stdpath("data"), "site", "pack")
+packer.init({
+    package_root = util.join_paths(vim.fn.stdpath("data"), "site", "pack")
+})
+
+return require("packer").startup(function()
+    local use = use
+    use {"wbthomason/packer.nvim"}
+
+    use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+
+    -- Languages and syntax highlighting
+    use {
+        "nvim-treesitter/nvim-treesitter",
+        run = ":TSUpdate",
+        config = "require('plugins.treesitter')",
+        event = "BufEnter"
     }
-)
 
-return require("packer").startup(
-    function()
-        local use = use
-        use {
-            "wbthomason/packer.nvim"
-        }
+    use {"chr4/nginx.vim", ft = ".conf"}
+    use {"wavded/vim-stylus", ft = ".styl"}
+    use {"tomlion/vim-solidity", ft = ".sol"}
+    use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
+    use {
+        "hashivim/vim-terraform",
+        ft = {".hcl", ".tf", ".tfvars", ".terraformrc"}
+    }
 
-        use {
-            "npxbr/gruvbox.nvim",
-            requires = {"rktjmp/lush.nvim"}
-        }
+    use {"neovim/nvim-lspconfig", config = "require('lsp')()"}
 
-        -- Languages and syntax highlighting
-        use {
-            "nvim-treesitter/nvim-treesitter",
-            run = ":TSUpdate",
-            config = "require('plugins.treesitter')",
-            event = "BufEnter"
-        }
+    use {
+        "hrsh7th/nvim-cmp",
+        requires = {
+            {"L3MON4D3/LuaSnip"}, {"hrsh7th/cmp-nvim-lsp"},
+            {"hrsh7th/cmp-path", after = "nvim-cmp"},
+            {"saadparwaiz1/cmp_luasnip", after = "nvim-cmp"}
+        },
+        config = "require('plugins.cmp')",
+        event = "InsertEnter"
+    }
 
-        use {"chr4/nginx.vim", ft = ".conf"}
-        use {"wavded/vim-stylus", ft = ".styl"}
-        use {"tomlion/vim-solidity", ft = ".sol"}
-        use {"Vimjas/vim-python-pep8-indent", ft = ".py"}
-        use {
-            "hashivim/vim-terraform",
-            ft = {".hcl", ".tf", ".tfvars", ".terraformrc"}
-        }
+    use {
+        "mfussenegger/nvim-dap",
+        keys = "<Leader>d",
+        config = "require('plugins.dap')"
+    }
 
-        use "neovim/nvim-lspconfig"
+    use {"tpope/vim-surround"}
+    use {"tpope/vim-sleuth"}
+    use {"tpope/vim-repeat"}
 
-        use {
-            "hrsh7th/nvim-cmp",
-            requires = {
-                {"L3MON4D3/LuaSnip"},
-                {"hrsh7th/cmp-nvim-lsp"},
-                {"hrsh7th/cmp-path", after = "nvim-cmp"},
-                {"saadparwaiz1/cmp_luasnip", after = "nvim-cmp"}
-            },
-            config = "require('plugins.cmp')",
-            event = "InsertEnter"
-        }
+    use {"b3nj5m1n/kommentary", keys = {"gc", "gcc"}}
 
-        use {
-            "mfussenegger/nvim-dap",
-            keys = "<Leader>d",
-            config = "require('plugins.dap')"
-        }
+    use {"ahmedkhalf/project.nvim", config = "require('plugins.project')"}
 
-        use {"tpope/vim-surround"}
-        use {"tpope/vim-sleuth"}
-        use {"tpope/vim-repeat"}
+    use {
+        "iamcco/markdown-preview.nvim",
+        run = "cd app && yarn install",
+        cmd = "MarkdownPreview"
+    }
 
-        use {
-            "b3nj5m1n/kommentary",
-            keys = {"gc", "gcc"}
-        }
+    use {"nvim-lua/plenary.nvim", module = "plenary"}
 
-        use {
-            "ahmedkhalf/project.nvim",
-            config = "require('plugins.project')"
-        }
+    use {"nvim-telescope/telescope-fzf-native.nvim", run = "make"}
+    use {"gbrlsnchs/telescope-lsp-handlers.nvim"}
 
-        use {
-            "iamcco/markdown-preview.nvim",
-            run = "cd app && yarn install",
-            cmd = "MarkdownPreview"
-        }
+    use {
+        "nvim-telescope/telescope.nvim",
+        config = "require('plugins.telescope')"
+    }
 
-        use {
-            "nvim-lua/plenary.nvim",
-            module = "plenary"
-        }
+    use {
+        "lewis6991/gitsigns.nvim",
+        config = "require('plugins.gitsigns')",
+        event = "BufRead"
+    }
 
-        use {"nvim-telescope/telescope-fzf-native.nvim", run = "make"}
-        use {"gbrlsnchs/telescope-lsp-handlers.nvim"}
+    use {
+        "janko-m/vim-test",
+        cmd = {"TestNearest", "TestFile", "TestSuite", "TestLatest"}
+    }
 
-        use {
-            "nvim-telescope/telescope.nvim",
-            config = "require('plugins.telescope')"
-        }
+    use {"antoinemadec/FixCursorHold.nvim", event = "CursorHold"}
 
-        use {
-            "lewis6991/gitsigns.nvim",
-            config = "require('plugins.gitsigns')",
-            event = "BufRead"
-        }
+    use {"nvim-lua/lsp_extensions.nvim", event = "BufEnter"}
 
-        use {
-            "janko-m/vim-test",
-            cmd = {"TestNearest", "TestFile", "TestSuite", "TestLatest"}
-        }
+    use {
+        "akinsho/nvim-toggleterm.lua",
+        keys = "<C-t>",
+        config = "require('plugins.toggle_term')"
+    }
 
-        use {
-            "antoinemadec/FixCursorHold.nvim",
-            event = "CursorHold"
-        }
+    use {
+        "kabouzeid/nvim-lspinstall",
+        cmd = {"LspInstall", "LspUninstall"},
+        event = "BufEnter"
+    }
 
-        use {
-            "nvim-lua/lsp_extensions.nvim",
-            event = "BufEnter"
-        }
+    use {"kyazdani42/nvim-web-devicons", module = "nvim-web-devicons"}
 
-        use {
-            "akinsho/nvim-toggleterm.lua",
-            keys = "<C-t>",
-            config = "require('plugins.toggle_term')"
-        }
+    use {
+        "hoob3rt/lualine.nvim",
+        config = "require('plugins.lualine')",
+        event = "VimEnter"
+    }
 
-        use {
-            "kabouzeid/nvim-lspinstall",
-            cmd = {"LspInstall", "LspUninstall"},
-            event = "BufEnter"
-        }
+    use {
+        "kyazdani42/nvim-tree.lua",
+        keys = {"<C-n>"},
+        config = "require('plugins.nvim-tree')",
+        cmd = {"NvimTreeOpen", "NvimTreeToggle"}
+    }
 
-        use {
-            "kyazdani42/nvim-web-devicons",
-            module = "nvim-web-devicons"
-        }
+    use {
+        "karb94/neoscroll.nvim",
+        keys = {"<C-u>", "<C-d>"},
+        config = "require('plugins.neoscroll')"
+    }
 
-        use {
-            "hoob3rt/lualine.nvim",
-            config = "require('plugins.lualine')",
-            event = "VimEnter"
-        }
-
-        use {
-            "kyazdani42/nvim-tree.lua",
-            keys = {"<C-n>"},
-            config = "require('plugins.nvim-tree')",
-            cmd = {"NvimTreeOpen", "NvimTreeToggle"}
-        }
-
-        use {
-            "karb94/neoscroll.nvim",
-            keys = {"<C-u>", "<C-d>"},
-            config = "require('plugins.neoscroll')"
-        }
-    end
-)
+    --[[ use {
+            "jose-elias-alvarez/null-ls.nvim",
+            config = "require('plugins.null_ls')",
+            requires = {"nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"}
+        } ]]
+end)

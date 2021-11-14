@@ -1,0 +1,18 @@
+local null_ls = require("null-ls")
+local on_attach = require("lsp.callbacks").on_attach
+
+null_ls.config({
+    sources = {
+        -- linters
+        null_ls.builtins.formatting.eslint,
+        null_ls.builtins.diagnostics.luacheck, -- formatters
+        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.rustfmt,
+        null_ls.builtins.formatting.lua_format
+    }
+})
+
+require("lspconfig")["null-ls"].setup({
+    -- see the nvim-lspconfig documentation for available configuration options
+    on_attach = on_attach
+})

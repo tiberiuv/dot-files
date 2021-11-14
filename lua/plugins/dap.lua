@@ -12,7 +12,8 @@ dap.configurations.rust = {
         type = "lldb",
         request = "launch",
         program = function()
-            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/",
+                                "file")
         end,
         cwd = "${workspaceFolder}",
         stopOnEntry = false,
@@ -37,8 +38,6 @@ dap.configurations.python = {
         request = "launch",
         name = "Launch file",
         program = "${file}",
-        pythonPath = function()
-            return "/usr/bin/python"
-        end
+        pythonPath = function() return "/usr/bin/python" end
     }
 }

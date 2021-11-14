@@ -1,3 +1,1 @@
-require("gitsigns").setup {
-    sign_priority = 4
-}
+require("gitsigns").setup {sign_priority = 4}

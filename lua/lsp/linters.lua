@@ -7,7 +7,9 @@ return {
             command = "eslint",
             rootPatterns = {".eslintrc.js", "package.json"},
             debounce = debounce,
-            args = {"--stdin", "--stdin-filename", "%filepath", "--format", "json"},
+            args = {
+                "--stdin", "--stdin-filename", "%filepath", "--format", "json"
+            },
             parseJson = {
                 errorsRoot = "[0].messages",
                 line = "line",
@@ -34,14 +36,13 @@ return {
                     message = {4, " [", 5, "]"}
                 }
             },
-            securities = {
-                warning = "warning",
-                error = "error"
-            }
+            securities = {warning = "warning", error = "error"}
         },
         flake8 = {
             command = "flake8",
-            args = {"--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s", "-"},
+            args = {
+                "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s", "-"
+            },
             debounce = debounce,
             rootPatterns = {".flake8", "setup.cfg", "tox.ini"},
             offsetLine = 0,
@@ -50,12 +51,7 @@ return {
             formatLines = 1,
             formatPattern = {
                 "(\\d+),(\\d+),([A-Z]),(.*)(\\r|\\n)*$",
-                {
-                    line = 1,
-                    column = 2,
-                    security = 3,
-                    message = 4
-                }
+                {line = 1, column = 2, security = 3, message = 4}
             },
             securities = {
                 W = "warning",

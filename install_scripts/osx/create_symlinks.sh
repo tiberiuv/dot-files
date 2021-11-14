@@ -3,13 +3,15 @@
 # Assumes directories actually exist on new host
 # Call this from home dir
 
-dir=~/icloud/dot-files
+dir=$HOME/icloud/dot-files
 
-ln -sfF ${dir}/.zshrc ~/.zshrc
-ln -sfF ${dir}/.alacritty.yml ~/.config/alacritty/alacritty.yml
-ln -sfF ${dir}/.tmux.conf ~/.tmux.conf
-ln -sfF ${dir}/init.vim ~/.config/nvim/init.vim
-ln -sfF ${dir}/lua ~/.config/nvim/lua
-ln -sfF ${dir}/plugins.vim ~/.config/nvim/plugins.vim
-ln -sfF ${dir}/init.lua ~/.config/nvim/init.lua
-ln -sfF ${dir}/kitty ~/.config/kitty
+ln -sfF ${dir}/.zshrc $HOME/.zshrc
+ln -sfF ${dir}/.zprofile $HOME/.zprofile
+ln -sfF ${dir}/.zshenv $HOME/.zshenv
+ln -sfF ${dir}/.alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -sfF ${dir}/.tmux.conf $HOME/.tmux.conf
+ln -sfF ${dir}/init.vim $HOME/.config/nvim/init.vim
+ln -sfF ${dir}/lua $HOME/.config/nvim/lua
+ln -sfF ${dir}/plugins.vim $HOME/.config/nvim/plugins.vim
+ln -sfF ${dir}/init.lua $HOME/.config/nvim/init.lua
+ln -sfF ${dir}/kitty $HOME/.config/kitty

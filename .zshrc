@@ -26,9 +26,6 @@ export SCALA_HOME=$HOMEBREW_PREFIX/opt/scala@2.12/idea
 export PYSPARK_PYTHON=python3
 export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
 export GOPATH=$HOME/go
-export N_PRESERVE_NPM=1
-export N_PREFIX=$HOME/.n
-export PATH=$PATH:$N_PREFIX/bin
 export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
 export KITTY_CONFIG_DIRECTORY=~/.config/kitty/kitty.conf
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
@@ -39,23 +36,7 @@ export SSH_KEY_PATH=~/.ssh/rsa_id
 export CLICOLOR=1
 export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-# Set Path
-# ------------------------------------------------------------ #
-# default PATH
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
-export PATH=$PATH:$HOME/bin
-export PATH=$PATH:/Applications
-export PATH=$PATH:$HOMEBREW_PREFIX/texlive/2019/texmf-dist/tex/xelatex
-export PATH=$PATH:$JAVA_HOME/bin
-export PATH=$HOME/.cargo/bin:$PATH
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
-export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
-export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
-export PATH=$HOMEBREW_PREFIX/bin:$PATH
-export PATH=$HOMEBREW_PREFIX/sbin:$PATH
-export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
-export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
+export FZF_VERSION="0.27.3"
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -138,9 +119,9 @@ alias forward_nginx='sudo kubectl port-forward svc/nginx 80:80 443:443'
 # Zinit install chunk
 # ------------------------------------------------------------ #
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
         pushd "$HOME/.zinit/bin" && \
         git checkout c27bf53f060d4584333ebdff8cfcd6aed60ca430 && \
         popd && \
@@ -163,11 +144,11 @@ setopt promptsubst
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-bin-gem-node \
-    zinit-zsh/z-a-submods \
-    zdharma/declare-zsh
+    zdharma-continuum/z-a-patch-dl \
+    zdharma-continuum/z-a-as-monitor \
+    zdharma-continuum/z-a-bin-gem-node \
+    zdharma-continuum/z-a-submods \
+    zdharma-continuum/declare-zsh
 
 zinit wait"0a" lucid light-mode for \
   atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
@@ -175,7 +156,7 @@ zinit wait"0a" lucid light-mode for \
 
 zinit wait lucid light-mode for \
   blockf atpull"zinit creinstall -q ." zsh-users/zsh-completions \
-  zdharma/fast-syntax-highlighting
+  zdharma-continuum/fast-syntax-highlighting
 
 zinit wait lucid light-mode for zsh-users/zsh-history-substring-search
 
@@ -190,14 +171,14 @@ zinit wait lucid for \
 zinit ice id-as"rust" wait"0" lucid rustup as"command" \
             pick"bin/rustc" atload="export \
                 CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup"
-zinit load zdharma/null
+zinit load zdharma-continuum/null
 
-# Installs rust and then the `exa' and `lsd' crates
+# Installs rust and then a few CLI tools
 # and exposes their binaries by altering $PATH
 zinit ice rustup as"command" \
-  cargo'exa;bat;procs;ripgrep;diesel_cli' \
-  pick"bin/(exa|bat|procs|rg|diesel)"
-zinit load zdharma/null
+  cargo"exa;bat;procs;ripgrep;diesel_cli;du-dust" \
+  pick"bin/(exa|bat|procs|rg|diesel|dust)"
+zinit load zdharma-continuum/null
 
 # Fzf
 zinit ice depth"1" as"program" pick"bin/fzf" \
@@ -250,7 +231,7 @@ zinit light tmux/tmux
 
 # Colorful diffs
 zinit ice as"program" pick"bin/git-dsf"
-zinit light zdharma/zsh-diff-so-fancy
+zinit light zdharma-continuum/zsh-diff-so-fancy
 
 # ------------------------------------------------------------ #
 
@@ -291,3 +272,8 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/comp
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 printf "\e[?1042l"
+# Python version manager
+eval "$(pyenv init -)"
+
+# Node version manager
+eval "$(fnm env)"

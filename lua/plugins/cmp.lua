@@ -41,9 +41,7 @@ local lspkind_comparator = function(conf)
 
         local priority1 = conf[kind1].order or 0
         local priority2 = conf[kind2].order or 0
-        if priority1 == priority2 then
-            return nil
-        end
+        if priority1 == priority2 then return nil end
         return priority2 < priority1
     end
 end
@@ -87,25 +85,16 @@ local mapping = {
 
 cmp.setup {
     mapping = mapping,
-    completion = {
-        completeopt = "menu,menuone,noselect",
-        keyword_length = 2
-    },
-    sources = {
-        {name = "nvim_lsp"},
-        {name = "luasnip"},
-        {name = "path"}
-    },
+    completion = {completeopt = "menu,menuone,noselect", keyword_length = 2},
+    sources = {{name = "nvim_lsp"}, {name = "luasnip"}, {name = "path"}},
     snippet = {
-        expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-        end
+        expand = function(args) require("luasnip").lsp_expand(args.body) end
     },
     formatting = {
         format = function(entry, vim_item)
-            vim_item.kind = cmp_kinds[vim_item.kind].icon .. " " .. vim_item.kind
-            vim_item.menu =
-                ({
+            vim_item.kind = cmp_kinds[vim_item.kind].icon .. " " ..
+                                vim_item.kind
+            vim_item.menu = ({
                 nvim_lsp = "[LSP]",
                 luasnip = "[Snp]",
                 buffer = "[Buf]",
@@ -120,10 +109,5 @@ cmp.setup {
             return vim_item
         end
     },
-    sorting = {
-        comparators = {
-            lspkind_comparator(cmp_kinds),
-            label_comparator
-        }
-    }
+    sorting = {comparators = {lspkind_comparator(cmp_kinds), label_comparator}}
 }

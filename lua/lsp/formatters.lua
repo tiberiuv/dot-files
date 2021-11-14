@@ -1,8 +1,21 @@
 return {
     formatters = {
-        prettier = {command = "prettier", args = {"--stdin-filepath", "%filepath"}},
+        prettier = {
+            rootPatterns = {
+                ".prettierrc.js", ".prettierrc.json", ".prettierrc.js",
+                ".prettierrc.yaml"
+            },
+            command = "prettierd",
+            args = {"%filepath"}
+        },
         rustfmt = {command = "rustfmt", args = {"--edition", "2018"}},
-        luafmt = {command = "luafmt", args = {"--stdin"}}
+        lua_format = {command = "lua-format", args = {'%filepath'}},
+        black = {
+            command = "black",
+            args = {"%filepath"},
+            doesWriteToFile = true,
+            rootPatterns = {".git", "pyproject.toml", "setup.py"}
+        }
     },
     formatFiletypes = {
         javascript = "prettier",
@@ -12,6 +25,7 @@ return {
         json = "prettier",
         yaml = "prettier",
         rust = "rustfmt",
-        lua = "luafmt"
+        lua = "lua_format",
+        python = "black"
     }
 }
