@@ -21,7 +21,11 @@ return function()
         ft = {".hcl", ".tf", ".tfvars", ".terraformrc"}
     }
 
-    use {"neovim/nvim-lspconfig", config = "require('lsp')()"}
+    use {
+        "neovim/nvim-lspconfig",
+        config = "require('lsp')()",
+        event = "BufRead"
+    }
 
     use {
         "hrsh7th/nvim-cmp",
@@ -111,11 +115,5 @@ return function()
         "karb94/neoscroll.nvim",
         keys = {"<C-u>", "<C-d>"},
         config = "require('plugins.neoscroll')"
-    }
-
-    use {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = "require('plugins.null_ls')",
-        requires = {"nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"}
     }
 end
