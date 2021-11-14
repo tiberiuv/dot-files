@@ -3,7 +3,8 @@ require"lualine".setup {
     sections = {
         lualine_a = {{"mode", lower = true}},
         lualine_b = {
-            {"branch", icon = ""}, {
+            {"branch", icon = ""},
+            {
                 "diff",
                 colored = true, -- displays diff status in color if set to true
                 -- all colors are in format #rrggbb
@@ -17,7 +18,8 @@ require"lualine".setup {
             {
                 "filename",
                 path = 1 -- 0 = just filename, 1 = relative path, 2 = absolute path
-            }, {
+            },
+            {
                 "diagnostics",
                 sources = {"nvim_lsp"},
                 -- displays diagnostics from defined severity

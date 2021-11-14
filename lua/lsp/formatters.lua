@@ -2,14 +2,19 @@ return {
     formatters = {
         prettier = {
             rootPatterns = {
-                ".prettierrc.js", ".prettierrc.json", ".prettierrc.js",
+                ".prettierrc.js",
+                ".prettierrc.json",
+                ".prettierrc.js",
                 ".prettierrc.yaml"
             },
             command = "prettierd",
             args = {"%filepath"}
         },
         rustfmt = {command = "rustfmt", args = {"--edition", "2018"}},
-        lua_format = {command = "lua-format", args = {'%filepath'}},
+        lua_format = {
+            command = "lua-format",
+            args = {'%filepath', "--chop-down-table"}
+        },
         black = {
             command = "black",
             args = {"%filepath"},

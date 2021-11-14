@@ -26,14 +26,9 @@ local function setup_servers()
         default_config = {
             cmd = {"pyright-langserver", "--stdio"},
             filetypes = {"python"},
-            root_dir = nvim_lsp.util.root_pattern(
-                "Pipfile",
-                "requirements.txt",
-                ".git",
-                "setup.py",
-                "setup.cfg",
-                "pyproject.toml"
-            ),
+            root_dir = nvim_lsp.util.root_pattern("Pipfile", "requirements.txt",
+                                                  ".git", "setup.py",
+                                                  "setup.cfg", "pyproject.toml"),
             settings = {
                 analysis = {
                     autoSearchPaths = true,
@@ -106,8 +101,10 @@ local function setup_servers()
         print("Unsupported system for sumneko")
     end
 
-    local sumneko_root_path = os.getenv("HOME") .. "/.zinit/plugins/sumneko---lua-language-server"
-    local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
+    local sumneko_root_path = os.getenv("HOME") ..
+                                  "/.zinit/plugins/sumneko---lua-language-server"
+    local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name ..
+                               "/lua-language-server"
 
     nvim_lsp.sumneko_lua.setup {
         on_attach = on_attach,
@@ -129,9 +126,7 @@ local function setup_servers()
                     -- Make the server aware of Neovim runtime files
                     library = vim.api.nvim_get_runtime_file("", true)
                 },
-                telemetry = {
-                    enabled = false
-                }
+                telemetry = {enabled = false}
             }
         },
         capabilities = capabilities,
@@ -144,10 +139,7 @@ local function setup_servers()
         root_dir = nvim_lsp.util.root_pattern("Cargo.toml", ".git"),
         settings = {
             ["rust-analyzer"] = {
-                diagnostics = {
-                    enable = true,
-                    enableExperimental = true
-                },
+                diagnostics = {enable = true, enableExperimental = true},
                 inlayHints = {
                     enable = true,
                     parameterHints = true,
@@ -167,12 +159,8 @@ local function setup_servers()
                     target = os.getenv("RUST_ANALYZER_TARGET"),
                     allFeatures = true
                 },
-                procMacro = {
-                    enable = true
-                },
-                experimental = {
-                    procAttrMacros = true
-                },
+                procMacro = {enable = true},
+                experimental = {procAttrMacros = true},
                 lruCapacity = 256
             }
         },
@@ -180,10 +168,7 @@ local function setup_servers()
         flags = common_flags
     }
 
-    nvim_lsp.bashls.setup {
-        filetypes = {"bash", "zsh"},
-        on_attach = on_attach
-    }
+    nvim_lsp.bashls.setup {filetypes = {"bash", "zsh"}, on_attach = on_attach}
 
     local servers = {
         "vimls",
@@ -226,6 +211,7 @@ local function setup_servers()
             formatFiletypes = formatters.formatFiletypes
         }
     }
+
 end
 
 return setup_servers

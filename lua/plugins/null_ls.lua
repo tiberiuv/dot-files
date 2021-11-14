@@ -4,9 +4,9 @@ local on_attach = require("lsp.callbacks").on_attach
 null_ls.config({
     sources = {
         -- linters
-        null_ls.builtins.formatting.eslint,
+        null_ls.builtins.formatting.eslint_d,
         null_ls.builtins.diagnostics.luacheck, -- formatters
-        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.prettierd,
         null_ls.builtins.formatting.rustfmt,
         null_ls.builtins.formatting.lua_format
     }

@@ -4,11 +4,22 @@ return {
     linters = {
         eslint = {
             sourceName = "eslint",
-            command = "eslint",
-            rootPatterns = {".eslintrc.js", "package.json"},
+            command = "eslint_d",
+            rootPatterns = {
+                ".eslintrc.js",
+                '.eslintrc',
+                '.eslintrc.cjs',
+                '.eslintrc.json',
+                '.eslintrc.yaml',
+                '.eslintrc.yml'
+            },
             debounce = debounce,
             args = {
-                "--stdin", "--stdin-filename", "%filepath", "--format", "json"
+                "--stdin",
+                "--stdin-filename",
+                "%filepath",
+                "--format",
+                "json"
             },
             parseJson = {
                 errorsRoot = "[0].messages",
@@ -41,7 +52,8 @@ return {
         flake8 = {
             command = "flake8",
             args = {
-                "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s", "-"
+                "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s",
+                "-"
             },
             debounce = debounce,
             rootPatterns = {".flake8", "setup.cfg", "tox.ini"},

@@ -10,7 +10,6 @@ vim.cmd [[
     augroup END
 ]]
 
-
 vim.cmd [[
     augroup last_edit
       autocmd!

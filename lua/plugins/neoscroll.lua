@@ -13,9 +13,11 @@ require("neoscroll").setup({
 
 local t = {}
 t['<C-u>'] = {
-    'scroll', {'-vim.wo.scroll', 'true', '350', 'quadratic', [['cursorline']]}
+    'scroll',
+    {'-vim.wo.scroll', 'true', '350', 'quadratic', [['cursorline']]}
 }
 t['<C-d>'] = {
-    'scroll', {'vim.wo.scroll', 'true', '350', 'quadratic', [['cursorline']]}
+    'scroll',
+    {'vim.wo.scroll', 'true', '350', 'quadratic', [['cursorline']]}
 }
 require('neoscroll.config').set_mappings(t)

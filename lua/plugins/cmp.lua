@@ -92,8 +92,9 @@ cmp.setup {
     },
     formatting = {
         format = function(entry, vim_item)
-            vim_item.kind = cmp_kinds[vim_item.kind].icon .. " " ..
-                                vim_item.kind
+            local k = cmp_kinds[vim_item.kind].icon .. " " .. vim_item.kind
+            vim_item.kind = k
+
             vim_item.menu = ({
                 nvim_lsp = "[LSP]",
                 luasnip = "[Snp]",
