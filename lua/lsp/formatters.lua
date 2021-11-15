@@ -11,10 +11,7 @@ return {
             args = {"%filepath"}
         },
         rustfmt = {command = "rustfmt", args = {"--edition", "2018"}},
-        lua_format = {
-            command = "lua-format",
-            args = {'%filepath', "--chop-down-table"}
-        },
+        lua_format = {command = "lua-format", args = {"%filepath"}},
         black = {
             command = "black",
             args = {"%filepath"},

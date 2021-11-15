@@ -27,7 +27,7 @@ opt.grepformat = "%f:%l:%c:%m"
 opt.undofile = true
 
 opt.shortmess = vim.o.shortmess .. "c"
-opt.colorcolumn = "100"
+opt.colorcolumn = "80"
 
 -- Window local
 -----------------------------------------------

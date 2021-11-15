@@ -15,4 +15,4 @@ require("project_nvim").setup {
     update_focused_file = {enable = true, update_cwd = true}
 }
 
-require('telescope').load_extension('projects')
+require("telescope").load_extension("projects")
