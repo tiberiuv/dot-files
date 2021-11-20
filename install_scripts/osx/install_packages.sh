@@ -29,49 +29,7 @@ brew tap homebrew/cask-fonts
 brew install --cask vlc firefox-developer-edition spotify temurin11
 
 # Install brew packages
-brew install \
-    llvm \
-    gcc \ 
-    wget \
-    curl \
-    watch \
-    diff-so-fancy \
-    pyenv \
-    autogen \
-    ninja \
-    libtool \
-    automake \
-    pkg-config \
-    gettext \
-    git \
-    docker \
-    tmux \
-    pipenv \
-    python \
-    node \
-    yarn \
-    scala \
-    pinentry-mac \
-    gnupg \
-    gpg-agent \
-    kubectl \
-    mysql \
-    postgres \
-    htop \
-    openssl \
-    readline \
-    zlib \
-    coreutils \
-    cmake \
-    icu4c \
-    harfbuzz \
-    lcms2 \
-    font-jetbrains-mono-nerd-font \
-    fuse \
-    librsync \
-    ImageMagick \
-    utf8proc \
-    go
+brew install llvm gcc wget curl watch diff pyenv autogen ninja libtool automake pkg gettext git git-lfs docker tmux pipenv poetry python node yarn scala pinentry gnupg gpg-agent kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 font fuse librsync ImageMagick utf8proc go luarocks
 
 brew link --overwrite gnupg
 

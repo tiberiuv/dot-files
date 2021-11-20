@@ -1,4 +1,3 @@
--- vim.b.neoscroll_performance_mode = true
 require("neoscroll").setup({
     pre_hook = function(info)
         if info == "cursorline" then vim.wo.cursorline = false end

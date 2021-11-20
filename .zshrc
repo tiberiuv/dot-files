@@ -197,14 +197,13 @@ zinit light rust-analyzer/rust-analyzer
 # Alacritty
 zinit ice \
   atclone"make app;
-          cp -r target/release/osx/Alacritty.app /Applications/" \
+          mv -r /Applications/Alacritty.app /tmp/ && cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
 zinit light alacritty/alacritty
 
 # Lua lsp
 zinit ice as"program" pick"bin/macOs" \
-  atclone"git submodule update --init --recursive;
-          cd 3rd/luamake;
+  atclone"cd 3rd/luamake;
           compile/install.sh;
           cd ../..;
           ./3rd/luamake/luamake rebuild;" \
