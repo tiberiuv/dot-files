@@ -11,7 +11,11 @@ return {
             args = {"%filepath"}
         },
         rustfmt = {command = "rustfmt", args = {"--edition", "2018"}},
-        lua_format = {command = "lua-format", args = {"%filepath"}},
+        lua_format = {
+            command = "lua-format",
+            args = {"%filepath"},
+            rootPatterns = { '.lua-format' },
+        },
         black = {
             command = "black",
             args = {"%filepath"},

@@ -41,7 +41,7 @@ return function()
 
     use {
         "mfussenegger/nvim-dap",
-        keys = "<Leader>d",
+        keys = "<leader>d",
         config = "require('plugins.dap')"
     }
 
