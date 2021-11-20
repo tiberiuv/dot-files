@@ -1,6 +1,16 @@
-# Set Path
+if [[ $(uname -m) == arm64 ]]; then
+  eval $(/opt/homebrew/bin/brew shellenv)
+  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
+  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
+else
+  eval $(/usr/local/bin/brew shellenv)
+  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.1.2/libexec"
+  export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
+fi
+
 # ------------------------------------------------------------ #
-# default PATH
+# Path
+# ------------------------------------------------------------ #
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/Applications
@@ -15,3 +25,32 @@ export PATH=$HOMEBREW_PREFIX/bin:$PATH
 export PATH=$HOMEBREW_PREFIX/sbin:$PATH
 export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
 export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
+# ------------------------------------------------------------ #
+# Compiler flags
+# ------------------------------------------------------------ #
+# export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/opt/openssl/lib/
+# export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/lib/
+# ------------------------------------------------------------ #
+# Environment variables
+# ------------------------------------------------------------ #
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
+export SCALA_HOME=$HOMEBREW_PREFIX/opt/scala@2.12/idea
+export PYSPARK_PYTHON=python3
+export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
+export GOPATH=$HOME/go
+export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
+export KITTY_CONFIG_DIRECTORY=~/.config/kitty/kitty.conf
+export CARGO_NET_GIT_FETCH_WITH_CLI=true
+export EDITOR=nvim
+export GPG_TTY=$(tty)
+# ssh
+export SSH_KEY_PATH=~/.ssh/rsa_id
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export FZF_VERSION="0.27.3"
+# For minikube
+export KUBERNETES_PROVIDER=docker
+# ------------------------------------------------------------ #
