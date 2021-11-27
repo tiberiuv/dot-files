@@ -162,7 +162,7 @@ zinit light rust-analyzer/rust-analyzer
 # Alacritty
 zinit ice \
   atclone"make app;
-          mv -r /Applications/Alacritty.app /tmp/ && cp -r target/release/osx/Alacritty.app /Applications/" \
+          mv /Applications/Alacritty.app /tmp/ && cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
 zinit light alacritty/alacritty
 
@@ -198,6 +198,8 @@ zinit ice as"program" pick"bin/git-dsf"
 zinit light zdharma-continuum/zsh-diff-so-fancy
 
 # ------------------------------------------------------------ #
+autoload -U compinit
+compinit
 
 zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:git-checkout:*" sort false

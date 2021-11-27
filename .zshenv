@@ -4,7 +4,7 @@ if [[ $(uname -m) == arm64 ]]; then
   export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
 else
   eval $(/usr/local/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.1.2/libexec"
+  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
   export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
 fi
 
