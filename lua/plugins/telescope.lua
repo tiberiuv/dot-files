@@ -5,7 +5,6 @@ local actions = require("telescope.actions")
 telescope.setup {defaults = {mappings = {i = {["<ESC>"] = actions.close}}}}
 telescope.load_extension("fzf")
 telescope.load_extension("lsp_handlers")
-telescope.load_extension("projects")
 
 local opts = {noremap = true, silent = true}
 

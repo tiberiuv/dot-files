@@ -8,8 +8,7 @@ return function()
     use {
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
-        config = "require('plugins.treesitter')",
-        event = "BufEnter"
+        config = "require('plugins.treesitter')"
     }
 
     use {"chr4/nginx.vim", ft = ".conf"}
@@ -24,14 +23,12 @@ return function()
     use {
         "neovim/nvim-lspconfig",
         config = "require('lsp')()",
-        event = "BufRead"
     }
 
     use {
         "hrsh7th/nvim-cmp",
         requires = {
-            {"L3MON4D3/LuaSnip"},
-            {"hrsh7th/cmp-nvim-lsp"},
+            {"L3MON4D3/LuaSnip"}, {"hrsh7th/cmp-nvim-lsp"},
             {"hrsh7th/cmp-path", after = "nvim-cmp"},
             {"saadparwaiz1/cmp_luasnip", after = "nvim-cmp"}
         },
@@ -115,5 +112,10 @@ return function()
         "karb94/neoscroll.nvim",
         keys = {"<C-u>", "<C-d>"},
         config = "require('plugins.neoscroll')"
+    }
+
+    use {
+        "jose-elias-alvarez/null-ls.nvim",
+        config = "require('plugins.null-ls')"
     }
 end

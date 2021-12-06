@@ -1,8 +1,4 @@
 local on_attach = function(_, bufnr)
-    local function buf_set_keymap(...)
-        vim.api.nvim_buf_set_keymap(bufnr, ...)
-    end
-
     require"lsp_extensions".inlay_hints {
         highlight = "Comment",
         prefix = " > ",
@@ -12,38 +8,39 @@ local on_attach = function(_, bufnr)
         use_languagetree = true
     }
 
-    -- Mappings.
     local opts = {noremap = true, silent = true}
-    buf_set_keymap("n", "gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", opts)
-    buf_set_keymap("n", "gd", "<CMD>lua vim.lsp.buf.definition()<CR>", opts)
-    buf_set_keymap("n", "K", "<CMD>lua vim.lsp.buf.hover()<CR>", opts)
-    buf_set_keymap("n", "gi", "<CMD>lua vim.lsp.buf.implementation()<CR>", opts)
-    buf_set_keymap("n", "<C-s>", "<CMD>lua vim.lsp.buf.signature_help()<CR>",
-                   opts)
-    buf_set_keymap("n", "<leader>wa",
-                   "<CMD>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-    buf_set_keymap("n", "<leader>wr",
-                   "<CMD>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-    buf_set_keymap("n", "<leader>wl",
-                   "<CMD>lua vim.lsp.buf.list_workspace_folders()<CR>", opts)
-    buf_set_keymap("n", "<leader>D",
-                   "<CMD>lua vim.lsp.buf.type_definition()<CR>", opts)
-    buf_set_keymap("n", "<leader>rn", "<CMD>lua vim.lsp.buf.rename()<CR>", opts)
-    buf_set_keymap("n", "gr", "<CMD>lua vim.lsp.buf.references()<CR>", opts)
-    buf_set_keymap("n", "<leader>ca", "<Cmd>lua vim.lsp.buf.code_action()<CR>",
-                   opts)
-    buf_set_keymap("n", "[e", "<CMD>lua vim.lsp.diagnostic.goto_prev()<CR>",
-                   opts)
-    buf_set_keymap("n", "]e", "<CMD>lua vim.lsp.diagnostic.goto_next()<CR>",
-                   opts)
-    buf_set_keymap("n", "<leader>e",
-                   "<CMD>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
-                   opts)
-    buf_set_keymap("n", "<leader>f", "<CMD>lua vim.lsp.buf.formatting()<CR>",
-                   opts)
-    buf_set_keymap("n", "<leader>f",
-                   "<CMD>lua vim.lsp.buf.formatting_sync()<CR> <CMD>:w<CR>",
-                   opts)
+
+    local function buf_set_keymap(...)
+        vim.api.nvim_buf_set_keymap(bufnr, ...)
+    end
+
+    local function set_keymap_n(...)
+        vim.api.nvim_buf_set_keymap(bufnr, "n", ...)
+    end
+
+    -- Mappings.
+    set_keymap_n("gD", "<CMD>lua vim.lsp.buf.declaration()<CR>", opts)
+    set_keymap_n("gd", "<CMD>lua vim.lsp.buf.definition()<CR>", opts)
+    set_keymap_n("K", "<CMD>lua vim.lsp.buf.hover()<CR>", opts)
+    set_keymap_n("gi", "<CMD>lua vim.lsp.buf.implementation()<CR>", opts)
+    set_keymap_n("<C-s>", "<CMD>lua vim.lsp.buf.signature_help()<CR>", opts)
+    set_keymap_n("<leader>wa",
+                 "<CMD>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+    set_keymap_n("<leader>wr",
+                 "<CMD>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+    set_keymap_n("<leader>wl",
+                 "<CMD>lua vim.lsp.buf.list_workspace_folders()<CR>", opts)
+    set_keymap_n("<leader>D", "<CMD>lua vim.lsp.buf.type_definition()<CR>", opts)
+    set_keymap_n("<leader>rn", "<CMD>lua vim.lsp.buf.rename()<CR>", opts)
+    set_keymap_n("gr", "<CMD>lua vim.lsp.buf.references()<CR>", opts)
+    set_keymap_n("<leader>ca", "<Cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+    set_keymap_n("[e", "<CMD>lua vim.diagnostic.goto_prev()<CR>", opts)
+    set_keymap_n("]e", "<CMD>lua vim.diagnostic.goto_next()<CR>", opts)
+    set_keymap_n("<leader>e",
+                 "<CMD>lua vim.diagnostic.open_float()<CR>", opts)
+    set_keymap_n("<leader>f", "<CMD>lua vim.lsp.buf.formatting()<CR>", opts)
+    set_keymap_n("<leader>f",
+                 "<CMD>lua vim.lsp.buf.formatting_sync()<CR> <CMD>:w<CR>", opts)
 
     local handlers = vim.lsp.handlers
     local pop_opts = {border = "single", max_width = 100}

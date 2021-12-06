@@ -20,29 +20,28 @@ local function setup_servers()
     local on_attach = callbacks.on_attach
     local on_attach_no_formatting = callbacks.on_attach_no_formatting
 
-    configs.pyright = {
+    nvim_lsp.pyright.setup {
         on_attach = on_attach,
         filetypes = {"python", ".py"},
-        default_config = {
-            cmd = {"pyright-langserver", "--stdio"},
-            filetypes = {"python"},
-            root_dir = nvim_lsp.util.root_pattern("Pipfile", "requirements.txt",
-                                                  ".git", "setup.py",
-                                                  "setup.cfg", "pyproject.toml"),
-            settings = {
+        settings = {
+            python = {
                 analysis = {
                     autoSearchPaths = true,
                     useLibraryCodeForTypes = true
                 },
                 pyright = {
                     useLibraryCodeForTypes = true,
-                    venvPath = "~/.local/share/virtualenvs",
-                    reportMissingImports = true
+                    -- venvPath = "~/.local/share/virtualenvs",
+                    venvPath = "~/Library/Caches/pypoetry/virtualenvs/",
+                    reportMissingImports = true,
                 }
             }
         },
         capabilities = capabilities,
-        flags = common_flags
+        flags = {
+            lsp_flags = {debounce_text_changes = 150},
+            allow_incremental_sync = false
+        }
     }
 
     nvim_lsp.tsserver.setup {
@@ -59,12 +58,12 @@ local function setup_servers()
         flags = common_flags
     }
 
-    nvim_lsp.metals.setup {
+    --[[ nvim_lsp.metals.setup {
         on_attach = on_attach,
         filetypes = {"scala", ".sc", ".scala"},
         capabilities = capabilities,
         flags = common_flags
-    }
+    } ]]
 
     nvim_lsp.flow.setup {
         on_attach = on_attach_no_formatting,
@@ -176,14 +175,13 @@ local function setup_servers()
         "terraformls",
         "dockerls",
         "texlab",
-        "yamlls",
-        "pyright"
+        "yamlls"
     }
 
     for _, lsp in ipairs(servers) do
         local _on_attach = function(client, bufnr)
             -- using prettier instead for formatting
-            if lsp == "jsonls" or lsp == "yamlls" then
+            if lsp == "jsonls" or lsp == "yamlls" or lsp == "tsserver" then
                 on_attach_no_formatting(client, bufnr)
             else
                 on_attach(client, bufnr)
@@ -196,19 +194,10 @@ local function setup_servers()
         }
     end
 
-    local linters = require("lsp.linters")
-    local formatters = require("lsp.formatters")
-
-    nvim_lsp.diagnosticls.setup {
-        on_attach = on_attach,
-        filetypes = vim.tbl_keys(formatters.formatFiletypes),
-        init_options = {
-            filetypes = linters.linter_filetypes,
-            linters = linters.linters,
-            formatters = formatters.formatters,
-            formatFiletypes = formatters.formatFiletypes
-        }
-    }
+    require("lspconfig")["null-ls"].setup({
+        -- see the nvim-lspconfig documentation for available configuration options
+        on_attach = on_attach
+    })
 
 end
 

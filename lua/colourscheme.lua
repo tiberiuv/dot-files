@@ -6,7 +6,6 @@ vim.g.diagnostic_enable_virtual_text = 1
 
 vim.cmd [[
     colorscheme gruvbox
-    syntax enable
     filetype plugin indent on
     let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
     if has("termguicolors")     " set true colors

@@ -24,12 +24,14 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/i
 brew tap homebrew/cask
 brew tap homebrew/cask-versions
 brew tap homebrew/cask-fonts
+brew tap hashicorp/tap
 
 # Instal brew gui apps
 brew install --cask vlc firefox-developer-edition spotify temurin11
 
 # Install brew packages
 brew install llvm gcc wget curl watch diff pyenv autogen ninja libtool automake pkg gettext git git-lfs docker tmux pipenv poetry python node yarn scala pinentry gnupg gpg-agent kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 font fuse librsync ImageMagick utf8proc go luarocks
+brew install terraform-ls
 
 brew link --overwrite gnupg
 
@@ -42,8 +44,9 @@ yarn global add \
   pyvm \
   vscode-langservers-extracted \
   diagnostic-languageserver \
-  stylelint
-
+  stylelint \
+  dockerfile-language-server-nodejs \
+  vim-language-server
 # Install Lua linter
 luarocks install luacheck luaformatter
 

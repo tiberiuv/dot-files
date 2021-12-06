@@ -147,7 +147,7 @@ zinit load zdharma-continuum/null
 
 # Fzf
 zinit ice depth"1" as"program" pick"bin/fzf" \
-  atclone"make install" \
+  atclone"rm -rf bin/fzf && make install" \
   atpull"%atclone"
 zinit light junegunn/fzf
 
