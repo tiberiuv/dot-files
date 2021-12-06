@@ -4,23 +4,23 @@ local fn = vim.fn
 -- ensure that packer is installed
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({
-        "git",
-        "clone",
-        "https://github.com/wbthomason/packer.nvim",
-        install_path
-    })
-    execute "packadd packer.nvim"
+	fn.system({
+		"git",
+		"clone",
+		"https://github.com/wbthomason/packer.nvim",
+		install_path,
+	})
+	execute("packadd packer.nvim")
 end
 
 -- Auto compile when there are changes in plugins.lua
-vim.cmd "autocmd BufWritePost plugins/packer.lua PackerCompile"
+vim.cmd("autocmd BufWritePost plugins/packer.lua PackerCompile")
 
-local packer = require "packer"
-local util = require "packer.util"
+local packer = require("packer")
+local util = require("packer.util")
 
 packer.init({
-    package_root = util.join_paths(vim.fn.stdpath("data"), "site", "pack")
+	package_root = util.join_paths(vim.fn.stdpath("data"), "site", "pack"),
 })
 
 return require("packer").startup(require("plugins.plugins"))

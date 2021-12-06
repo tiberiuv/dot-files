@@ -4,7 +4,7 @@ vim.g.gruvbox_italic = 1
 vim.g.gruvbox_italicize_strings = 1
 vim.g.diagnostic_enable_virtual_text = 1
 
-vim.cmd [[
+vim.cmd([[
     colorscheme gruvbox
     filetype plugin indent on
     let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
@@ -13,4 +13,4 @@ vim.cmd [[
         set t_8b=\[[48;2;%lu;%lu;%lum
         set termguicolors
     endif
-]]
+]])

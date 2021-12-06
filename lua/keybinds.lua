@@ -1,4 +1,4 @@
-local map = require"utils".map
+local map = require("utils").map
 
 map("n", "<up>", "<nop>")
 map("n", "<down>", "<nop>")
@@ -14,9 +14,9 @@ map("n", "<S-Enter>", "O<Esc>")
 map("n", "<CR>", "o<Esc>")
 
 -- Remove Highlight on esc
-map("n", "<ESC>", ":noh<CR>", {silent = true})
+map("n", "<ESC>", ":noh<CR>", { silent = true })
 
-vim.cmd [[
+vim.cmd([[
    fun! SetupCommandAlias(from, to)
         exec 'cnoreabbrev <expr> '.a:from .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")' .'? ("'.a:to.'") : ("'.a:from.'"))'
     endfun
@@ -26,4 +26,4 @@ vim.cmd [[
     call SetupCommandAlias("q:", "q")
     call SetupCommandAlias("Wq", "wq")
     call SetupCommandAlias("WQ", "wq")
-]]
+]])
