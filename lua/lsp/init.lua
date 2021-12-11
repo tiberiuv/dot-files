@@ -8,7 +8,6 @@ end
 
 -- Setup all the lsp servers
 local function setup_servers()
-    local configs = require("lspconfig/configs")
     local nvim_lsp = require("lspconfig")
 
     local common_flags = require("lsp.common")
@@ -51,13 +50,6 @@ local function setup_servers()
         capabilities = capabilities,
         flags = common_flags,
     })
-
-    --[[ nvim_lsp.metals.setup {
-        on_attach = on_attach,
-        filetypes = {"scala", ".sc", ".scala"},
-        capabilities = capabilities,
-        flags = common_flags
-    } ]]
 
     nvim_lsp.flow.setup({
         on_attach = on_attach_no_formatting,

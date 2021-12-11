@@ -21,7 +21,7 @@ require("lualine").setup({
             },
             {
                 "diagnostics",
-                sources = { "nvim_lsp" },
+                sources = { "nvim_diagnostic" },
                 -- displays diagnostics from defined severity
                 sections = { "error", "warn", "info", "hint" },
                 -- all colors are in format #rrggbb
