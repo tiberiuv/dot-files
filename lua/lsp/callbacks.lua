@@ -10,10 +10,6 @@ local on_attach = function(_, bufnr)
 
     local opts = { noremap = true, silent = true }
 
-    local function buf_set_keymap(...)
-        vim.api.nvim_buf_set_keymap(bufnr, ...)
-    end
-
     local function set_keymap_n(...)
         vim.api.nvim_buf_set_keymap(bufnr, "n", ...)
     end

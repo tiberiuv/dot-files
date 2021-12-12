@@ -158,7 +158,6 @@ local function setup_servers()
         "cssls",
         "terraformls",
         "dockerls",
-        "texlab",
         "yamlls",
     }
 

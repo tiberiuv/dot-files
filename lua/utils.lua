@@ -17,7 +17,13 @@ local function map(mode, combo, mapping, opts)
     if opts then
         options = vim.tbl_extend("force", options, opts)
     end
-    vim.api.nvim_set_keymap(mode, combo, mapping, options)
+    if type(mode) == "table" then
+        for _, value in ipairs(mode) do
+            vim.api.nvim_set_keymap(value, combo, mapping, options)
+        end
+    else
+        vim.api.nvim_set_keymap(mode, combo, mapping, options)
+    end
 end
 
 local function require_reset(pck)

@@ -17,9 +17,6 @@ else
   eval $(/usr/local/bin/brew shellenv);
 fi
 
-# Install zinit - package manager for zsh shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
-
 # Add other repos to brew
 brew tap homebrew/cask
 brew tap homebrew/cask-versions
@@ -34,6 +31,11 @@ brew install llvm gcc wget curl watch diff pyenv autogen ninja libtool automake 
 brew install terraform-ls
 
 brew link --overwrite gnupg
+
+# Install zinit - package manager for zsh shell
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+
+source ~/.zshrc
 
 # Install global node modules
 # mainly linters etc.
@@ -51,26 +53,10 @@ yarn global add \
 luarocks install luacheck luaformatter
 
 # Install Rust cli tools
-cargo install exa bat procs ripgrep diesel_cli trunk wasm-bindgen-cli fnm
+cargo install exa bat procs ripgrep diesel_cli trunk wasm-bindgen-cli fnm fd-find
 
 # Add wasm target for rust
 rustup target add wasm32-unknown-unknown
-
-curl -L -o coursier https://git.io/coursier-cli
-chmod +x coursier
-mv coursier ~/bin
-
-# Install metals scala lsp server
-./coursier bootstrap \
-  --java-opt -Xss4m \
-  --java-opt -Xms100m \
-  --java-opt -Dmetals.client=vim-lsc \
-  org.scalameta:metals_2.12:0.9.10 \
-  -r bintray:scalacenter/releases \
-  -r sonatype:snapshots \
-  -o /usr/local/bin/metals-vim -f
-
-mv /usr/local/bin/metals-vim /usr/local/bin/metals
 
 # Install nvim plugins
 nvim -c PackerInstall

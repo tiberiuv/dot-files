@@ -60,6 +60,7 @@ setopt path_dirs                # Perform Path Search Even On Command Names With
 setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A Trailing Slash.
 
 # ------------------------------ Aliases ------------------------------ #
+
 alias ssh="TERM=xterm-256color ssh"
 alias update-all="source ~/icloud/dot-files/update.zsh"
 
@@ -73,6 +74,7 @@ fi
 if type procs >/dev/null 2>&1; then
   alias ps=procs
 fi
+
 # Forward port 80 and 443 from host to nginx running in kubernetes (minikube)
 alias forward_nginx='sudo kubectl port-forward svc/nginx 80:80 443:443'
 # ------------------------------------------------------------ #

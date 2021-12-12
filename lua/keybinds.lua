@@ -1,14 +1,9 @@
 local map = require("utils").map
 
-map("n", "<up>", "<nop>")
-map("n", "<down>", "<nop>")
-map("n", "<left>", "<nop>")
-map("n", "<right>", "<nop>")
-
-map("i", "<up>", "<nop>")
-map("i", "<down>", "<nop>")
-map("i", "<left>", "<nop>")
-map("i", "<right>", "<nop>")
+map({ "n", "i" }, "<up>", "<nop>")
+map({ "n", "i" }, "<down>", "<nop>")
+map({ "n", "i" }, "<left>", "<nop>")
+map({ "n", "i" }, "<right>", "<nop>")
 
 map("n", "<S-Enter>", "O<Esc>")
 map("n", "<CR>", "o<Esc>")
