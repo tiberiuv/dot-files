@@ -73,9 +73,6 @@ fi
 if type procs >/dev/null 2>&1; then
   alias ps=procs
 fi
-if type htop >/dev/null 2>&1; then
-  alias top=htop
-fi
 # Forward port 80 and 443 from host to nginx running in kubernetes (minikube)
 alias forward_nginx='sudo kubectl port-forward svc/nginx 80:80 443:443'
 # ------------------------------------------------------------ #
@@ -198,8 +195,6 @@ zinit ice as"program" pick"bin/git-dsf"
 zinit light zdharma-continuum/zsh-diff-so-fancy
 
 # ------------------------------------------------------------ #
-autoload -U compinit
-compinit
 
 zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:git-checkout:*" sort false
@@ -207,6 +202,9 @@ zstyle ":completion:*:descriptions" format '[%d]'
 zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
 zstyle ":fzf-tab:complete:cd:*" fzf-preview "exa -1 --color=always $realpath"
 zstyle ":fzf-tab:*" fzf-command fzf
+
+autoload -U compinit
+compinit
 
 # In the line editor, number of matches to show before asking permission
 LISTMAX=9999

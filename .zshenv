@@ -8,10 +8,6 @@ else
   export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
 fi
 
-# if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
-#   source "${VIRTUAL_ENV}/bin/activate"
-# fi
-
 # ------------------------------------------------------------ #
 # Environment variables
 # ------------------------------------------------------------ #
@@ -31,7 +27,8 @@ export GPG_TTY=$(tty)
 # ssh
 export SSH_KEY_PATH=~/.ssh/rsa_id
 export CLICOLOR=1
-export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+export LSCOLORS=Gxfxcxdxbxegedabagacad
+export LS_COLORS='ow=36:di=34:fi=32:ex=31:ln=35:'
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 export FZF_VERSION="0.27.3"
 # For minikube
@@ -39,7 +36,7 @@ export KUBERNETES_PROVIDER=docker
 # ------------------------------------------------------------ #
 # Path
 # ------------------------------------------------------------ #
-export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH=$PYENV_ROOT/bin:$PATH
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/Applications
@@ -60,6 +57,3 @@ export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
 # export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/opt/openssl/lib/
 # export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/lib/
 # ------------------------------------------------------------ #
-# if [[ -n $VIRTUAL_ENV && -e "${VIRTUAL_ENV}/bin/activate" ]]; then
-#   source "${VIRTUAL_ENV}/bin/activate"
-# fi
