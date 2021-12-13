@@ -177,12 +177,6 @@ local function setup_servers()
         })
     end
 
-    require("plugins/null-ls")()
-
-    require("lspconfig")["null-ls"].setup({
-        -- see the nvim-lspconfig documentation for available configuration options
-        on_attach = on_attach,
-    })
 end
 
 return setup_servers

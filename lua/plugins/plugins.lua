@@ -117,6 +117,7 @@ return function()
 
     use({
         "jose-elias-alvarez/null-ls.nvim",
-        requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        config = "require('plugins.null-ls')",
+        requires = { "nvim-lua/plenary.nvim"},
     })
 end
