@@ -52,44 +52,17 @@ local label_comparator = function(entry1, entry2)
     return entry1.completion_item.label < entry2.completion_item.label
 end
 
-local luasnip = require("luasnip")
 local cmp = require("cmp")
-
-local has_words_before = function()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-local tab = function(fallback)
-    if cmp.visible() then
-        cmp.select_next_item()
-    elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-    elseif has_words_before() then
-        cmp.complete()
-    else
-        fallback()
-    end
-end
-
-local stab = function(fallback)
-    if cmp.visible() then
-        cmp.select_prev_item()
-    elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-    else
-        fallback()
-    end
-end
 
 local mapping = {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-n>"] = cmp.mapping.select_next_item(),
-    ["<C-Space>"] = cmp.mapping.complete(),
-    ["<C-e>"] = cmp.mapping.close(),
+    ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+    ["<C-e>"] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+    }),
     ["<CR>"] = cmp.mapping.confirm(),
-    ["<Tab>"] = cmp.mapping(tab, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(stab, { "i", "s" }),
 }
 
 cmp.setup({
@@ -103,8 +76,8 @@ cmp.setup({
     },
     formatting = {
         format = function(entry, vim_item)
-            local k = cmp_kinds[vim_item.kind].icon .. " " .. vim_item.kind
-            vim_item.kind = k
+            local kind = cmp_kinds[vim_item.kind].icon .. " " .. vim_item.kind
+            vim_item.kind = kind
 
             vim_item.menu = ({
                 nvim_lsp = "[LSP]",

@@ -159,9 +159,9 @@ zinit ice as"program" \
 zinit light rust-analyzer/rust-analyzer
 
 # Alacritty
-zinit ice \
+zinit ice ver"v0.9.0" \
   atclone"make app;
-          mv /Applications/Alacritty.app /tmp/ && cp -r target/release/osx/Alacritty.app /Applications/" \
+          cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
 zinit light alacritty/alacritty
 
@@ -182,15 +182,6 @@ zinit ice as"program" pick"build/bin/nvim" \
           sudo make install" \
   atpull"%atclone"
 zinit light neovim/neovim
-
-# Tmux
-zinit ice as"program" pick"tmux" \
-  atclone'sh autogen.sh;
-          CPPFLAGS="-I$HOMEBREW_PREFIX/include" \
-          LDFLAGS="-L$HOMEBREW_PREFIX/lib" \
-          ./configure --enable-utf8proc && make -j 8' \
-  atpull"%atclone"
-zinit light tmux/tmux
 
 # Colorful diffs
 zinit ice as"program" pick"bin/git-dsf"

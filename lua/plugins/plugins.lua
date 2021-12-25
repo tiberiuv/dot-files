@@ -12,7 +12,7 @@ return function()
     })
 
     use({ "chr4/nginx.vim", ft = ".conf" })
-    use({ "wavded/vim-stylus", ft = ".styl" })
+    use({ "wavded/vim-stylus", ft = { ".styl", "stylus" } })
     use({ "tomlion/vim-solidity", ft = ".sol" })
     use({ "Vimjas/vim-python-pep8-indent", ft = ".py" })
     use({
@@ -118,6 +118,6 @@ return function()
     use({
         "jose-elias-alvarez/null-ls.nvim",
         config = "require('plugins.null-ls')",
-        requires = { "nvim-lua/plenary.nvim"},
+        requires = { "nvim-lua/plenary.nvim" },
     })
 end

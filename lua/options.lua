@@ -13,6 +13,7 @@ opt.lazyredraw = true
 opt.encoding = "UTF-8"
 opt.smarttab = true
 opt.backspace = "indent,eol,start"
+opt.completeopt = "menu,menuone,noselect"
 opt.ruler = false
 opt.showcmd = false
 
