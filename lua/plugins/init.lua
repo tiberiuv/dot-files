@@ -23,4 +23,4 @@ packer.init({
     package_root = util.join_paths(vim.fn.stdpath("data"), "site", "pack"),
 })
 
-return require("packer").startup(require("plugins.plugins"))
+require("plugins.install_plugins")

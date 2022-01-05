@@ -20,10 +20,6 @@ font:
 
   size: 18.0
 
-  offset:
-    x: 1
-    y: 1
-
 # Mac only
 use_thin_strokes: true
 

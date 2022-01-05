@@ -177,6 +177,19 @@ local function setup_servers()
         })
     end
 
+    require("lspsaga").init_lsp_saga({
+        code_action_keys = {
+            quit = { "q", "<esc>" },
+            exec = "<CR>",
+        },
+        code_action_prompt = {
+            enable = true,
+            sign = true,
+            sign_priority = 40,
+            virtual_text = true,
+        },
+    })
+
 end
 
 return setup_servers

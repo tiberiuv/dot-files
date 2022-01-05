@@ -1,4 +1,4 @@
-return function()
+local function fn()
     local use = use
     use({ "wbthomason/packer.nvim" })
 
@@ -118,6 +118,14 @@ return function()
     use({
         "jose-elias-alvarez/null-ls.nvim",
         config = "require('plugins.null-ls')",
-        requires = { "nvim-lua/plenary.nvim" },
+    })
+
+    use({ "tami5/lspsaga.nvim" })
+
+    use({
+        "folke/zen-mode.nvim",
+        config = "require('zen-mode').setup({})"
     })
 end
+
+return require("packer").startup(fn)
