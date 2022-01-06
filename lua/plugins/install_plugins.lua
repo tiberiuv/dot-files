@@ -124,8 +124,9 @@ local function fn()
 
     use({
         "folke/zen-mode.nvim",
-        config = "require('zen-mode').setup({})"
+        config = "require('zen-mode').setup({})",
     })
+    use({ "kosayoda/nvim-lightbulb" })
 end
 
 return require("packer").startup(fn)

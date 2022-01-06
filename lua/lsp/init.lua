@@ -189,7 +189,6 @@ local function setup_servers()
             virtual_text = true,
         },
     })
-
 end
 
 return setup_servers
