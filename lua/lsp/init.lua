@@ -62,7 +62,6 @@ local function setup_servers()
         sumneko_lua = {
             on_attach = on_attach_no_formatting,
             filetypes = { "lua", ".lua" },
-            cmd = { sumneko_lua.bin, "-E", sumneko_lua.path .. "/main.lua" },
             settings = sumneko_lua.settings,
         },
     }
