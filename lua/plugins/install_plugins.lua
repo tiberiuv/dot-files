@@ -4,7 +4,6 @@ local packages = {
     ["tpope/vim-sleuth"] = {},
     ["tpope/vim-repeat"] = {},
     ["tami5/lspsaga.nvim"] = {},
-    ["kosayoda/nvim-lightbulb"] = {},
     ["gbrlsnchs/telescope-lsp-handlers.nvim"] = {},
     ["npxbr/gruvbox.nvim"] = { requires = { "rktjmp/lush.nvim" } },
     ["chr4/nginx.vim"] = { ft = ".conf" },
