@@ -47,7 +47,7 @@ local function setup_servers()
         },
         clangd = { on_attach = on_attach, filetypes = { "c", "ino", "cpp", ".ino" } },
 
-        -- Custom Settings
+        -- Custom settings
         rust_analyzer = { on_attach = on_attach_no_formatting, settings = rust_analyzer.settings },
         sqlls = {
             on_attach = on_attach,
@@ -86,7 +86,7 @@ local function setup_servers()
         },
         code_action_prompt = {
             enable = true,
-            sign = true,
+            sign = false,
             sign_priority = 40,
             virtual_text = true,
         },
