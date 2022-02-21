@@ -37,27 +37,6 @@ local function setup_servers()
         },
     })
 
-    nvim_lsp.tsserver.setup({
-        on_attach = on_attach_no_formatting,
-        filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-        capabilities = capabilities,
-        flags = common_flags,
-    })
-
-    nvim_lsp.clangd.setup({
-        on_attach = on_attach,
-        filetypes = { "c", "ino", "cpp", ".ino" },
-        capabilities = capabilities,
-        flags = common_flags,
-    })
-
-    nvim_lsp.flow.setup({
-        on_attach = on_attach_no_formatting,
-        capabilities = capabilities,
-        flags = common_flags,
-        filetypes = { ".js", ".jsx", "javascript", "javascriptreact", ".js.flow" },
-    })
-
     nvim_lsp.sqls.setup({
         on_attach = on_attach,
         filetypes = { "sql", ".sql" },
@@ -149,22 +128,32 @@ local function setup_servers()
         flags = common_flags,
     })
 
-    nvim_lsp.bashls.setup({ filetypes = { "bash", "zsh" }, on_attach = on_attach })
-
-    local servers = {
-        vimls = on_attach,
-        jsonls = on_attach_no_formatting,
-        html = on_attach,
-        cssls = on_attach,
-        terraformls = on_attach,
-        dockerls = on_attach,
-        yamlls = on_attach_no_formatting,
-        hls = on_attach,
+    -- Simple servers
+    local simple_servers = {
+        vimls = { on_attach = on_attach },
+        html = { on_attach = on_attach },
+        cssls = { on_attach = on_attach },
+        terraformls = { on_attach = on_attach },
+        dockerls = { on_attach = on_attach },
+        hls = { on_attach = on_attach },
+        yamlls = { on_attach = on_attach_no_formatting },
+        jsonls = { on_attach = on_attach_no_formatting },
+        bashls = { on_attach = on_attach, filetypes = { "bash", "zsh", "sh" } },
+        flow = {
+            on_attach = on_attach_no_formatting,
+            filetypes = { ".js", ".jsx", "javascript", "javascriptreact", ".js.flow" },
+        },
+        tsserver = {
+            on_attach = on_attach_no_formatting,
+            filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+        },
+        clangd = { on_attach = on_attach, filetypes = { "c", "ino", "cpp", ".ino" } },
     }
 
-    for lsp, custom_on_attach in pairs(servers) do
+    for lsp, v in pairs(simple_servers) do
         nvim_lsp[lsp].setup({
-            on_attach = custom_on_attach,
+            on_attach = v.on_attach,
+            filetypes = v.filetypes,
             capabilities = capabilities,
             flags = common_flags,
         })
