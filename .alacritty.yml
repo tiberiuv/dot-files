@@ -18,7 +18,7 @@ font:
     family: JetbrainsMono Nerd Font
     style: Bold Italic
 
-  size: 18.0
+  size: 19.5
 
 # Mac only
 use_thin_strokes: true
@@ -48,15 +48,15 @@ selection:
 live_config_reload: true
 custom_cursor_colors: true
 
+cursor:
+  text: "0x000000"
+  unfocused_hollow: true
+  # style:
+  #   shape: Beam
+
 # Colors (Gruvbox dark)
 colors:
   # Default colors
-  cursor:
-    text: "0x000000"
-    #cursor: '0xffffff'
-
-    unfocused_hollow: true
-
   primary:
     # medium contrast
     background: "#282828"

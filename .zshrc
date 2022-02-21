@@ -61,6 +61,7 @@ setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A T
 
 # ------------------------------ Aliases ------------------------------ #
 
+alias kc="kubectl"
 alias ssh="TERM=xterm-256color ssh"
 alias update-all="source ~/icloud/dot-files/update.zsh"
 
@@ -159,7 +160,7 @@ zinit ice as"program" \
 zinit light rust-analyzer/rust-analyzer
 
 # Alacritty
-zinit ice ver"v0.9.0" \
+zinit ice \
   atclone"make app;
           cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
@@ -234,3 +235,5 @@ eval "$(pyenv init -)"
 
 # Node version manager
 eval "$(fnm env)"
+
+export PATH="/usr/local/p/versions/python:$PATH"

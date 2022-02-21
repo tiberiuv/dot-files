@@ -54,7 +54,6 @@ local function fn()
     use({
         "iamcco/markdown-preview.nvim",
         run = "cd app && yarn install",
-        cmd = "MarkdownPreview",
     })
 
     use({ "nvim-lua/plenary.nvim", module = "plenary" })

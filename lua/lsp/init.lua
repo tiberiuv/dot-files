@@ -38,7 +38,7 @@ local function setup_servers()
     })
 
     nvim_lsp.tsserver.setup({
-        on_attach = on_attach,
+        on_attach = on_attach_no_formatting,
         filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
         capabilities = capabilities,
         flags = common_flags,
@@ -55,7 +55,7 @@ local function setup_servers()
         on_attach = on_attach_no_formatting,
         capabilities = capabilities,
         flags = common_flags,
-        filetypes = { ".js", ".jsx", "javascript", "javascriptreact" },
+        filetypes = { ".js", ".jsx", "javascript", "javascriptreact", ".js.flow" },
     })
 
     nvim_lsp.sqls.setup({
@@ -88,7 +88,7 @@ local function setup_servers()
     local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
 
     nvim_lsp.sumneko_lua.setup({
-        on_attach = on_attach,
+        on_attach = on_attach_no_formatting,
         filetypes = { "lua", ".lua" },
         cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
         settings = {
@@ -152,26 +152,19 @@ local function setup_servers()
     nvim_lsp.bashls.setup({ filetypes = { "bash", "zsh" }, on_attach = on_attach })
 
     local servers = {
-        "vimls",
-        "jsonls",
-        "html",
-        "cssls",
-        "terraformls",
-        "dockerls",
-        "yamlls",
+        vimls = on_attach,
+        jsonls = on_attach_no_formatting,
+        html = on_attach,
+        cssls = on_attach,
+        terraformls = on_attach,
+        dockerls = on_attach,
+        yamlls = on_attach_no_formatting,
+        hls = on_attach,
     }
 
-    for _, lsp in ipairs(servers) do
-        local _on_attach = function(client, bufnr)
-            -- using prettier instead for formatting
-            if lsp == "jsonls" or lsp == "yamlls" or lsp == "tsserver" then
-                on_attach_no_formatting(client, bufnr)
-            else
-                on_attach(client, bufnr)
-            end
-        end
+    for lsp, custom_on_attach in pairs(servers) do
         nvim_lsp[lsp].setup({
-            on_attach = _on_attach,
+            on_attach = custom_on_attach,
             capabilities = capabilities,
             flags = common_flags,
         })
