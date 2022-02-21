@@ -26,4 +26,4 @@ local rust_analyzer_settings = {
     },
 }
 
-return rust_analyzer_settings
+return {settings = rust_analyzer_settings}

@@ -8,67 +8,26 @@ end
 
 -- Setup all the lsp servers
 local function setup_servers()
-    local sumneko_lua_settings = require("lsp.sumneko_lua")
-    local pyright_settings = require("lsp.pyright")
-    local rust_analyzer_settings = require("lsp.rust_analyzer")
-    local sqlls_settings = require("lsp.sqlls")
-
     local nvim_lsp = require("lspconfig")
-
     local common_flags = require("lsp.common")
 
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+    -- Servers with custom settings
+    local sumneko_lua = require("lsp.sumneko_lua")
+    local pyright = require("lsp.pyright")
+    local rust_analyzer = require("lsp.rust_analyzer")
+    local sqlls = require("lsp.sqlls")
 
+    -- On attach callbacks
     local callbacks = require("lsp/callbacks")
     local on_attach = callbacks.on_attach
     local on_attach_no_formatting = callbacks.on_attach_no_formatting
 
-    local system_name
-    if vim.fn.has("mac") == 1 then
-        system_name = "macOS"
-    elseif vim.fn.has("unix") == 1 then
-        system_name = "Linux"
-    else
-        print("Unsupported system for sumneko")
-    end
-
-    local sumneko_root_path = os.getenv("HOME") .. "/.zinit/plugins/sumneko---lua-language-server"
-    local sumneko_binary = sumneko_root_path .. "/bin/" .. system_name .. "/lua-language-server"
-
-    local sumneko_lua_config = {
-        on_attach = on_attach_no_formatting,
-        filetypes = { "lua", ".lua" },
-        cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
-        settings = sumneko_lua_settings,
-        capabilities = capabilities,
-        flags = common_flags,
-    }
-
-    local rust_analyzer_config = {
-        on_attach = on_attach_no_formatting,
-        root_dir = nvim_lsp.util.root_pattern("Cargo.toml", ".git"),
-        settings = rust_analyzer_settings,
-    }
-
-    local pyright_config = {
-        on_attach = on_attach,
-        filetypes = { "python", ".py" },
-        settings = pyright_settings,
-        capabilities = capabilities,
-        flags = common_flags,
-    }
-
-    local sqlls_config = {
-        on_attach = on_attach,
-        filetypes = { "sql", ".sql" },
-        settings = sqlls_settings,
-        capabilities = capabilities,
-        flags = common_flags,
-    }
+    -- Server capabilities
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
     local servers = {
-        -- Simple server config
+        -- Default settings
         vimls = { on_attach = on_attach },
         html = { on_attach = on_attach },
         cssls = { on_attach = on_attach },
@@ -88,14 +47,28 @@ local function setup_servers()
         },
         clangd = { on_attach = on_attach, filetypes = { "c", "ino", "cpp", ".ino" } },
 
-        -- Complex server config
-        pyright = pyright_config,
-        sqlls = sqlls_config,
-        rust_analyzer = rust_analyzer_config,
-        sumneko_lua = sumneko_lua_config,
+        -- Custom Settings
+        rust_analyzer = { on_attach = on_attach_no_formatting, settings = rust_analyzer.settings },
+        sqlls = {
+            on_attach = on_attach,
+            filetypes = { "sql", ".sql" },
+            settings = sqlls.settings,
+        },
+        pyright = {
+            on_attach = on_attach,
+            filetypes = { "python", ".py" },
+            settings = pyright.settings,
+        },
+        sumneko_lua = {
+            on_attach = on_attach_no_formatting,
+            filetypes = { "lua", ".lua" },
+            cmd = { sumneko_lua.bin, "-E", sumneko_lua.path .. "/main.lua" },
+            settings = sumneko_lua.settings,
+        },
     }
 
     for lsp, v in pairs(servers) do
+        -- Note if a property is not set it will not be overridden
         nvim_lsp[lsp].setup({
             on_attach = v.on_attach,
             filetypes = v.filetypes,

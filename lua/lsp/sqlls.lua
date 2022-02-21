@@ -9,4 +9,4 @@ local sqlls_settings = {
     },
 }
 
-return sqlls_settings
+return {settings = sqlls_settings}

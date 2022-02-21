@@ -7,4 +7,4 @@ local pyright_settings = {
     },
 }
 
-return pyright_settings
+return {settings = pyright_settings}
