@@ -39,7 +39,7 @@ local function setup_servers()
         bashls = { on_attach = on_attach, filetypes = { "bash", "zsh", "sh" } },
         flow = {
             on_attach = on_attach_no_formatting,
-            filetypes = { ".js", ".jsx", "javascript", "javascriptreact", ".js.flow" },
+            filetypes = { ".js", ".jsx", "javascript", "javascriptreact", ".js.flow", "svelte" },
         },
         tsserver = {
             on_attach = on_attach_no_formatting,

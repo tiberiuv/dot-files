@@ -19,6 +19,8 @@ require("nvim-treesitter.configs").setup({
         "java",
         "go",
         "scala",
+        "svelte",
+        "hcl",
     },
     highlight = { enable = true },
     incremental_selection = { enable = true },
