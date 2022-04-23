@@ -64,6 +64,7 @@ setopt auto_param_slash         # If Completed Parameter Is A Directory, Add A T
 alias kc="kubectl"
 alias ssh="TERM=xterm-256color ssh"
 alias update-all="source ~/icloud/dot-files/update.zsh"
+alias clean_evicted="kubectl get pod | grep Evicted | awk '{print $1}' | xargs kubectl delete pod"
 
 alias vim=nvim
 if type exa >/dev/null 2>&1; then
@@ -162,6 +163,7 @@ zinit light rust-analyzer/rust-analyzer
 # Alacritty
 zinit ice \
   atclone"make app;
+          rm -rf /Applications/Alacritty.app;
           cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone"
 zinit light alacritty/alacritty

@@ -1,18 +1,41 @@
-vim.cmd([[
-    augroup file_types
-        autocmd!
-        autocmd BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
-        autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-        autocmd BufNewFile,BufRead *.ino,*.pde set filetype=cpp
-        autocmd BufNewFile,BufRead *.sc setlocal filetype=scala
-        autocmd BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml
-        autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-    augroup END
-]])
+---------- File types --------
+vim.api.nvim_create_augroup("file_types", { clear = true })
 
-vim.cmd([[
-    augroup last_edit
-      autocmd!
-      autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-    augroup END
-]])
+vim.api.nvim_create_autocmd("BufNewFile,BufRead *.tsx", {
+    group = "file_types",
+    command = "setlocal filetype=typescript.tsx"
+})
+
+vim.api.nvim_create_autocmd("BufNewFile,BufRead *.ts", {
+    group = "file_types",
+    command = "setlocal filetype=typescript"
+})
+
+vim.api.nvim_create_autocmd("BufNewFile,BufRead *.ino,*.pde", {
+    group = "file_types",
+    command = "setlocal filetype=cpp"
+})
+
+vim.api.nvim_create_autocmd("BufNewFile,BufRead *.sc", {
+    group = "file_types",
+    command = "setlocal filetype=scala"
+})
+
+vim.api.nvim_create_autocmd("BufNewFile,BufRead *.{yaml,yml}", {
+    group = "file_types",
+    command = "setlocal filetype=yaml"
+})
+
+vim.api.nvim_create_autocmd("FileType yaml", {
+    group = "file_types",
+    command = "setlocal ts=2 sts=2 sw=2 expandtab"
+})
+
+-----------------------------
+---------- Last Edit --------
+vim.api.nvim_create_augroup("last_edit", { clear = true })
+vim.api.nvim_create_autocmd("BufReadPost *", {
+    group = "last_edit",
+    command = [[if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif]]
+})
+-----------------------------

@@ -79,7 +79,7 @@ local function setup_servers()
         })
     end
 
-    require("lspsaga").init_lsp_saga({
+    require("lspsaga").setup({
         code_action_keys = {
             quit = { "q", "<esc>" },
             exec = "<CR>",

@@ -5,6 +5,7 @@ local packages = {
     ["tpope/vim-repeat"] = {},
     ["tami5/lspsaga.nvim"] = {},
     ["gbrlsnchs/telescope-lsp-handlers.nvim"] = {},
+    ["nfnty/vim-nftables"] = {},
     ["npxbr/gruvbox.nvim"] = { requires = { "rktjmp/lush.nvim" } },
     ["chr4/nginx.vim"] = { ft = ".conf" },
     ["wavded/vim-stylus"] = { ft = { ".styl", "stylus" } },
@@ -36,7 +37,7 @@ local packages = {
 
     ["nvim-lua/lsp_extensions.nvim"] = { event = "BufEnter" },
 
-    ["akinsho/nvim-toggleterm.lua"] = { keys = "<C-t>", config = "require('plugins.toggle_term')" },
+    ["akinsho/nvim-toggleterm.lua"] = { keys = "<C-t>", config = "require('plugins.toggle_term')", branch = "main" },
 
     ["kabouzeid/nvim-lspinstall"] = { cmd = { "LspInstall", "LspUninstall" }, event = "BufEnter" },
 

@@ -1,6 +1,7 @@
 require("nvim-treesitter.configs").setup({
     -- Modules and its options go here
     ensure_installed = {
+        "ruby",
         "rust",
         "python",
         "json",
