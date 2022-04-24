@@ -65,6 +65,8 @@ local packages = {
         config = "require('plugins.treesitter')",
     },
 
+    ["nvim-treesitter/nvim-treesitter-textobjects"] = {},
+
     ["kyazdani42/nvim-tree.lua"] = {
         keys = { "<C-n>" },
         config = "require('plugins.nvim-tree')",
