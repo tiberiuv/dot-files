@@ -11,12 +11,13 @@ vim.g.nvim_tree_show_icons = {
 vim.g.nvim_tree_add_trailing = 1
 vim.g.nvim_tree_respect_buf_cwd = 1
 
-vim.cmd([[
-    augroup nvim_tree
-      au!
-      autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif
-    augroup END
-]])
+local nvim_tree = vim.api.nvim_create_augroup("nvim_tree", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "* ++nested",
+    group = nvim_tree,
+    command = [[if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif]],
+})
+
 
 require("nvim-tree").setup({
     update_cwd = true,
