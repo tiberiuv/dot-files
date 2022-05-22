@@ -165,7 +165,9 @@ zinit ice \
   atclone"make app;
           rm -rf /Applications/Alacritty.app;
           cp -r target/release/osx/Alacritty.app /Applications/" \
-  atpull"%atclone"
+  atpull"%atclone" \
+  pullopts"--rebase --no-ff"
+  ver="master"
 zinit light alacritty/alacritty
 
 # Lua lsp
@@ -237,5 +239,3 @@ eval "$(pyenv init -)"
 
 # Node version manager
 eval "$(fnm env)"
-
-export PATH="/usr/local/p/versions/python:$PATH"

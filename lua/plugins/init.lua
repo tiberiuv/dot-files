@@ -16,6 +16,14 @@ end
 local packer = require("packer")
 local util = require("packer.util")
 
+vim.cmd("autocmd BufWritePost plugins/packer.lua PackerCompile")
+local au = vim.api.nvim_create_augroup("packer", { clear = true })
+vim.api.nvim_create_autocmd("BufReadPost", {
+    pattern = "BufWritePost plugins/init.lua",
+    group = au,
+    command = "PackerCompile",
+})
+
 packer.init({
     package_root = util.join_paths(vim.fn.stdpath("data"), "site", "pack"),
 })

@@ -29,7 +29,11 @@ local sources = {
     }),
     -- rust
     null_ls.builtins.formatting.rustfmt.with({
-        extra_args = { "--edition", "2021" }
+        extra_args = { "--edition", "2021" },
+    }),
+    -- yaml
+    null_ls.builtins.diagnostics.yamllint.with({
+        extra_args = { "{extends: default, rules: {document-start: disable}}" },
     }),
 }
 

@@ -36,6 +36,7 @@ local function setup_servers()
         hls = { on_attach = on_attach },
         yamlls = { on_attach = on_attach_no_formatting },
         jsonls = { on_attach = on_attach_no_formatting },
+        ansiblels = { on_attach = on_attach_no_formatting },
         bashls = { on_attach = on_attach, filetypes = { "bash", "zsh", "sh" } },
         flow = {
             on_attach = on_attach_no_formatting,

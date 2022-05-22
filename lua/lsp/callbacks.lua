@@ -25,8 +25,8 @@ local on_attach = function(_, bufnr)
     map_n("<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
     map_n("gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
     map_n("<leader>e", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
-    map_n("<leader>f", "<cmd>lua vim.lsp.buf.formatting()<cr>", opts)
-    map_n("<leader>f", "<cmd>lua vim.lsp.buf.formatting_sync()<cr> <cmd>:w<cr>", opts)
+    --map_n("<leader>f", "<cmd>lua vim.lsp.buf.formatting()<cr>", opts)
+    map_n("<leader>f", "<cmd>lua vim.lsp.buf.format()<cr> <cmd>:w<cr>", opts)
 
     map_n("<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
     map_n("<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
@@ -56,7 +56,7 @@ local on_attach = function(_, bufnr)
 end
 
 local on_attach_no_formatting = function(client, bufnr)
-    client.resolved_capabilities.document_formatting = false
+    client.server_capabilities.document_formatting = false
     on_attach(client, bufnr)
 end
 

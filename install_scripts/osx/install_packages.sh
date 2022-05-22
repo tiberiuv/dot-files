@@ -27,7 +27,7 @@ brew tap hashicorp/tap
 brew install --cask vlc firefox-developer-edition spotify temurin11
 
 # Install brew packages
-brew install llvm gcc wget curl watch diff pyenv autogen ninja libtool automake pkg gettext git git-lfs docker tmux pipenv poetry python node yarn scala pinentry gnupg gpg-agent kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 font fuse librsync ImageMagick utf8proc go luarocks terraform-ls
+brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs docker tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go luarocks terraform-ls ansible-lint yamllint
 brew install tmux --head
 brew install kitty --head
 brew install alacritty --head
@@ -50,7 +50,9 @@ yarn global add \
   diagnostic-languageserver \
   stylelint \
   dockerfile-language-server-nodejs \
-  vim-language-server
+  vim-language-server \
+  @ansible/ansible-language-server
+
 # Install Lua linter
 luarocks install luacheck luaformatter
 
