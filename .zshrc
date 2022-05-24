@@ -110,9 +110,10 @@ setopt promptsubst
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
 zinit light-mode for \
-    zdharma-continuum/z-a-patch-dl \
-    zdharma-continuum/z-a-as-monitor \
-    zdharma-continuum/z-a-bin-gem-node \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust \
     zdharma-continuum/z-a-submods \
     zdharma-continuum/declare-zsh
 
@@ -239,3 +240,5 @@ eval "$(pyenv init -)"
 
 # Node version manager
 eval "$(fnm env)"
+
+### End of Zinit's installer chunk

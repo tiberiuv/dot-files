@@ -35,7 +35,7 @@ brew install alacritty --head
 brew link --overwrite gnupg
 
 # Install zinit - package manager for zsh shell
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
 source ~/.zshrc
 
