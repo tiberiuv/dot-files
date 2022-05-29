@@ -113,7 +113,6 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust \
     zdharma-continuum/z-a-submods \
     zdharma-continuum/declare-zsh
 
@@ -134,19 +133,6 @@ zinit wait lucid for \
 # ------------------------------------------------------------ #
 # Programs
 # ------------------------------------------------------------ #
-# Just install rust and make it available globally in the system
-zinit ice id-as"rust" wait"0" lucid rustup as"command" \
-            pick"bin/rustc" atload="export \
-                CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup"
-zinit load zdharma-continuum/null
-
-# Installs rust and then a few CLI tools
-# and exposes their binaries by altering $PATH
-zinit ice rustup as"command" \
-  cargo"exa;bat;procs;ripgrep;diesel_cli;du-dust" \
-  pick"bin/(exa|bat|procs|rg|diesel|dust)"
-zinit load zdharma-continuum/null
-
 # Fzf
 zinit ice depth"1" as"program" pick"bin/fzf" \
   atclone"rm -rf bin/fzf && make install" \

@@ -3,9 +3,10 @@ local packages = {
     ["tpope/vim-surround"] = {},
     ["tpope/vim-sleuth"] = {},
     ["tpope/vim-repeat"] = {},
-    ["tami5/lspsaga.nvim"] = {},
-    ["gbrlsnchs/telescope-lsp-handlers.nvim"] = {},
     ["nfnty/vim-nftables"] = {},
+    ["arkav/lualine-lsp-progress"] = {},
+    ["nvim-telescope/telescope-ui-select.nvim"] = {},
+    ["rmagatti/goto-preview"] = { config = "require('plugins.goto_preview')"},
     ["npxbr/gruvbox.nvim"] = { requires = { "rktjmp/lush.nvim" } },
     ["chr4/nginx.vim"] = { ft = ".conf" },
     ["wavded/vim-stylus"] = { ft = { ".styl", "stylus" } },
@@ -34,8 +35,6 @@ local packages = {
     ["janko-m/vim-test"] = { cmd = { "TestNearest", "TestFile", "TestSuite", "TestLatest" } },
 
     ["antoinemadec/FixCursorHold.nvim"] = { event = "CursorHold" },
-
-    ["nvim-lua/lsp_extensions.nvim"] = { event = "BufEnter" },
 
     ["akinsho/nvim-toggleterm.lua"] = { keys = "<C-t>", config = "require('plugins.toggle_term')", branch = "main" },
 

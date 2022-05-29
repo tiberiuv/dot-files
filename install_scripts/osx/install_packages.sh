@@ -57,7 +57,7 @@ yarn global add \
 luarocks install luacheck luaformatter
 
 # Install Rust cli tools
-cargo install exa bat procs ripgrep diesel_cli trunk wasm-bindgen-cli fnm fd-find
+cargo install exa bat procs ripgrep diesel_cli trunk wasm-bindgen-cli fnm
 
 # Add wasm target for rust
 rustup target add wasm32-unknown-unknown

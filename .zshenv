@@ -11,6 +11,9 @@ fi
 # ------------------------------------------------------------ #
 # Environment variables
 # ------------------------------------------------------------ #
+export RUST_HOME="$HOME/.rustup"
+export CARGO_HOME="$HOME/.cargo"
+
 export PYENV_ROOT="$HOME/.pyenv"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
