@@ -33,8 +33,6 @@ _fzf_compgen_dir() {
   rg --smart-case --files --hidden --no-messages --glob "!{node_modules,.git,*.lock,target,dist}" ${1}
 }
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # ------------------------------------------------------------ #
 setopt AUTO_CD              # Change directory without cd
 setopt AUTO_PUSHD           # Make cd push each old directory onto the stack
@@ -153,7 +151,7 @@ zinit ice \
           rm -rf /Applications/Alacritty.app;
           cp -r target/release/osx/Alacritty.app /Applications/" \
   atpull"%atclone" \
-  pullopts"--rebase --no-ff"
+  pullopts"--rebase" \
   ver="master"
 zinit light alacritty/alacritty
 
@@ -172,7 +170,8 @@ zinit ice as"program" pick"build/bin/nvim" \
           sudo rm -rf ./.deps;
           make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
           sudo make install" \
-  atpull"%atclone"
+  atpull"%atclone" \
+  pullopts"--rebase"
 zinit light neovim/neovim
 
 # Colorful diffs
@@ -194,37 +193,22 @@ compinit
 # In the line editor, number of matches to show before asking permission
 LISTMAX=9999
 
-# Setup GitHub HTTPS credentials.
-if git credential-osxkeychain 2>&1 | grep $Q "git.credential-osxkeychain" > /dev/null
-then
-  if [ "$(git config --global credential.helper)" != "osxkeychain" ]
-  then
-    git config --global credential.helper osxkeychain
-  fi
-
-  if [ -n "$STRAP_GITHUB_USER" ] && [ -n "$STRAP_GITHUB_TOKEN" ]
-  then
-    printf "protocol=https\\nhost=github.com\\n" | git credential-osxkeychain erase
-    printf "protocol=https\\nhost=github.com\\nusername=%s\\npassword=%s\\n" \
-          "$STRAP_GITHUB_USER" "$STRAP_GITHUB_TOKEN" \
-          | git credential-osxkeychain store
-  fi
-fi
-
 # updates PATH for the Google Cloud SDK.
 if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
 
 # enables shell command completion for gcloud.
 if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-printf "\e[?1042l"
 # Python version manager
 eval "$(pyenv init -)"
 
 # Node version manager
 eval "$(fnm env)"
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+printf "\e[?1042l"
 ### End of Zinit's installer chunk

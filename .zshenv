@@ -54,9 +54,12 @@ export PATH=$HOMEBREW_PREFIX/bin:$PATH
 export PATH=$HOMEBREW_PREFIX/sbin:$PATH
 export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
 export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
+export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
 # export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/opt/openssl/lib/
 # export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/lib/
+export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@3/lib"
+export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
 # ------------------------------------------------------------ #

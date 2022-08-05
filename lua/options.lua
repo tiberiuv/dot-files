@@ -16,6 +16,7 @@ opt.backspace = "indent,eol,start"
 opt.completeopt = "menu,menuone,noselect"
 opt.ruler = false
 opt.showcmd = false
+opt.mouse = ""
 
 -- Search
 opt.ignorecase = true

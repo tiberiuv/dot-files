@@ -9,7 +9,7 @@
           <string>launchctl</string>
           <string>limit</string>
           <string>maxfiles</string>
-          <string>1024</string>
+          <string>10240</string>
           <string>25060</string>
         </array>
       <key>RunAtLoad</key>

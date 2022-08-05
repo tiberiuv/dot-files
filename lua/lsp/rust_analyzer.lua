@@ -17,7 +17,7 @@ local rust_analyzer_settings = {
         },
         cargo = {
             loadOutDirsFromCheck = true,
-            target = os.getenv("RUST_ANALYZER_TARGET"),
+            -- target = os.getenv("RUST_ANALYZER_TARGET"),
             allFeatures = true,
         },
         procMacro = { enable = true },
