@@ -33,7 +33,6 @@ export CLICOLOR=1
 export LSCOLORS=Gxfxcxdxbxegedabagacad
 export LS_COLORS='ow=36:di=34:fi=32:ex=31:ln=35:'
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-export FZF_VERSION="0.27.3"
 # For minikube
 export KUBERNETES_PROVIDER=docker
 # ------------------------------------------------------------ #
@@ -63,3 +62,4 @@ export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
 export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@3/lib"
 export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
 # ------------------------------------------------------------ #
+. "$HOME/.cargo/env"

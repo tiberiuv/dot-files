@@ -24,13 +24,13 @@ brew tap homebrew/cask-fonts
 brew tap hashicorp/tap
 
 # Instal brew gui apps
-brew install --cask vlc firefox-developer-edition spotify temurin11
+brew install --cask firefox-developer-edition temurin11 docker
 
 # Install brew packages
-brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs docker tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go luarocks terraform-ls ansible-lint yamllint
+brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go luarocks terraform-ls ansible-lint yamllint fnm pinentry-mac
+
 brew install tmux --head
 brew install kitty --head
-brew install alacritty --head
 
 brew link --overwrite gnupg
 
@@ -51,7 +51,8 @@ yarn global add \
   stylelint \
   dockerfile-language-server-nodejs \
   vim-language-server \
-  @ansible/ansible-language-server
+  @ansible/ansible-language-server \
+  bash-language-server
 
 # Install Lua linter
 luarocks install luacheck luaformatter
