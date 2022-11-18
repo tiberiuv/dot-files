@@ -165,14 +165,14 @@ zinit ice as"program" pick"bin/macOs" \
 zinit light sumneko/lua-language-server
 
 # Neovim
-zinit ice as"program" pick"build/bin/nvim" \
-  atclone"sudo rm -rf ./build;
-          sudo rm -rf ./.deps;
-          make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
-          sudo make install" \
-  atpull"%atclone" \
-  pullopts"--rebase"
-zinit light neovim/neovim
+# zinit ice as"program" pick"build/bin/nvim" \
+#   atclone"sudo rm -rf ./build;
+#           sudo rm -rf ./.deps;
+#           make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
+#           sudo make install" \
+#   atpull"%atclone" \
+#   pullopts"--rebase"
+# zinit light neovim/neovim
 
 # Colorful diffs
 zinit ice as"program" pick"bin/git-dsf"

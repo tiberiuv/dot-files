@@ -15,6 +15,7 @@ local function setup_servers()
     local sumneko_lua = require("lsp.sumneko_lua")
     local pyright = require("lsp.pyright")
     local rust_analyzer = require("lsp.rust_analyzer")
+    local yamlls = require("lsp.yamlls")
     local sqlls = require("lsp.sqlls")
 
     -- On attach callbacks
@@ -23,8 +24,7 @@ local function setup_servers()
     local on_attach_no_formatting = callbacks.on_attach_no_formatting
 
     -- Server capabilities
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+    local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
     local servers = {
         -- Default settings
@@ -34,7 +34,7 @@ local function setup_servers()
         terraformls = { on_attach = on_attach },
         dockerls = { on_attach = on_attach },
         hls = { on_attach = on_attach },
-        yamlls = { on_attach = on_attach_no_formatting },
+        yamlls = { on_attach = on_attach_no_formatting, settings = yamlls.settings },
         jsonls = { on_attach = on_attach_no_formatting },
         ansiblels = { on_attach = on_attach_no_formatting },
         bashls = { on_attach = on_attach, filetypes = { "bash", "zsh", "sh" } },
