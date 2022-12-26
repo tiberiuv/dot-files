@@ -33,8 +33,7 @@ local sources = {
     }),
     -- yaml
     null_ls.builtins.diagnostics.yamllint.with({
-        -- extra_args = { "{extends: default, rules: {document-start: disable}}" },
-        extra_args = { "-d relaxed" },
+        extra_args = { "-d {extends: default, rules: {document-start: disable}}" },
     }),
 }
 
