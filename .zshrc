@@ -199,6 +199,9 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path
 # enables shell command completion for gcloud.
 if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
 
+# enable k8s command completion
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+
 # Python version manager
 eval "$(pyenv init -)"
 
