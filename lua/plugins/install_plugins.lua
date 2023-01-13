@@ -6,7 +6,7 @@ local packages = {
     ["nfnty/vim-nftables"] = {},
     ["arkav/lualine-lsp-progress"] = {},
     ["nvim-telescope/telescope-ui-select.nvim"] = {},
-    ["rmagatti/goto-preview"] = { config = "require('plugins.goto_preview')"},
+    ["rmagatti/goto-preview"] = { config = "require('plugins.goto_preview')" },
     ["npxbr/gruvbox.nvim"] = { requires = { "rktjmp/lush.nvim" } },
     ["chr4/nginx.vim"] = { ft = ".conf" },
     ["wavded/vim-stylus"] = { ft = { ".styl", "stylus" } },
@@ -18,6 +18,7 @@ local packages = {
     ["neovim/nvim-lspconfig"] = { config = "require('lsp')()" },
 
     ["mfussenegger/nvim-dap"] = { keys = "<leader>d", config = "require('plugins.dap')" },
+    --["rcarriga/nvim-dap-ui"] = { config = "require('dapui').setup()" },
 
     ["b3nj5m1n/kommentary"] = { keys = { "gc", "gcc" } },
 

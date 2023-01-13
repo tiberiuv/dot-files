@@ -27,7 +27,7 @@ brew tap hashicorp/tap
 brew install --cask firefox-developer-edition temurin11 docker
 
 # Install brew packages
-brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go luarocks terraform-ls ansible-lint yamllint fnm pinentry-mac jq ijq yq shellcheck
+brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go luarocks terraform-ls ansible-lint yamllint fnm pinentry-mac jq ijq jid yq shellcheck
 
 brew install tmux --head
 brew install kitty --head

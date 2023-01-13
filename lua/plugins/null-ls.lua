@@ -42,7 +42,6 @@ local sources = {
     diagnostics.shellcheck.with({
         filetypes = {
             "sh",
-            "zsh",
             "bash",
         },
     }),
