@@ -1,4 +1,4 @@
-local sumneko_lua_settings = {
+local lua_ls = {
     Lua = {
         runtime = {
             -- Get the language server to recognize LuaJIT globals like `jit` and `bit`
@@ -18,4 +18,4 @@ local sumneko_lua_settings = {
     },
 }
 
-return {settings = sumneko_lua_settings}
+return {settings = lua_ls}

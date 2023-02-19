@@ -12,7 +12,7 @@ local function setup_servers()
     local common_flags = require("lsp.common")
 
     -- Servers with custom settings
-    local sumneko_lua = require("lsp.sumneko_lua")
+    local lua_ls = require("lsp.lua_ls")
     local pyright = require("lsp.pyright")
     local rust_analyzer = require("lsp.rust_analyzer")
     local yamlls = require("lsp.yamlls")
@@ -60,10 +60,10 @@ local function setup_servers()
             filetypes = { "python", ".py" },
             settings = pyright.settings,
         },
-        sumneko_lua = {
+        lua_ls = {
             on_attach = on_attach_no_formatting,
             filetypes = { "lua", ".lua" },
-            settings = sumneko_lua.settings,
+            settings = lua_ls.settings,
         },
     }
 
