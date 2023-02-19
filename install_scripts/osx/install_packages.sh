@@ -12,9 +12,9 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 if [ "$(arch)" = "arm64" ]; then
-  eval $(/opt/homebrew/bin/brew shellenv);
+  eval "$(/opt/homebrew/bin/brew shellenv)";
 else
-  eval $(/usr/local/bin/brew shellenv);
+  eval "$(/usr/local/bin/brew shellenv)";
 fi
 
 # Add other repos to brew
@@ -58,7 +58,16 @@ yarn global add \
 luarocks install luacheck luaformatter
 
 # Install Rust cli tools
-cargo install exa bat procs ripgrep diesel_cli trunk wasm-bindgen-cli fnm
+cargo install \
+  exa \
+  bat \
+  procs \
+  ripgrep \
+  diesel_cli \
+  trunk \
+  wasm-bindgen-cli \
+  fnm \
+  starship
 
 # Add wasm target for rust
 rustup target add wasm32-unknown-unknown

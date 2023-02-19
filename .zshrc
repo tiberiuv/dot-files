@@ -1,7 +1,3 @@
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # ------------------------------------------------------------ #
 # Env vars
 # ------------------------------------------------------------ #
@@ -97,11 +93,11 @@ source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 # ------------------------------------------------------------ #
-# THEME
+# PROMPT
 # ------------------------------------------------------------ #
-zinit depth=1 lucid light-mode nocd for romkatv/powerlevel10k
-POWERLEVEL10K_MODE="nerfont-complete"
-setopt promptsubst
+
+eval "$(starship init zsh)"
+
 # ------------------------------------------------------------ #
 # PLUGINS
 # ------------------------------------------------------------ #
@@ -164,16 +160,6 @@ zinit ice as"program" pick"bin/macOs" \
   atpull"%atclone"
 zinit light sumneko/lua-language-server
 
-# Neovim
-# zinit ice as"program" pick"build/bin/nvim" \
-#   atclone"sudo rm -rf ./build;
-#           sudo rm -rf ./.deps;
-#           make CMAKE_BUILD_TYPE=Release DCMAKE_C_COMPILER=/usr/bin/clang DCMAKE_CXX_COMPILER=/usr/bin/clang++;
-#           sudo make install" \
-#   atpull"%atclone" \
-#   pullopts"--rebase"
-# zinit light neovim/neovim
-
 # Colorful diffs
 zinit ice as"program" pick"bin/git-dsf"
 zinit light zdharma-continuum/zsh-diff-so-fancy
@@ -202,6 +188,9 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/comp
 # enable k8s command completion
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
+# enable velero command completion
+source <(velero completion zsh)
+
 # Python version manager
 eval "$(pyenv init -)"
 
@@ -209,9 +198,6 @@ eval "$(pyenv init -)"
 eval "$(fnm env)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 printf "\e[?1042l"
 ### End of Zinit's installer chunk

@@ -2,13 +2,13 @@
 
 # Assumes directories actually exist on new host
 # Call this from home dir
+ROOT_DIR="$(git rev-parse --show-toplevel)"
 
-dir=$HOME/dot-files
-
-ln -sfF ${dir}/.zshrc $HOME/.zshrc
-ln -sfF ${dir}/.zprofile $HOME/.zprofile
-ln -sfF ${dir}/.zshenv $HOME/.zshenv
-ln -sfF ${dir}/.alacritty.yml $HOME/.config/alacritty/alacritty.yml
-ln -sfF ${dir}/.tmux.conf $HOME/.tmux.conf
-ln -sfF ${dir}/lua $HOME/.config/nvim/
-ln -sfF ${dir}/init.lua $HOME/.config/nvim/init.lua
+ln -sfF "$ROOT_DIR"/.zshrc "$HOME"/.zshrc
+ln -sfF "$ROOT_DIR"/.zprofile "$HOME"/.zprofile
+ln -sfF "$ROOT_DIR"/.zshenv "$HOME"/.zshenv
+ln -sfF "$ROOT_DIR"/starship.toml "$HOME"/.config/starship.toml
+ln -sfF "$ROOT_DIR"/.alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
+ln -sfF "$ROOT_DIR"/.tmux.conf "$HOME"/.tmux.conf
+ln -sfF "$ROOT_DIR"/lua "$HOME"/.config/nvim/
+ln -sfF "$ROOT_DIR"/init.lua "$HOME"/.config/nvim/init.lua
