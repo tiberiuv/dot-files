@@ -1,3 +1,6 @@
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 # ------------------------------------------------------------ #
 # Env vars
 # ------------------------------------------------------------ #
@@ -96,7 +99,11 @@ autoload -Uz _zinit
 # PROMPT
 # ------------------------------------------------------------ #
 
-eval "$(starship init zsh)"
+zinit depth=1 lucid light-mode nocd for romkatv/powerlevel10k
+POWERLEVEL10K_MODE="nerfont-complete"
+setopt promptsubst
+
+# eval "$(starship init zsh)"
 
 # ------------------------------------------------------------ #
 # PLUGINS
@@ -198,6 +205,9 @@ eval "$(pyenv init -)"
 eval "$(fnm env)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 printf "\e[?1042l"
 ### End of Zinit's installer chunk
