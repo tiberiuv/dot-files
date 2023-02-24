@@ -208,7 +208,7 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/comp
 [[ $commands[kubectl] ]] && . <(kubectl completion zsh)
 
 # enable velero command completion
-. <(velero completion zsh)
+[[ $commands[velero] ]] &&  . <(velero completion zsh)
 
 # Python version manager
 eval "$(pyenv init --path)"
