@@ -73,7 +73,7 @@ cargo install \
 rustup target add wasm32-unknown-unknown
 
 # Install nvim plugins
-nvim -c PackerInstall
+nvim --headless "+Lazy! sync" +qa
 
 ### Install tmux tpm plugins
 ~/.tmux/plugins/tpm/scripts/install_plugins.sh

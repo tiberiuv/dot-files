@@ -15,4 +15,4 @@ zinit self-update
 zinit update
 
 # Update nvim plugins
-nvim -c PackerSync
+nvim --headless "+Lazy! sync" +qa
