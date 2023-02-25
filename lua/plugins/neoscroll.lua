@@ -1,6 +1,9 @@
 return {
     "karb94/neoscroll.nvim",
-    keys = { "<C-u>", "<C-d>" },
+    keys = {
+        { "<C-u>", mode = { "n", "v" } },
+        { "<C-d>", mode = { "n", "v" } },
+    },
     config = function()
         require("neoscroll").setup({
             pre_hook = function(info)

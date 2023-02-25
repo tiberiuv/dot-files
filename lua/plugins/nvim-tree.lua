@@ -1,10 +1,18 @@
 return {
     "kyazdani42/nvim-tree.lua",
-    keys = { "<C-n>" },
+    keys = { { "<C-n>", ":NvimTreeToggle<CR>", { noremap = true, silent = true } } },
+    dependencies = {
+        { "kyazdani42/nvim-web-devicons" },
+    },
     cmd = { "NvimTreeOpen", "NvimTreeToggle" },
     opts = {
         update_cwd = true,
-        update_focused_file = { enable = true, update_cwd = true },
+        respect_buf_cwd = true,
+        sync_root_with_cwd = true,
+        update_focused_file = {
+            enable = true,
+            update_cwd = true,
+        },
         actions = {
             open_file = {
                 quit_on_open = true,
@@ -13,13 +21,8 @@ return {
         renderer = {
             add_trailing = true,
         },
-        respect_buf_cwd = true,
     },
     config = function(_, opts)
-        local map = require("utils").map
-
-        map("n", "<C-n>", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
-
         local nvim_tree = vim.api.nvim_create_augroup("nvim_tree", { clear = true })
         vim.api.nvim_create_autocmd("BufEnter", {
             pattern = "* ++nested",

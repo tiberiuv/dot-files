@@ -1,6 +1,10 @@
 return {
     "mfussenegger/nvim-dap",
-    keys = "<leader>d",
+    keys = {
+        { "<leader>b", "<cmd>lua require('dap').toggle_breakpoint()<CR>" },
+        { "<leader>dl", "<cmd>lua require('dap').run_last()<CR>" },
+        { "<leader>dc", "<cmd>lua require('dap').continue()<CR>" },
+    },
     config = function()
         local dap = require("dap")
 

@@ -32,7 +32,7 @@ return {
         refactor = { smart_rename = { enable = true }, navigation = { enable = true } },
         textobjects = { enable = true },
     },
-    config = function (_, opts)
+    config = function(_, opts)
         require("nvim-treesitter.configs").setup(opts)
-    end
+    end,
 }

@@ -1,14 +1,14 @@
 return {
-    "npxbr/gruvbox.nvim",
-    dependencies = { "rktjmp/lush.nvim" },
+    "ellisonleao/gruvbox.nvim",
     lazy = false,
     priority = 1000,
-    config = function()
+    opts = {
+        italic = true,
+    },
+    config = function(_, opts)
         vim.o.background = "dark"
-        vim.g.gruvbox_contrast_dark = "medium"
-        vim.g.gruvbox_italic = 1
-        vim.g.gruvbox_italicize_strings = 1
-        vim.g.diagnostic_enable_virtual_text = 1
+
+        require("gruvbox").setup(opts)
 
         vim.cmd([[
             colorscheme gruvbox
