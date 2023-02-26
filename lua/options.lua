@@ -4,7 +4,7 @@ local opt = require("utils").opt
 -----------------------------------------------
 vim.g.python3_host_prog = "~/pynvim/bin/python"
 vim.g.cursorhold_updatetime = 100
-opt.cmdheight = 2
+opt.cmdheight = 0
 opt.hidden = true
 opt.wildmenu = true
 opt.laststatus = 2

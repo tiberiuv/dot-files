@@ -16,7 +16,6 @@ local function setup_servers()
     local pyright = require("lsp.pyright")
     local rust_analyzer = require("lsp.rust_analyzer")
     local yamlls = require("lsp.yamlls")
-    local sqlls = require("lsp.sqlls")
 
     -- On attach callbacks
     local callbacks = require("lsp/callbacks")
@@ -50,11 +49,6 @@ local function setup_servers()
 
         -- Custom settings
         rust_analyzer = { on_attach = on_attach_no_formatting, settings = rust_analyzer.settings },
-        sqlls = {
-            on_attach = on_attach,
-            filetypes = { "sql", ".sql" },
-            settings = sqlls.settings,
-        },
         pyright = {
             on_attach = on_attach,
             filetypes = { "python", ".py" },
