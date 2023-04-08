@@ -2,7 +2,7 @@ local rust_analyzer_settings = {
     ["rust-analyzer"] = {
         diagnostics = {
             enable = true,
-            enableExperimental = true,
+            -- enableExperimental = true,
             disabled = { "unresolved-proc-macro" },
         },
         inlayHints = {

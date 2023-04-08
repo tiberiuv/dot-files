@@ -2,9 +2,37 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   . "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 # ------------------------------------------------------------ #
+# Path
+# ------------------------------------------------------------ #
+export PATH=$PYENV_ROOT/bin:$PATH
+export PATH=$PATH:$HOME/bin
+export PATH=$PATH:/Applications
+export PATH=$PATH:$HOMEBREW_PREFIX/texlive/2019/texmf-dist/tex/xelatex
+export PATH=$PATH:$JAVA_HOME/bin
+export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
+export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
+export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
+export PATH=$HOMEBREW_PREFIX/bin:$PATH
+export PATH=$HOMEBREW_PREFIX/sbin:$PATH
+export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
+export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
+export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+if [[ $(uname -m) == arm64 ]]; then
+  eval $(/opt/homebrew/bin/brew shellenv)
+  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
+  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
+else
+  eval $(/usr/local/bin/brew shellenv)
+  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
+  export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
+fi
+# ------------------------------------------------------------ #
 # Env vars
 # ------------------------------------------------------------ #
-
 export RUST_HOME="$HOME/.rustup"
 export CARGO_HOME="$HOME/.cargo"
 
@@ -29,7 +57,6 @@ export LS_COLORS='ow=36:di=34:fi=32:ex=31:ln=35:'
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # For minikube
 export KUBERNETES_PROVIDER=docker
-
 # ------------------------------------------------------------ #
 # Compiler flags
 # ------------------------------------------------------------ #
@@ -222,35 +249,6 @@ eval "$(fnm env)"
 [[ ! -f ~/.p10k.zsh ]] || . ~/.p10k.zsh
 
 . "$HOME/.cargo/env"
-
-# ------------------------------------------------------------ #
-# Path
-# ------------------------------------------------------------ #
-export PATH=$PYENV_ROOT/bin:$PATH
-export PATH=$PATH:$HOME/bin
-export PATH=$PATH:/Applications
-export PATH=$PATH:$HOMEBREW_PREFIX/texlive/2019/texmf-dist/tex/xelatex
-export PATH=$PATH:$JAVA_HOME/bin
-export PATH=$HOME/.cargo/bin:$PATH
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
-export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
-export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
-export PATH=$HOMEBREW_PREFIX/bin:$PATH
-export PATH=$HOMEBREW_PREFIX/sbin:$PATH
-export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
-export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
-export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
-
-if [[ $(uname -m) == arm64 ]]; then
-  eval $(/opt/homebrew/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
-  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
-else
-  eval $(/usr/local/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
-  export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
-fi
 
 printf "\e[?1042l"
 ### End of Zinit's installer chunk
