@@ -89,16 +89,16 @@ return {
                     vim_item.kind = kind
 
                     vim_item.menu = ({
-                            nvim_lsp = "[LSP]",
-                            luasnip = "[Snp]",
-                            buffer = "[Buf]",
-                            nvim_lua = "[Lua]",
-                            path = "[Pth]",
-                            calc = "[Clc]",
-                            spell = "[Spl]",
-                            emoji = "[Emj]",
-                            treesitter = "[Trs]",
-                        })[entry.source.name]
+                        nvim_lsp = "[LSP]",
+                        luasnip = "[Snp]",
+                        buffer = "[Buf]",
+                        nvim_lua = "[Lua]",
+                        path = "[Pth]",
+                        calc = "[Clc]",
+                        spell = "[Spl]",
+                        emoji = "[Emj]",
+                        treesitter = "[Trs]",
+                    })[entry.source.name]
 
                     return vim_item
                 end,
