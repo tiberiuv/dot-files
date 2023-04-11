@@ -4,6 +4,16 @@ fi
 # ------------------------------------------------------------ #
 # Path
 # ------------------------------------------------------------ #
+if [[ $(uname -m) == arm64 ]]; then
+  eval $(/opt/homebrew/bin/brew shellenv)
+  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
+  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
+else
+  eval $(/usr/local/bin/brew shellenv)
+  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
+  export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
+fi
+
 export PATH=$PYENV_ROOT/bin:$PATH
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/Applications
@@ -21,15 +31,6 @@ export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
 export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-if [[ $(uname -m) == arm64 ]]; then
-  eval $(/opt/homebrew/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
-  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
-else
-  eval $(/usr/local/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
-  export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
-fi
 # ------------------------------------------------------------ #
 # Env vars
 # ------------------------------------------------------------ #
