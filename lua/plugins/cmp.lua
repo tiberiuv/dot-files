@@ -8,6 +8,8 @@ return {
     },
     event = "InsertEnter",
     config = function()
+        local compare = require("cmp.config.compare")
+
         local cmp_kinds = {
             Field = { icon = "ﰠ", order = 11 },
             Property = { icon = "ﰠ", order = 11 },
@@ -103,7 +105,7 @@ return {
                     return vim_item
                 end,
             },
-            sorting = { comparators = { lspkind_comparator(cmp_kinds), label_comparator } },
+            -- sorting = { comparators = { lspkind_comparator(cmp_kinds), label_comparator } },
         }
 
         require("cmp").setup(opts)
