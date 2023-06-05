@@ -14,7 +14,7 @@ local function setup_servers()
     -- Servers with custom settings
     local lua_ls = require("lsp.lua_ls")
     local pyright = require("lsp.pyright")
-    local rust_analyzer = require("lsp.rust_analyzer")
+    -- local rust_analyzer = require("lsp.rust_analyzer")
     local yamlls = require("lsp.yamlls")
 
     -- On attach callbacks
@@ -46,9 +46,8 @@ local function setup_servers()
             filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
         },
         clangd = { on_attach = on_attach, filetypes = { "c", "ino", "cpp", ".ino" } },
-
         -- Custom settings
-        rust_analyzer = { on_attach = on_attach_no_formatting, settings = rust_analyzer.settings },
+        -- rust_analyzer = { on_attach = on_attach_no_formatting, settings = rust_analyzer.settings },
         pyright = {
             on_attach = on_attach,
             filetypes = { "python", ".py" },
@@ -59,6 +58,9 @@ local function setup_servers()
             filetypes = { "lua", ".lua" },
             settings = lua_ls.settings,
         },
+        gopls = {
+            on_attach = on_attach_no_formatting,
+        }
     }
 
     for lsp, v in pairs(servers) do
