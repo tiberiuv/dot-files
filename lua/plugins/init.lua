@@ -1,7 +1,7 @@
 return {
     { "tpope/vim-surround", keys = { "cs", "ds", "yss" } },
     { "tpope/vim-sleuth", event = "BufEnter" },
-    { "tpope/vim-repeat" },
+    { "tpope/vim-repeat", keys = {"."} },
     { "janko-m/vim-test", cmd = { "TestNearest", "TestFile", "TestSuite", "TestLatest" } },
     { "antoinemadec/FixCursorHold.nvim", event = "CursorHold" },
     { "chr4/nginx.vim" },
