@@ -8,33 +8,35 @@ return {
             server = {
                 on_attach = require("lsp/callbacks").on_attach,
                 settings = {
-                    diagnostics = {
-                        enable = true,
-                        -- enableExperimental = true,
-                        disabled = { "unresolved-proc-macro" },
+                    ["rust-analyzer"] = {
+                        diagnostics = {
+                            enable = true,
+                            -- enableExperimental = true,
+                            disabled = { "unresolved-proc-macro" },
+                        },
+                        inlayHints = {
+                            enable = true,
+                            parameterHints = true,
+                            typeHints = true,
+                        },
+                        checkOnSave = {
+                            command = "clippy",
+                            extraArgs = { "--tests" },
+                            allTargets = false,
+                        },
+                        assist = {
+                            importGranularity = "module",
+                            importPrefix = "by_self",
+                        },
+                        cargo = {
+                            loadOutDirsFromCheck = true,
+                            target = os.getenv("RUST_ANALYZER_TARGET"),
+                            allFeatures = true,
+                        },
+                        procMacro = { enable = true },
+                        experimental = { procAttrMacros = true },
+                        lruCapacity = 256,
                     },
-                    inlayHints = {
-                        enable = true,
-                        parameterHints = true,
-                        typeHints = true,
-                    },
-                    checkOnSave = {
-                        command = "clippy",
-                        extraArgs = { "--tests" },
-                        allTargets = false,
-                    },
-                    assist = {
-                        importGranularity = "module",
-                        importPrefix = "by_self",
-                    },
-                    cargo = {
-                        loadOutDirsFromCheck = true,
-                        target = os.getenv("RUST_ANALYZER_TARGET"),
-                        allFeatures = true,
-                    },
-                    procMacro = { enable = true },
-                    experimental = { procAttrMacros = true },
-                    lruCapacity = 256,
                 },
             },
         })
