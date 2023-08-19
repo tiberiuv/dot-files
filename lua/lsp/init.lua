@@ -60,7 +60,11 @@ local function setup_servers()
         },
         gopls = {
             on_attach = on_attach_no_formatting,
-        }
+        },
+        zls = {
+            on_attach = on_attach_no_formatting,
+            filetypes = { "zig", ".zig" },
+        },
     }
 
     for lsp, v in pairs(servers) do

@@ -255,3 +255,5 @@ eval "$(fnm env)"
 
 printf "\e[?1042l"
 ### End of Zinit's installer chunk
+
+export PATH="/usr/local/p/versions/python:$PATH"
