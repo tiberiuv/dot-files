@@ -1,3 +1,5 @@
+#!/bin/sh
+
 mkdir ~/.config
 mkdir ~/.config/nvim
 mkdir ~/.config/nvim/lua

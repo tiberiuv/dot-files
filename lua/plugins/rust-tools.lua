@@ -31,10 +31,9 @@ return {
                         cargo = {
                             loadOutDirsFromCheck = true,
                             target = os.getenv("RUST_ANALYZER_TARGET"),
-                            allFeatures = true,
+                            features = "all",
                         },
-                        procMacro = { enable = true },
-                        experimental = { procAttrMacros = true },
+                        procMacro = { enable = true, attributes = { enable = true } },
                         lruCapacity = 256,
                     },
                 },

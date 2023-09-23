@@ -1,3 +1,4 @@
+#!/bin/sh
 #---------- Create various symlinks ----------
 
 # Assumes directories actually exist on new host

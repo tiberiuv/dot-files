@@ -207,12 +207,6 @@ zinit light junegunn/fzf
 
 zinit wait lucid light-mode for Aloxaf/fzf-tab
 
-# Rust analyzer
-zinit ice as"program" \
-  atclone"cargo +nightly xtask install --server && rm -rf target" \
-  atpull"%atclone"
-zinit light rust-analyzer/rust-analyzer
-
 # ------------------------------------------------------------ #
 
 zstyle ":completion:*:match:*" original only
@@ -257,3 +251,9 @@ printf "\e[?1042l"
 ### End of Zinit's installer chunk
 
 export PATH="/usr/local/p/versions/python:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
