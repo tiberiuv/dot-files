@@ -251,9 +251,3 @@ printf "\e[?1042l"
 ### End of Zinit's installer chunk
 
 export PATH="/usr/local/p/versions/python:$PATH"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tiberiuvoicu/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
