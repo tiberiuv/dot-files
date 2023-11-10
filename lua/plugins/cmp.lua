@@ -1,3 +1,9 @@
+local has_words_before = function()
+    if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+end
+
 return {
     "hrsh7th/nvim-cmp",
     dependencies = {
@@ -11,29 +17,30 @@ return {
         local compare = require("cmp.config.compare")
 
         local cmp_kinds = {
-            Field = { icon = "ﰠ", order = 11 },
-            Property = { icon = "ﰠ", order = 11 },
-            Constant = { icon = "", order = 10 },
+            Field = { icon = "󰜢", order = 11 },
+            Property = { icon = "󰜢", order = 11 },
+            Constant = { icon = "󰏿", order = 10 },
             Enum = { icon = "", order = 10 },
             EnumMember = { icon = "", order = 10 },
+            Copilot = { icon = "", order = 10 },
             Event = { icon = "", order = 10 },
-            Function = { icon = "", order = 10 },
-            Method = { icon = "", order = 10 },
-            Operator = { icon = "", order = 10 },
-            Reference = { icon = "", order = 10 },
-            Struct = { icon = "פּ", order = 10 },
-            Variable = { icon = "", order = 9 },
-            File = { icon = "", order = 8 },
-            Folder = { icon = "", order = 8 },
-            Class = { icon = "ﴯ", order = 5 },
-            Color = { icon = "", order = 5 },
+            Function = { icon = "󰊕", order = 10 },
+            Method = { icon = "󰆧", order = 10 },
+            Operator = { icon = "󰆕", order = 10 },
+            Reference = { icon = "󰈇", order = 10 },
+            Struct = { icon = "󰙅", order = 10 },
+            Variable = { icon = "󰀫", order = 9 },
+            File = { icon = "󰈙", order = 8 },
+            Folder = { icon = "󰉋", order = 8 },
+            Class = { icon = "󰠱", order = 5 },
+            Color = { icon = "󰏘", order = 5 },
             Module = { icon = "", order = 5 },
             Keyword = { icon = "", order = 2 },
             Constructor = { icon = "", order = 1 },
             Interface = { icon = "", order = 1 },
-            Text = { icon = "", order = 1 },
+            Text = { icon = "󰉿", order = 1 },
             Unit = { icon = "塞", order = 1 },
-            Value = { icon = "", order = 1 },
+            Value = { icon = "󰎠", order = 1 },
             TypeParameter = { icon = "", order = 1 },
             Snippet = { icon = "", order = 0 },
         }
@@ -75,11 +82,19 @@ return {
                 c = cmp.mapping.close(),
             }),
             ["<CR>"] = cmp.mapping.confirm(),
+            ["<Tab>"] = vim.schedule_wrap(function(fallback)
+                if cmp.visible() and has_words_before() then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                else
+                    fallback()
+                end
+            end)
         }
         local opts = {
             mapping = mapping,
             completion = { completeopt = "menu,menuone,noselect", keyword_length = 2 },
-            sources = { { name = "nvim_lsp" }, { name = "luasnip" }, { name = "path" } },
+            sources = { { name = "copilot" }, { name = "nvim_lsp" }, { name = "luasnip" },
+                { name = "path" } },
             snippet = {
                 expand = function(args)
                     require("luasnip").lsp_expand(args.body)
@@ -105,7 +120,6 @@ return {
                     return vim_item
                 end,
             },
-            -- sorting = { comparators = { lspkind_comparator(cmp_kinds), label_comparator } },
         }
 
         require("cmp").setup(opts)
