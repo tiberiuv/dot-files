@@ -229,10 +229,10 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path
 if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
 
 # enable k8s command completion
-[[ $commands[kubectl] ]] && . <(kubectl completion zsh)
+[[ ${commands[kubectl]} ]] && . <(kubectl completion zsh)
 
 # enable velero command completion
-[[ $commands[velero] ]] &&  . <(velero completion zsh)
+[[ ${commands[velero]} ]] &&  . <(velero completion zsh)
 
 # Python version manager
 eval "$(pyenv init --path)"

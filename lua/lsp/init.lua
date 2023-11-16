@@ -15,7 +15,7 @@ local function setup_servers()
     local lua_ls = require("lsp.lua_ls")
     local pyright = require("lsp.pyright")
     -- local rust_analyzer = require("lsp.rust_analyzer")
-    local yamlls = require("lsp.yamlls")
+    -- local yamlls = require("lsp.yamlls")
 
     -- On attach callbacks
     local callbacks = require("lsp/callbacks")
@@ -33,7 +33,7 @@ local function setup_servers()
         terraformls = { on_attach = on_attach },
         dockerls = { on_attach = on_attach },
         hls = { on_attach = on_attach },
-        yamlls = { on_attach = on_attach_no_formatting, settings = yamlls.settings },
+        -- yamlls = { on_attach = on_attach_no_formatting, settings = yamlls.settings },
         jsonls = { on_attach = on_attach_no_formatting },
         ansiblels = { on_attach = on_attach_no_formatting },
         bashls = { on_attach = on_attach, filetypes = { "bash", "zsh", "sh" } },
@@ -79,6 +79,11 @@ local function setup_servers()
             root_dir = v.root_dir,
         })
     end
+
+    local yamlls = require("yaml-companion").setup({
+            on_attach = on_attach_no_formatting
+    })
+    require("lspconfig")["yamlls"].setup(yamlls)
 end
 
 return setup_servers
