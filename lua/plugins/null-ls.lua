@@ -27,12 +27,12 @@ return {
                         "less",
                         "html",
                         "json",
-                        "yaml",
                         "markdown",
                         "graphql",
                         "toml",
                     },
                 }),
+                formatting.yamlfmt,
                 diagnostics.flake8,
                 diagnostics.eslint_d,
                 -- yaml

@@ -15,7 +15,7 @@ local function setup_servers()
     local lua_ls = require("lsp.lua_ls")
     local pyright = require("lsp.pyright")
     -- local rust_analyzer = require("lsp.rust_analyzer")
-    -- local yamlls = require("lsp.yamlls")
+    local yamlls = require("lsp.yamlls")
 
     -- On attach callbacks
     local callbacks = require("lsp/callbacks")
@@ -80,10 +80,17 @@ local function setup_servers()
         })
     end
 
-    local yamlls = require("yaml-companion").setup({
-            on_attach = on_attach_no_formatting
+    local yaml_companion = require("yaml-companion").setup({
+        on_attach = on_attach_no_formatting,
+        lspconfig = {
+            settings = {
+                format = {
+                    enable = false
+                }
+            }
+        }
     })
-    require("lspconfig")["yamlls"].setup(yamlls)
+    require("lspconfig")["yamlls"].setup(yaml_companion)
 end
 
 return setup_servers

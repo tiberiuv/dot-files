@@ -3,19 +3,19 @@ env:
 
 font:
   normal:
-    family: JetbrainsMono Nerd Font
+    family: JetbrainsMono NF
     style: Regular
 
   bold:
-    family: JetbrainsMono Nerd Font
+    family: JetbrainsMono NF
     style: Bold
 
   italic:
-    family: JetbrainsMono Nerd Font
+    family: JetbrainsMono NF
     style: Italic
 
   bold_italic:
-    family: JetbrainsMono Nerd Font
+    family: JetbrainsMono NF
     style: Bold Italic
 
   size: 19.5

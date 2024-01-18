@@ -5,6 +5,7 @@ local yamlls_settings = {
             ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
             ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
             ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+            ["./**/crds"] = "./*.yaml"
         },
         completion = true,
         validate = true,
