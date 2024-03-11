@@ -1,4 +1,5 @@
-return {
+return {}
+--[[ return {
     "nvimtools/none-ls.nvim",
     lazy = false,
     config = function()
@@ -49,4 +50,4 @@ return {
             },
         })
     end,
-}
+} ]]
