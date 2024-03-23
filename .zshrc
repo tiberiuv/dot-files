@@ -217,7 +217,10 @@ zstyle ":fzf-tab:complete:cd:*" fzf-preview "exa -1 --color=always $realpath"
 zstyle ":fzf-tab:*" fzf-command fzf
 
 autoload -U compinit
-compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 
 # In the line editor, number of matches to show before asking permission
 LISTMAX=9999
