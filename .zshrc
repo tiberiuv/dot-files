@@ -185,7 +185,6 @@ zinit light-mode for \
 zinit wait"0a" lucid light-mode for \
   atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 
-
 zinit wait lucid light-mode for \
   blockf atpull"zinit creinstall -q ." zsh-users/zsh-completions \
   zdharma-continuum/fast-syntax-highlighting
@@ -209,18 +208,15 @@ zinit wait lucid light-mode for Aloxaf/fzf-tab
 
 # ------------------------------------------------------------ #
 
+autoload -Uz compinit
+compinit
+
 zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:git-checkout:*" sort false
 zstyle ":completion:*:descriptions" format '[%d]'
 zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
 zstyle ":fzf-tab:complete:cd:*" fzf-preview "exa -1 --color=always $realpath"
 zstyle ":fzf-tab:*" fzf-command fzf
-
-autoload -U compinit
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
 
 # In the line editor, number of matches to show before asking permission
 LISTMAX=9999
@@ -237,20 +233,14 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/comp
 # enable velero command completion
 [[ ${commands[velero]} ]] &&  . <(velero completion zsh)
 
-# Python version manager
-eval "$(pyenv init --path)"
-
-# Node version manager
-eval "$(fnm env)"
-
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || . ~/.p10k.zsh
 
-. "$HOME/.cargo/env"
-
 printf "\e[?1042l"
 ### End of Zinit's installer chunk
 
 export PATH="/usr/local/p/versions/python:$PATH"
+
+zinit cdreplay -q
