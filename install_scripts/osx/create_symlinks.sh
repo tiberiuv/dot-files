@@ -11,3 +11,4 @@ ln -sfF "$ROOT_DIR"/alacritty.toml "$HOME"/.config/alacritty/alacritty.toml
 ln -sfF "$ROOT_DIR"/.tmux.conf "$HOME"/.tmux.conf
 ln -sfF "$ROOT_DIR"/lua "$HOME"/.config/nvim/
 ln -sfF "$ROOT_DIR"/init.lua "$HOME"/.config/nvim/init.lua
+ln -sfF "$ROOT_DIR"/.p10k.zsh "$HOME"/.p10k.zsh
