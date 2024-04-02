@@ -26,8 +26,6 @@ return {
             yaml = { { "prettierd", "prettier" } },
             ["_"] = { "trim_whitespace" },
         },
-        -- Set up format-on-save
-        format_on_save = { timeout_ms = 500, lsp_fallback = true },
     },
     init = function()
         -- If you want the formatexpr, here is the place to set it
