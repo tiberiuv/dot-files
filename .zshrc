@@ -245,6 +245,9 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/comp
 printf "\e[?1042l"
 ### End of Zinit's installer chunk
 
+# Node version manager
+eval "$(fnm env)"
+
 export PATH="/usr/local/p/versions/python:$PATH"
 
 zinit cdreplay -q
