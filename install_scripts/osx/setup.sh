@@ -16,3 +16,5 @@ launchctl load /Library/LaunchDaemons/com.startup.sysctl.plist
 sudo cp ./install_scripts/osx/limit.maxfiles.plist /Library/LaunchDaemons/limit.maxfiles.plist
 chown root:wheel /Library/LaunchDaemons/limit.maxfiles.plist
 launchctl load /Library/LaunchDaemons/limit.maxfiles.plist
+
+sed "s/^#auth/auth/" /etc/pam.d/sudo_local.template | sudo tee /etc/pam.d/sudo_local
