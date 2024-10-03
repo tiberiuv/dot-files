@@ -41,7 +41,7 @@ local function setup_servers()
             on_attach = on_attach_no_formatting,
             filetypes = { ".js", ".jsx", "javascript", "javascriptreact", ".js.flow", "svelte" },
         },
-        tsserver = {
+        ts_ls = {
             on_attach = on_attach_no_formatting,
             filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
         },
