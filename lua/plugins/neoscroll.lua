@@ -1,11 +1,12 @@
 return {
     "karb94/neoscroll.nvim",
     keys = {
-        { "<C-u>", mode = { "n", "v" } },
-        { "<C-d>", mode = { "n", "v" } },
+        { "<C-u>", mode = { "n", "v", "x"} },
+        { "<C-d>", mode = { "n", "v", "x"} },
     },
     config = function()
-        require("neoscroll").setup({
+        local neoscroll = require('neoscroll')
+        neoscroll.setup({
             pre_hook = function(info)
                 if info == "cursorline" then
                     vim.wo.cursorline = false
@@ -21,15 +22,13 @@ return {
             hide_cursor = true,
         })
 
-        local t = {}
-        t["<C-u>"] = {
-            "scroll",
-            { "-vim.wo.scroll", "true", "350", "quadratic", [['cursorline']] },
-        }
-        t["<C-d>"] = {
-            "scroll",
-            { "vim.wo.scroll", "true", "350", "quadratic", [['cursorline']] },
-        }
-        require("neoscroll.config").set_mappings(t)
+        local keymap = {}
+        keymap["<C-u>"] = function() neoscroll.ctrl_u({ duration = 350; easing = 'quadratic' }) end;
+        keymap["<C-d>"] = function() neoscroll.ctrl_d({ duration = 350; easing = 'quadratic' }) end;
+        local modes = { 'n', 'v', 'x' }
+
+        for key, func in pairs(keymap) do
+            vim.keymap.set(modes, key, func)
+        end
     end,
 }
