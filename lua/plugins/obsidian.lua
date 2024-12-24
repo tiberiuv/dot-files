@@ -8,9 +8,6 @@ return {
     -- Required.
     "nvim-lua/plenary.nvim",
 
-    -- Optional, for completion.
-    "hrsh7th/nvim-cmp",
-
     -- Optional, for search and quick-switch functionality.
     "nvim-telescope/telescope.nvim",
 

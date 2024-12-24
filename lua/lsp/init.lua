@@ -22,9 +22,6 @@ local function setup_servers()
     local on_attach = callbacks.on_attach
     local on_attach_no_formatting = callbacks.on_attach_no_formatting
 
-    -- Server capabilities
-    local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
     local servers = {
         -- Default settings
         vimls = { on_attach = on_attach },
@@ -72,7 +69,7 @@ local function setup_servers()
         nvim_lsp[lsp].setup({
             on_attach = v.on_attach,
             filetypes = v.filetypes,
-            capabilities = v.capabilities or capabilities,
+            capabilities = require('blink.cmp').get_lsp_capabilities(v.capabilities),
             cmd = v.cmd,
             flags = v.flags or common_flags,
             settings = v.settings,

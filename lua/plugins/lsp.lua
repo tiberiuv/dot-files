@@ -4,6 +4,7 @@ return {
         lazy = false,
         dependencies = {
             "mfussenegger/nvim-lint",
+            "saghen/blink.cmp",
         },
         config = function()
             local lint = require("lint")
