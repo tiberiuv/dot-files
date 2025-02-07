@@ -26,15 +26,12 @@ local function setup_servers()
         html = { on_attach = on_attach },
         cssls = { on_attach = on_attach },
         terraformls = { on_attach = on_attach },
+        tflint = { on_attach = on_attach },
         dockerls = { on_attach = on_attach },
         hls = { on_attach = on_attach },
         jsonls = { on_attach = on_attach_no_formatting },
         ansiblels = { on_attach = on_attach_no_formatting },
         bashls = { on_attach = on_attach, filetypes = { "bash", "zsh", "sh" } },
-        flow = {
-            on_attach = on_attach_no_formatting,
-            filetypes = { ".js", ".jsx", "javascript", "javascriptreact", ".js.flow", "svelte" },
-        },
         ts_ls = {
             on_attach = on_attach_no_formatting,
             filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
