@@ -22,6 +22,5 @@ return {
             }
         })
         require("lspconfig")["yamlls"].setup(cfg)
-        require("telescope").load_extension("yaml_schema")
     end,
 }

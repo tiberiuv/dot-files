@@ -1,3 +1,11 @@
+local function get_yaml_companion_schema()
+    local schema = require("yaml-companion").get_buf_schema(0)
+    if schema.result[1].name == "none" then
+        return ""
+    end
+    return schema.result[1].name
+end
+
 return {
     {
         "hoob3rt/lualine.nvim",
@@ -10,11 +18,11 @@ return {
                     { "branch", icon = "" },
                     {
                         "diff",
-                        colored = true, -- displays diff status in color if set to true
+                        colored = true,                                           -- displays diff status in color if set to true
                         -- all colors are in format #rrggbb
-                        color_added = nil, -- changes diff's added foreground color
-                        color_modified = nil, -- changes diff's modified foreground color
-                        color_removed = nil, -- changes diff's removed foreground color
+                        color_added = nil,                                        -- changes diff's added foreground color
+                        color_modified = nil,                                     -- changes diff's modified foreground color
+                        color_removed = nil,                                      -- changes diff's removed foreground color
                         symbols = { added = "+", modified = "~", removed = "-" }, -- changes diff symbols
                     },
                 },
@@ -33,13 +41,13 @@ return {
                         sections = { "error", "warn", "info", "hint" },
                         -- all colors are in format #rrggbb
                         color_error = nil, -- changes diagnostic's error foreground color
-                        color_warn = nil, -- changes diagnostic's warn foreground color
-                        color_info = nil, -- Changes diagnostic's info foreground color
-                        color_hint = nil, -- Changes diagnostic's hint foreground color
+                        color_warn = nil,  -- changes diagnostic's warn foreground color
+                        color_info = nil,  -- Changes diagnostic's info foreground color
+                        color_hint = nil,  -- Changes diagnostic's hint foreground color
                         symbols = { error = "E", warn = "W", info = "I", hint = "H" },
                     },
                 },
-                lualine_x = { "encoding", "fileformat", { "filetype", colored = true } },
+                lualine_x = { "encoding", "fileformat", get_yaml_companion_schema, { "filetype", colored = true } },
                 lualine_y = { "progres" },
                 lualine_z = { "location" },
             },
