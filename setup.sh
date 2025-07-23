@@ -1,3 +1,3 @@
-#! /bin/sh
+#!/bin/zsh
 
-sh ./install_scripts/osx/setup.sh
+zsh ./install_scripts/osx/setup.sh

@@ -1,17 +1,22 @@
 #!/bin/sh
 
-mkdir ~/.config
-mkdir ~/.config/nvim
-mkdir ~/.config/nvim/lua
-mkdir ~/.config/alacritty
-mkdir ~/.tmux
-mkdir ~/.tmux/plugins
+mkdir -p ~/.config
+mkdir -p ~/.config/nvim
+mkdir -p ~/.config/nvim/lua
+mkdir -p ~/.config/alacritty
+mkdir -p ~/.tmux
+mkdir -p ~/.tmux/plugins
 
 # Install tmux tpm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-# Install brew - package/app for osx
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+which -s brew
+if [[ $? != 0 ]] ; then
+    # Install brew - package/app for osx
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 if [ "$(arch)" = "arm64" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)";
@@ -22,19 +27,24 @@ fi
 # Add other repos to brew
 brew tap homebrew/cask
 brew tap homebrew/cask-versions
-brew tap homebrew/cask-fonts
 brew tap hashicorp/tap
 
 # Instal brew gui apps
-brew install --cask firefox-developer-edition temurin11 docker
+brew install --cask firefox@developer-edition temurin11 docker
+
+brew install --cask font-jetbrains-mono-nerd-font
 
 # Install brew packages
-brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql postgres htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go luarocks terraform-ls ansible-lint yamllint fnm pinentry-mac jq ijq jid yq shellcheck
+brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go terraform-ls ansible-lint yamllint fnm pinentry-mac jq ijq jid yq shellcheck alacritty lua-language-server
 
 brew install tmux --head
 brew install kitty --head
 
 brew link --overwrite gnupg
+
+brew install mise
+mise plugins add lua
+mise use -g lua@5.1
 
 # Install zinit - package manager for zsh shell
 bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
