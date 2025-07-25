@@ -19,7 +19,8 @@ return {
                             parameterHints = true,
                             typeHints = true,
                         },
-                        checkOnSave = {
+                        checkOnSave = true,
+                        check = {
                             command = "clippy",
                             extraArgs = { "--tests" },
                             allTargets = false,
