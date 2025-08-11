@@ -56,6 +56,7 @@ local function setup_servers()
             on_attach = on_attach_no_formatting,
             filetypes = { "zig", ".zig" },
         },
+        csharp_ls = { on_attach = on_attach }
     }
 
     for lsp, v in pairs(servers) do

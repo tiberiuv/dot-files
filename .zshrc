@@ -24,6 +24,7 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
 export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
+export PATH=$PATH:/Users/voicut/.dotnet/tools
 export PATH=$HOMEBREW_PREFIX/bin:$PATH
 export PATH=$HOMEBREW_PREFIX/sbin:$PATH
 export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
