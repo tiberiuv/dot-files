@@ -12,8 +12,9 @@ return {
                 python = { "flake8" },
                 javascript = { "eslint_d" },
                 shell = { "shellcheck" },
+                markdown = { "markdownlint-cli2" },
             }
-            vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+            vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
                 callback = function()
                     require("lint").try_lint()
                 end,

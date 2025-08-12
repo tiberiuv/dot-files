@@ -16,10 +16,6 @@ local on_attach = function(_, bufnr)
     map_n("<leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
     map_n("K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
 
-    map_n("<leader>e", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
-    map_n("[e", "<cmd>lua vim.diagnostic.goto_prev()<cr>", opts)
-    map_n("]e", "<cmd>lua vim.diagnostic.goto_next()<cr>", opts)
-
     map_n("<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
     map_n("gd", "<cmd>lua require'telescope.builtin'.lsp_definitions()<cr>", opts)
     map_n("gi", "<cmd>lua require'telescope.builtin'.lsp_implementations()<cr>", opts)
@@ -28,13 +24,6 @@ local on_attach = function(_, bufnr)
     local handlers = vim.lsp.handlers
     local pop_opts = { border = "single", max_width = 100 }
 
-    handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-        virtual_text = true,
-        signs = true,
-        underline = true,
-        update_in_insert = false,
-        severity_sort = true,
-    })
     handlers["textDocument/hover"] = vim.lsp.with(handlers.hover, pop_opts)
     handlers["textDocument/signatureHelp"] = vim.lsp.with(handlers.signature_help, pop_opts)
 end

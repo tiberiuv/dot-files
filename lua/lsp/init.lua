@@ -20,6 +20,7 @@ local function setup_servers()
     local on_attach = callbacks.on_attach
     local on_attach_no_formatting = callbacks.on_attach_no_formatting
 
+
     local servers = {
         -- Default settings
         vimls = { on_attach = on_attach },
@@ -71,6 +72,23 @@ local function setup_servers()
             root_dir = v.root_dir,
         })
     end
+
+    vim.diagnostic.config({
+        -- virtual_text = true,      -- show inline messages
+        signs = true,             -- show signs in the gutter
+        underline = true,         -- underline problematic text
+        update_in_insert = false, -- don't update diagnostics while typing
+        severity_sort = true,     -- sort diagnostics by severity
+    })
+
+    --[[ map_n("<leader>e", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
+    map_n("[e", "<cmd>lua vim.diagnostic.goto_prev()<cr>", opts)
+    map_n("]e", "<cmd>lua vim.diagnostic.goto_next()<cr>", opts) ]]
+
+    local opts = { noremap = true, silent = true }
+    vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
+    vim.keymap.set("n", "[e", vim.diagnostic.goto_prev, opts)
+    vim.keymap.set("n", "]e", vim.diagnostic.goto_next, opts)
 end
 
 return setup_servers

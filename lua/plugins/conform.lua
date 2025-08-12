@@ -23,6 +23,7 @@ return {
             javascriptreact = { "prettierd", "prettier", stop_after_first = true },
             typescriptreact = { "prettierd", "prettier", stop_after_first = true },
             rust = { "rustfmt" },
+            markdown = { "markdownlint-cli2" },
             -- yaml = { "prettierd", "prettier", stop_after_first = true },
             ["_"] = { "trim_whitespace" },
         },
