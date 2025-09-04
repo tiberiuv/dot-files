@@ -10,5 +10,4 @@ return {
     { "tomlion/vim-solidity",            ft = "solidity" },
     { "Vimjas/vim-python-pep8-indent",   ft = "python" },
     { "hashivim/vim-terraform",          ft = { "hcl", "terraform" } },
-    { "github/copilot.vim",              cmd = { "Copilot" } }
 }
