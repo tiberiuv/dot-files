@@ -13,7 +13,7 @@ return {
                 "@commitlint/config-conventional"
             }
             lint.linters_by_ft = {
-                python = { "flake8" },
+                python = { "flake8", "ruff"},
                 javascript = { "eslint_d" },
                 shell = { "shellcheck" },
                 markdown = { "markdownlint-cli2" },
