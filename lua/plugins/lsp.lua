@@ -13,11 +13,10 @@ return {
                 "@commitlint/config-conventional"
             }
             lint.linters_by_ft = {
-                python = { "flake8", "ruff"},
+                python = { "flake8", "ruff" },
                 javascript = { "eslint_d" },
                 shell = { "shellcheck" },
                 markdown = { "markdownlint-cli2" },
-                gitcommit = { "commitlint" },
             }
             vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
                 callback = function()
@@ -26,7 +25,10 @@ return {
             })
             vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
                 callback = function()
-                    require("lint").try_lint("commitlint")
+                    local filetype = vim.bo.filetype
+                    if filetype == "gitcommit" then
+                        require("lint").try_lint("commitlint")
+                    end
                 end,
             })
             require("lsp")()
