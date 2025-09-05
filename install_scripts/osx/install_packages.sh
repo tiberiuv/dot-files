@@ -72,7 +72,9 @@ yarn global add \
   dockerfile-language-server-nodejs \
   vim-language-server \
   @ansible/ansible-language-server \
-  bash-language-server
+  bash-language-server \
+  @commitlint/cli \
+  @commitlint/config-conventional
 
 # Install Lua linter
 luarocks install luacheck luaformatter
