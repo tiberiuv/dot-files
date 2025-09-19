@@ -8,7 +8,6 @@ end
 
 -- Setup all the lsp servers
 local function setup_servers()
-    local nvim_lsp = require("lspconfig")
     local common_flags = require("lsp.common")
 
     -- Servers with custom settings
@@ -62,7 +61,7 @@ local function setup_servers()
 
     for lsp, v in pairs(servers) do
         -- Note if a property is not set it will not be overridden
-        nvim_lsp[lsp].setup({
+        vim.lsp.config(lsp, {
             on_attach = v.on_attach,
             filetypes = v.filetypes,
             capabilities = require('blink.cmp').get_lsp_capabilities(v.capabilities),
@@ -71,6 +70,7 @@ local function setup_servers()
             settings = v.settings,
             root_dir = v.root_dir,
         })
+        vim.lsp.enable(lsp)
     end
 
     vim.diagnostic.config({
@@ -81,14 +81,14 @@ local function setup_servers()
         severity_sort = true,     -- sort diagnostics by severity
     })
 
-    --[[ map_n("<leader>e", "<cmd>lua vim.diagnostic.open_float()<cr>", opts)
-    map_n("[e", "<cmd>lua vim.diagnostic.goto_prev()<cr>", opts)
-    map_n("]e", "<cmd>lua vim.diagnostic.goto_next()<cr>", opts) ]]
-
     local opts = { noremap = true, silent = true }
     vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
-    vim.keymap.set("n", "[e", vim.diagnostic.goto_prev, opts)
-    vim.keymap.set("n", "]e", vim.diagnostic.goto_next, opts)
+    vim.keymap.set("n", "[e", function()
+        vim.diagnostic.jump({ count = -1, float = true })
+    end, opts)
+    vim.keymap.set("n", "]e", function()
+        vim.diagnostic.jump({ count = 1, float = true })
+    end, opts)
 end
 
 return setup_servers

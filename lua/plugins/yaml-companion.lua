@@ -21,6 +21,7 @@ return {
                 }
             }
         })
-        require("lspconfig")["yamlls"].setup(cfg)
+        vim.lsp.config("yamlls", cfg)
+        vim.lsp.enable("yamlls")
     end,
 }
