@@ -1,14 +1,9 @@
-local function get_yaml_companion_schema()
-    local schema = require("yaml-companion").get_buf_schema(0)
-    if schema.result[1].name == "none" then
-        return ""
-    end
-    return schema.result[1].name
-end
-
 return {
     {
         "hoob3rt/lualine.nvim",
+        dependencies = {
+            { "kyazdani42/nvim-web-devicons" },
+        },
         event = "VimEnter",
         opts = {
             options = { theme = "gruvbox" },
@@ -47,7 +42,7 @@ return {
                         symbols = { error = "E", warn = "W", info = "I", hint = "H" },
                     },
                 },
-                lualine_x = { "encoding", "fileformat", get_yaml_companion_schema, { "filetype", colored = true } },
+                lualine_x = { "encoding", "fileformat", { "filetype", colored = true } },
                 lualine_y = { "progres" },
                 lualine_z = { "location" },
             },

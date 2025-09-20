@@ -13,6 +13,7 @@ local function setup_servers()
     -- Servers with custom settings
     local lua_ls = require("lsp.lua_ls")
     local pyright = require("lsp.pyright")
+    local yamlls = require("lsp.yamlls")
 
     -- On attach callbacks
     local callbacks = require("lsp/callbacks")
@@ -56,7 +57,7 @@ local function setup_servers()
             on_attach = on_attach_no_formatting,
             filetypes = { "zig", ".zig" },
         },
-        csharp_ls = { on_attach = on_attach }
+        csharp_ls = { on_attach = on_attach },
     }
 
     for lsp, v in pairs(servers) do
@@ -70,6 +71,15 @@ local function setup_servers()
             settings = v.settings,
             root_dir = v.root_dir,
         })
+        vim.lsp.enable(lsp)
+    end
+
+    local schema_lsps = {
+        yamlls = yamlls
+    }
+
+    for lsp, v in pairs(schema_lsps) do
+        vim.lsp.config(lsp, v)
         vim.lsp.enable(lsp)
     end
 
