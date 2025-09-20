@@ -1,10 +1,4 @@
 -- Better looking diagnostic signs
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-
-for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
 
 -- Setup all the lsp servers
 local function setup_servers()
@@ -83,12 +77,28 @@ local function setup_servers()
         vim.lsp.enable(lsp)
     end
 
+
+    local _signs = { ERROR = "󰅙", WARN = "", HINT = "", INFO = "󰋼" }
+    local signs = {
+        text = {},
+        linehl = {},
+        numhl = {},
+    }
+
+    local severity = vim.diagnostic.severity
+    for type, icon in pairs(_signs) do
+        local hl = "DiagnosticSign" .. type
+        signs.text[severity[type]] = icon
+        signs.linehl[severity[type]] = ""
+        signs.numhl[severity[type]] = hl
+    end
+
     vim.diagnostic.config({
         -- virtual_text = true,      -- show inline messages
-        signs = true,             -- show signs in the gutter
         underline = true,         -- underline problematic text
         update_in_insert = false, -- don't update diagnostics while typing
         severity_sort = true,     -- sort diagnostics by severity
+        signs = signs
     })
 
     local opts = { noremap = true, silent = true }
