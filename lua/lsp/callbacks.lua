@@ -1,4 +1,4 @@
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
     local opts = { noremap = true, silent = true }
 
     local function map_n(...)
@@ -26,6 +26,9 @@ local on_attach = function(_, bufnr)
 
     handlers["textDocument/hover"] = vim.lsp.with(handlers.hover, pop_opts)
     handlers["textDocument/signatureHelp"] = vim.lsp.with(handlers.signature_help, pop_opts)
+    if client.server_capabilities.inlayHintProvider then
+        vim.lsp.inlay_hint.enable(true)
+    end
 end
 
 local on_attach_no_formatting = function(client, bufnr)

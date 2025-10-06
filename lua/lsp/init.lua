@@ -8,6 +8,7 @@ local function setup_servers()
     local lua_ls = require("lsp.lua_ls")
     local pyright = require("lsp.pyright")
     local yamlls = require("lsp.yamlls")
+    local rustaceanvim = require("lsp.rustaceanvim")
 
     -- On attach callbacks
     local callbacks = require("lsp/callbacks")
@@ -32,8 +33,7 @@ local function setup_servers()
             filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
         },
         clangd = { on_attach = on_attach, filetypes = { "c", "ino", "cpp", ".ino" } },
-        -- Custom settings
-        -- rust_analyzer = { on_attach = on_attach_no_formatting, settings = rust_analyzer.settings },
+        ["rust-analyzer"] = rustaceanvim,
         pyright = {
             on_attach = on_attach,
             filetypes = { "python", ".py" },
@@ -76,7 +76,6 @@ local function setup_servers()
         vim.lsp.config(lsp, v)
         vim.lsp.enable(lsp)
     end
-
 
     local _signs = { ERROR = "󰅙", WARN = "", HINT = "", INFO = "󰋼" }
     local signs = {
