@@ -35,7 +35,7 @@ brew install --cask firefox@developer-edition temurin11 docker
 brew install --cask font-jetbrains-mono-nerd-font
 
 # Install brew packages
-brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go terraform-ls ansible-lint yamllint yaml-language-server fnm pinentry-mac jq ijq jid yq shellcheck alacritty lua-language-server tflint tfenv dotnet-sdk mise markdownlint-cli2 prettierd ruff
+brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go terraform-ls ansible-lint yamllint yaml-language-server fnm pinentry-mac jq ijq jid yq shellcheck alacritty lua-language-server tflint tfenv dotnet-sdk mise markdownlint-cli2 prettierd ruff cspell hadolint
 
 brew install tmux --head
 brew install kitty --head

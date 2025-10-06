@@ -30,7 +30,8 @@ return {
                 javascript = { "eslint_d" },
                 shell = { "shellcheck" },
                 markdown = { "markdownlint-cli2" },
-                tex = { "cspell" }
+                tex = { "cspell" },
+                dockerfile = { "hadolint" }
             }
             vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
                 callback = function()
