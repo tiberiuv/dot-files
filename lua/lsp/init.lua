@@ -13,8 +13,6 @@ local function setup_servers()
     -- On attach callbacks
     local callbacks = require("lsp/callbacks")
     local on_attach = callbacks.on_attach
-    local on_attach_no_formatting = callbacks.on_attach_no_formatting
-
 
     local servers = {
         -- Default settings
@@ -25,11 +23,11 @@ local function setup_servers()
         tflint = { on_attach = on_attach },
         dockerls = { on_attach = on_attach },
         hls = { on_attach = on_attach },
-        jsonls = { on_attach = on_attach_no_formatting },
-        ansiblels = { on_attach = on_attach_no_formatting },
+        jsonls = { on_attach = on_attach },
+        ansiblels = { on_attach = on_attach },
         bashls = { on_attach = on_attach, filetypes = { "bash", "zsh", "sh" } },
         ts_ls = {
-            on_attach = on_attach_no_formatting,
+            on_attach = on_attach,
             filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
         },
         clangd = { on_attach = on_attach, filetypes = { "c", "ino", "cpp", ".ino" } },
@@ -40,15 +38,15 @@ local function setup_servers()
             settings = pyright.settings,
         },
         lua_ls = {
-            on_attach = on_attach_no_formatting,
+            on_attach = on_attach,
             filetypes = { "lua", ".lua" },
             settings = lua_ls.settings,
         },
         gopls = {
-            on_attach = on_attach_no_formatting,
+            on_attach = on_attach,
         },
         zls = {
-            on_attach = on_attach_no_formatting,
+            on_attach = on_attach,
             filetypes = { "zig", ".zig" },
         },
         csharp_ls = { on_attach = on_attach },
@@ -59,7 +57,7 @@ local function setup_servers()
         vim.lsp.config(lsp, {
             on_attach = v.on_attach,
             filetypes = v.filetypes,
-            capabilities = require('blink.cmp').get_lsp_capabilities(v.capabilities),
+            capabilities = require("blink.cmp").get_lsp_capabilities(v.capabilities),
             cmd = v.cmd,
             flags = v.flags or common_flags,
             settings = v.settings,
@@ -69,7 +67,7 @@ local function setup_servers()
     end
 
     local schema_lsps = {
-        yamlls = yamlls
+        yamlls = yamlls,
     }
 
     for lsp, v in pairs(schema_lsps) do
@@ -94,10 +92,10 @@ local function setup_servers()
 
     vim.diagnostic.config({
         -- virtual_text = true,      -- show inline messages
-        underline = true,         -- underline problematic text
+        underline = true, -- underline problematic text
         update_in_insert = false, -- don't update diagnostics while typing
-        severity_sort = true,     -- sort diagnostics by severity
-        signs = signs
+        severity_sort = true, -- sort diagnostics by severity
+        signs = signs,
     })
 
     local opts = { noremap = true, silent = true }

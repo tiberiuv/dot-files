@@ -17,14 +17,20 @@ return {
         -- Define your formatters
         formatters_by_ft = {
             lua = { "stylua" },
-            python = { "ruff_format", "isort", "black" },
+            python = function(bufnr)
+                if require("conform").get_formatter_info("ruff_format", bufnr).available then
+                    return { "ruff_format" }
+                else
+                    return { "isort", "black" }
+                end
+            end,
             javascript = { "prettierd", "prettier", stop_after_first = true },
             typescript = { "prettierd", "prettier", stop_after_first = true },
             javascriptreact = { "prettierd", "prettier", stop_after_first = true },
             typescriptreact = { "prettierd", "prettier", stop_after_first = true },
             rust = { "rustfmt" },
             markdown = { "markdownlint-cli2" },
-            -- yaml = { "prettierd", "prettier", stop_after_first = true },
+            yaml = { "prettierd", "prettier", stop_after_first = true },
             ["_"] = { "trim_whitespace" },
         },
     },
