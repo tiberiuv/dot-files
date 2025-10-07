@@ -10,8 +10,7 @@ mkdir -p ~/.tmux/plugins
 # Install tmux tpm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-which -s brew
-if [[ $? != 0 ]] ; then
+if ! which -s brew ; then
     # Install brew - package/app for osx
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
@@ -24,25 +23,7 @@ else
   eval "$(/usr/local/bin/brew shellenv)";
 fi
 
-# Add other repos to brew
-brew tap homebrew/cask
-brew tap homebrew/cask-versions
-brew tap hashicorp/tap
-
-# Instal brew gui apps
-brew install --cask firefox@developer-edition temurin11 docker
-
-brew install --cask font-jetbrains-mono-nerd-font
-
-# Install brew packages
-brew install llvm gcc wget curl watch pyenv autogen ninja libtool automake gettext git git-lfs tmux pipenv poetry python node yarn scala pinentry gnupg kubectl mysql htop openssl readline zlib coreutils cmake icu4c harfbuzz lcms2 fuse librsync ImageMagick utf8proc go terraform-ls ansible-lint yamllint yaml-language-server fnm pinentry-mac jq ijq jid yq shellcheck alacritty lua-language-server tflint tfenv dotnet-sdk mise markdownlint-cli2 prettierd ruff cspell hadolint
-
-brew install tmux --head
-brew install kitty --head
-
-brew link --overwrite gnupg
-
-brew install mise
+. ./install_brew_packages.sh
 
 tfenv install latest
 tfenv init

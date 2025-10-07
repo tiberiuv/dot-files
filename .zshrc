@@ -216,7 +216,7 @@ zinit wait lucid light-mode for Aloxaf/fzf-tab
 
 # ------------------------------------------------------------ #
 
-autoload -Uz compinit 
+autoload -Uz compinit
 if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
 	compinit;
 else
