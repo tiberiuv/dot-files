@@ -31,6 +31,7 @@ return {
             rust = { "rustfmt" },
             markdown = { "markdownlint-cli2" },
             yaml = { "prettierd", "prettier", stop_after_first = true },
+            terraform = { "terraform_fmt" },
             ["_"] = { "trim_whitespace" },
         },
     },
