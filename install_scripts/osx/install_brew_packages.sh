@@ -76,4 +76,5 @@ brew install \
   yamllint \
   yarn \
   yq \
-  zlib
+  zlib \
+  multi-gitter
