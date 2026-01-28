@@ -128,6 +128,7 @@ alias kcuc='kubectl config use-context'
 alias ssh="TERM=xterm-256color ssh"
 alias update-all=". ~/dot-files/update.zsh"
 alias clean_evicted="kubectl get pod | grep Evicted | awk '{print $1}' | xargs kubectl delete pod"
+alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
 if [[ $(uname) == "Darwin" ]]; then
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
