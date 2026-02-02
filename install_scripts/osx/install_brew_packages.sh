@@ -66,6 +66,7 @@ brew install \
   scala \
   shellcheck \
   terraform-ls \
+  tfversion/tap/tfversion \
   tfenv \
   tflint \
   tmux \
