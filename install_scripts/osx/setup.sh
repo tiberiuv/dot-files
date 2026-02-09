@@ -1,7 +1,8 @@
 #!/bin/zsh
 
+zsh ./install_scripts/shared/setup-dirs.sh
+zsh ./install_scripts/shared/create_symlinks.sh
 zsh ./install_scripts/osx/macos_defaults.sh
-zsh ./install_scripts/osx/create_symlinks.sh
 zsh ./install_scripts/osx/install_packages.sh
 
 # Use pinentry as key manager

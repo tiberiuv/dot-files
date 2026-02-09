@@ -78,4 +78,5 @@ brew install \
   yarn \
   yq \
   zlib \
-  multi-gitter
+  multi-gitter \
+  pam-reattach

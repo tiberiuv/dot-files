@@ -1,12 +1,5 @@
 #!/bin/sh
 
-mkdir -p ~/.config
-mkdir -p ~/.config/nvim
-mkdir -p ~/.config/nvim/lua
-mkdir -p ~/.config/alacritty
-mkdir -p ~/.tmux
-mkdir -p ~/.tmux/plugins
-
 # Install tmux tpm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
