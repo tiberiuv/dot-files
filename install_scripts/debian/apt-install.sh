@@ -2,11 +2,11 @@
 
 sudo apt update && sudo apt upgrade
 
-sudo add-apt-repository ppa:neovim-ppa/stable
+sudo add-apt-repository ppa:neovim-ppa/unstable -y
 
 sudo apt update
 
-sudo apt-get -y install \
+sudo apt install -y \
     neovim \
     tmux \
     alacritty \

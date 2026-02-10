@@ -1,14 +1,9 @@
 #!/bin/sh
 
-# Install tmux tpm
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-
 if ! which -s brew ; then
     # Install brew - package/app for osx
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
-
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 if [ "$(arch)" = "arm64" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)";
@@ -65,14 +60,8 @@ cargo install \
   fnm \
   starship
 
-# Add wasm target for rust
-rustup target add wasm32-unknown-unknown
-
 # Install nvim plugins
 nvim --headless "+Lazy! sync" +qa
-
-### Install tmux tpm plugins
-~/.tmux/plugins/tpm/scripts/install_plugins.sh
 
 ### Install zinit 
 zinit update
