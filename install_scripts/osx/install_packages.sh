@@ -28,37 +28,9 @@ bash -c "$(curl --fail --show-error --silent --location https://raw.githubuserco
 
 . ~/.zshrc
 
-# Install global node modules
-# mainly linters etc.
-yarn global add \
-  lua-fmt \
-  typescript-language-server \
-  pyright \
-  pyvm \
-  vscode-langservers-extracted \
-  diagnostic-languageserver \
-  stylelint \
-  dockerfile-language-server-nodejs \
-  vim-language-server \
-  @ansible/ansible-language-server \
-  bash-language-server \
-  @commitlint/cli \
-  @commitlint/config-conventional
-
 # Install Lua linter
 luarocks install luacheck luaformatter
 
-# Install Rust cli tools
-cargo install \
-  exa \
-  bat \
-  procs \
-  ripgrep \
-  diesel_cli \
-  trunk \
-  wasm-bindgen-cli \
-  fnm \
-  starship
 
 # Install nvim plugins
 nvim --headless "+Lazy! sync" +qa
