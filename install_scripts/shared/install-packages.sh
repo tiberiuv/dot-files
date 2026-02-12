@@ -8,7 +8,7 @@ if "test ! -d ~/.tmux/plugins/tpm"; then \
 fi
 
 # Install rustup
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
 
 # Add wasm target for rust
 rustup target add wasm32-unknown-unknown
