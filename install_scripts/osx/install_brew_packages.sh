@@ -78,4 +78,5 @@ brew install \
   yq \
   zlib \
   multi-gitter \
-  pam-reattach
+  pam-reattach \
+  diff-so-fancy
