@@ -12,3 +12,4 @@ ln -sfF "$ROOT_DIR"/.tmux.conf "$HOME"/.tmux.conf
 ln -sfF "$ROOT_DIR"/lua "$HOME"/.config/nvim/lua
 ln -sfF "$ROOT_DIR"/init.lua "$HOME"/.config/nvim/init.lua
 ln -sfF "$ROOT_DIR"/.p10k.zsh "$HOME"/.p10k.zsh
+ln -sfF "$ROOT_DIR"/claude/CLAUDE.md "$HOME"/.claude/CLAUDE.md
