@@ -7,7 +7,15 @@ return {
         branch = "main",
         opts = {
             -- Modules and its options go here
-            ensure_installed = {
+            highlight = { enable = true },
+            incremental_selection = { enable = true },
+            indent = { enable = false },
+            refactor = { smart_rename = { enable = true }, navigation = { enable = true } },
+            textobjects = { enable = true },
+            install_dir = vim.fn.stdpath('data') .. '/site',
+        },
+        config = function(_, opts)
+            local parsers = {
                 "ruby",
                 "rust",
                 "python",
@@ -31,15 +39,8 @@ return {
                 "hcl",
                 "terraform",
                 "sql",
-            },
-            highlight = { enable = true },
-            incremental_selection = { enable = true },
-            indent = { enable = false },
-            refactor = { smart_rename = { enable = true }, navigation = { enable = true } },
-            textobjects = { enable = true },
-        },
-        config = function(_, opts)
-            require("nvim-treesitter.configs").setup(opts)
+            }
+            require('nvim-treesitter').install(parsers)
         end,
     },
 }
