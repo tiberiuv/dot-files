@@ -4,6 +4,7 @@ return {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
         build = ":TSUpdate",
+        branch = "main",
         opts = {
             -- Modules and its options go here
             ensure_installed = {
