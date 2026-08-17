@@ -1,5 +1,5 @@
 return {
-    { "nvim-treesitter/nvim-treesitter-textobjects" },
+    { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main"},
     {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
@@ -39,6 +39,9 @@ return {
                 "hcl",
                 "terraform",
                 "sql",
+                "gitcommit",
+                "git_rebase",
+                "diff",
             }
             require('nvim-treesitter').install(parsers)
         end,
