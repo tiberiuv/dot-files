@@ -42,6 +42,8 @@ return {
                 "gitcommit",
                 "git_rebase",
                 "diff",
+                "make",
+                "ssh_config"
             }
             require('nvim-treesitter').install(parsers)
         end,

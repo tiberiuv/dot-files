@@ -3,7 +3,6 @@
 sudo apt update && sudo apt upgrade
 
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
-sudo add-apt-repository ppa:aos1/diff-so-fancy
 
 sudo apt update
 
@@ -14,4 +13,4 @@ sudo apt install -y \
     git \
     git-lfs \
     zsh \
-    diff-so-fancy
+    tree-sitter-cli
