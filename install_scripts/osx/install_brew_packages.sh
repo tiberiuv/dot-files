@@ -22,10 +22,13 @@ brew install \
   ansible-lint \
   autogen \
   automake \
+  black \
   cmake \
   coreutils \
   cspell \
   curl \
+  eslint_d \
+  flake8 \
   fnm \
   fuse \
   gcc \
@@ -39,6 +42,7 @@ brew install \
   htop \
   icu4c \
   ijq \
+  isort \
   jid \
   jq \
   kubectl \
@@ -47,6 +51,7 @@ brew install \
   libtool \
   llvm \
   lua-language-server \
+  luarocks \
   markdownlint-cli2 \
   mise \
   mysql \
@@ -64,6 +69,7 @@ brew install \
   ruff \
   scala \
   shellcheck \
+  stylua \
   terraform-ls \
   tfenv \
   tflint \

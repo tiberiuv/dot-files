@@ -1,62 +1,95 @@
 #!/bin/bash
 
-sudo apt update && sudo apt upgrade
+# Non-interactive: `apt upgrade` without -y (and tzdata/keyboard prompts) will
+# otherwise block the whole unattended setup waiting on stdin.
+export DEBIAN_FRONTEND=noninteractive
 
-sudo add-apt-repository ppa:neovim-ppa/unstable -y
+sudo -E apt update
+sudo -E apt upgrade -y
 
-sudo apt update
+# add-apt-repository ships in software-properties-common, which is absent from
+# minimal/cloud images, so install it before reaching for a PPA.
+sudo -E apt install -y software-properties-common ca-certificates gnupg curl
 
-sudo apt install -y \
-    neovim \
-    tmux \
-    alacritty \
-    git \
-    git-lfs \
-    zsh \
-    tree-sitter-cli \
-    build-essential \
-    cmake \
-    ninja-build \
-    automake \
-    autogen \
-    libtool \
-    gettext \
-    imagemagick \
-    jq \
-    htop \
-    procps \
-    shellcheck \
-    yamllint \
-    wget \
-    curl \
-    fuse3 \
-    pipx \
-    luarocks \
-    unzip \
-    libharfbuzz-dev \
-    libicu-dev \
-    liblcms2-dev \
-    librsync-dev \
-    libutf8proc-dev \
-    zlib1g-dev \
-    libssl-dev \
-    libreadline-dev \
-    libbz2-dev \
-    libsqlite3-dev \
-    libncursesw5-dev \
-    xz-utils \
-    tk-dev \
-    libxml2-dev \
-    libxmlsec1-dev \
-    libffi-dev \
-    liblzma-dev \
-    gnupg \
-    pinentry-curses \
-    default-mysql-client \
-    python3 \
-    python3-pip \
-    python3-venv \
-    llvm \
-    clang \
-    lld \
+# PPAs are Ubuntu-only. Debian gets a current neovim from the upstream release
+# tarball in install_packages.sh instead (bookworm's apt neovim is 0.7, far too
+# old for this config: blink.cmp and nvim-treesitter `main` need 0.11+).
+DISTRO_ID="$(. /etc/os-release && echo "$ID")"
+if [ "$DISTRO_ID" = "ubuntu" ]; then
+    sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
+    sudo -E apt update
+    NEOVIM_PKG=neovim
+else
+    NEOVIM_PKG=""
+fi
+
+PACKAGES="
+    $NEOVIM_PKG
+    tmux
+    alacritty
+    git
+    git-lfs
+    zsh
+    build-essential
+    pkg-config
+    cmake
+    ninja-build
+    automake
+    autogen
+    libtool
+    gettext
+    imagemagick
+    jq
+    htop
+    procps
+    shellcheck
+    yamllint
+    wget
+    curl
+    fuse3
+    pipx
+    luarocks
+    unzip
+    fontconfig
+    xclip
+    wl-clipboard
+    libharfbuzz-dev
+    libicu-dev
+    liblcms2-dev
+    librsync-dev
+    libutf8proc-dev
+    zlib1g-dev
+    libssl-dev
+    libreadline-dev
+    libbz2-dev
+    libsqlite3-dev
+    libpq-dev
+    default-libmysqlclient-dev
+    libncurses-dev
+    xz-utils
+    tk-dev
+    libxml2-dev
+    libxmlsec1-dev
+    libffi-dev
+    liblzma-dev
+    gnupg
+    pinentry-curses
+    default-mysql-client
+    python3
+    python3-pip
+    python3-venv
+    llvm
+    clang
+    lld
     default-jdk
+"
+
+# One unavailable package name would otherwise abort the entire list, so retry
+# per package and report what could not be installed instead of dying.
+# shellcheck disable=SC2086
+if ! sudo -E apt install -y $PACKAGES; then
+    echo "Batch apt install failed; retrying package by package." >&2
+    for pkg in $PACKAGES; do
+        sudo -E apt install -y "$pkg" || echo "apt: could not install $pkg" >&2
+    done
+fi

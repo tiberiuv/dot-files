@@ -28,7 +28,7 @@ return {
             lint.linters_by_ft = {
                 python = { "flake8", "ruff" },
                 javascript = { "eslint_d" },
-                shell = { "shellcheck" },
+                sh = { "shellcheck" },
                 markdown = { "markdownlint-cli2" },
                 tex = { "cspell" },
                 dockerfile = { "hadolint" }

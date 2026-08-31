@@ -2,63 +2,16 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   . "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 # ------------------------------------------------------------ #
-# Path
-# ------------------------------------------------------------ #
-if [[ $(uname -m) == arm64 ]]; then
-  eval $(/opt/homebrew/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
-  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
-elif [[ $(uname -m) == amd64 ]]; then
-  eval $(/usr/local/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
-  export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
-fi
-
-if [[ $(uname -s) == "Linux" ]]; then
-  export JAVA_HOME=/usr/lib/jvm/default-java
-  export GOPATH=$HOME/go
-  export PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
-  export PATH=$HOME/.dotnet:$HOME/.dotnet/tools:$PATH
-  export PATH=$HOME/.tfenv/bin:$PATH
-  export PATH=$HOME/.local/share/coursier/bin:$PATH
-  eval "$(pyenv init -)" 2>/dev/null
-fi
-
-export PATH=$PYENV_ROOT/bin:$PATH
-export PATH=$PATH:$HOME/bin
-export PATH=$PATH:/Applications
-export PATH=$PATH:$HOMEBREW_PREFIX/texlive/2019/texmf-dist/tex/xelatex
-export PATH=$PATH:$JAVA_HOME/bin
-export PATH=$HOME/.cargo/bin:$PATH
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
-export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
-export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
-export PATH=$PATH:/Users/voicut/.dotnet/tools
-export PATH=$HOMEBREW_PREFIX/bin:$PATH
-export PATH=$HOMEBREW_PREFIX/sbin:$PATH
-export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
-export PATH=$HOMEBREW_PREFIX/p/versions/python:$PATH
-export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-
-# ------------------------------------------------------------ #
 # Env vars
 # ------------------------------------------------------------ #
+# Declared before the PATH block below, which references several of them.
 export RUST_HOME="$HOME/.rustup"
 export CARGO_HOME="$HOME/.cargo"
-
 export PYENV_ROOT="$HOME/.pyenv"
+export GOPATH="$HOME/go"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-if [[ $(uname -s) == "Darwin" ]]; then
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home
-  export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
-fi
-export SCALA_HOME=$HOMEBREW_PREFIX/opt/scala@2.12/idea
 export PYSPARK_PYTHON=python3
-export GOPATH=$HOME/go
 export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
 export KITTY_CONFIG_DIRECTORY=~/.config/kitty/kitty.conf
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
@@ -72,13 +25,61 @@ export LS_COLORS='ow=36:di=34:fi=32:ex=31:ln=35:'
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # For minikube
 export KUBERNETES_PROVIDER=docker
+
 # ------------------------------------------------------------ #
-# Compiler flags
+# Path
 # ------------------------------------------------------------ #
-# export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/opt/openssl/lib/
-# export LIBRARY_PATH=$LIBRARY_PATH:$HOMEBREW_PREFIX/lib/
-export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@3/lib"
-export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
+# Everything derived from $HOMEBREW_PREFIX has to stay inside the Darwin
+# branch: on Linux the variable is empty, so those lines would otherwise
+# inject /bin, /sbin, /opt/... into PATH and, worse, export LDFLAGS/CPPFLAGS
+# pointing at non-existent dirs (which breaks pyenv/cargo source builds).
+if [[ $(uname -s) == "Darwin" ]]; then
+  if [[ $(uname -m) == arm64 ]]; then
+    eval $(/opt/homebrew/bin/brew shellenv)
+    export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
+    export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
+  else
+    eval $(/usr/local/bin/brew shellenv)
+    export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
+    export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
+  fi
+
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home
+  export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
+  export SCALA_HOME=$HOMEBREW_PREFIX/opt/scala@2.12/idea
+
+  export PATH=$HOMEBREW_PREFIX/bin:$PATH
+  export PATH=$HOMEBREW_PREFIX/sbin:$PATH
+  export PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
+  export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
+  export PATH=$PATH:$HOMEBREW_PREFIX/texlive/2019/texmf-dist/tex/xelatex
+  export PATH=$PATH:/Applications
+  export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
+
+  # Compiler flags
+  export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@3/lib"
+  export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
+elif [[ $(uname -s) == "Linux" ]]; then
+  export JAVA_HOME=/usr/lib/jvm/default-java
+  export GOROOT=/usr/local/go
+  export RUST_ANALYZER_TARGET="$(uname -m)-unknown-linux-gnu"
+
+  export PATH=$GOROOT/bin:$PATH
+  export PATH=$HOME/.dotnet:$HOME/.dotnet/tools:$PATH
+  export PATH=$HOME/.tfenv/bin:$PATH
+  export PATH=$HOME/.local/share/coursier/bin:$PATH
+  # luarocks --local installs luacheck/luaformatter here
+  export PATH=$HOME/.luarocks/bin:$PATH
+fi
+
+export PATH=$PYENV_ROOT/bin:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$JAVA_HOME/bin
+export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 # ------------------------------------------------------------ #
 # Minifort
 alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone europe-west1-b
@@ -147,7 +148,9 @@ if [[ $(uname) == "Darwin" ]]; then
 fi
 
 alias vim=nvim
-if type exa >/dev/null 2>&1; then
+if type eza >/dev/null 2>&1; then
+  alias ls=eza
+elif type exa >/dev/null 2>&1; then
   alias ls=exa
 fi
 if type bat >/dev/null 2>&1; then
@@ -241,7 +244,10 @@ zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:git-checkout:*" sort false
 zstyle ":completion:*:descriptions" format '[%d]'
 zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
-zstyle ":fzf-tab:complete:cd:*" fzf-preview "exa -1 --color=always $realpath"
+# $realpath is expanded by fzf-tab at preview time, so keep it literal
+_fzf_tab_ls=exa
+(( ${+commands[eza]} )) && _fzf_tab_ls=eza
+zstyle ":fzf-tab:complete:cd:*" fzf-preview "$_fzf_tab_ls -1 --color=always \$realpath"
 zstyle ":fzf-tab:*" fzf-command fzf
 
 # In the line editor, number of matches to show before asking permission
@@ -264,14 +270,15 @@ if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/comp
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || . ~/.p10k.zsh
 
-eval "$(pyenv init -)"
+[[ ${commands[pyenv]} ]] && eval "$(pyenv init -)"
 
 printf "\e[?1042l"
 ### End of Zinit's installer chunk
 
 # Node version manager
-eval "$(fnm env)"
+[[ ${commands[fnm]} ]] && eval "$(fnm env)"
 
-export PATH="/usr/local/p/versions/python:$PATH"
+# Runtime version manager (provides lua 5.1 for the nvim toolchain)
+[[ ${commands[mise]} ]] && eval "$(mise activate zsh)"
 
 zinit cdreplay -q
