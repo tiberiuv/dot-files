@@ -143,9 +143,10 @@ if [ ! -d "$HOME/.pyenv" ]; then
   curl -fsSL https://pyenv.run | bash
 fi
 
-# tfenv (no apt package)
+# tfenv (no apt package). Upstream is tfutils/tfenv -- the old kamatama41
+# repo redirects there, and github.com/tfenv/tfenv is a 404.
 if [ ! -d "$HOME/.tfenv" ]; then
-  git clone https://github.com/tfenv/tfenv.git ~/.tfenv
+  git clone --depth 1 https://github.com/tfutils/tfenv.git ~/.tfenv
 fi
 export PATH="$HOME/.tfenv/bin:$PATH"
 tfenv install latest
