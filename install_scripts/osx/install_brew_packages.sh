@@ -1,6 +1,8 @@
-# Add other repos to brew
-brew tap homebrew/cask
-brew tap homebrew/cask-versions
+#!/bin/sh
+
+# homebrew/cask is built into brew now, and homebrew/cask-versions was
+# deprecated and its casks (temurin11, firefox@developer-edition) folded into
+# homebrew/cask -- tapping either just errors out.
 brew tap hashicorp/tap
 
 # Instal brew gui apps
@@ -13,7 +15,6 @@ brew install --cask \
 brew install tmux --head
 brew install kitty --head
 brew link --overwrite gnupg
-brew install mise
 
 # Install brew packages
 brew install \
@@ -73,7 +74,6 @@ brew install \
   terraform-ls \
   tfenv \
   tflint \
-  tmux \
   utf8proc \
   watch \
   wget \

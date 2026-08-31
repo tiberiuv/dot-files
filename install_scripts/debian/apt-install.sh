@@ -75,7 +75,10 @@ PACKAGES="
     gnupg
     pinentry-curses
     default-mysql-client
+    diff-so-fancy
+    locales
     python3
+    python3-dev
     python3-pip
     python3-venv
     llvm
@@ -92,4 +95,13 @@ if ! sudo -E apt install -y $PACKAGES; then
     for pkg in $PACKAGES; do
         sudo -E apt install -y "$pkg" || echo "apt: could not install $pkg" >&2
     done
+fi
+
+# .zshrc exports LANG/LC_ALL=en_US.UTF-8, but Debian/Ubuntu cloud and container
+# images ship only C.UTF-8. Without generating it every shell start (and perl,
+# git, tmux...) warns "setting locale failed".
+if command -v locale-gen >/dev/null 2>&1 && ! locale -a 2>/dev/null | grep -qiE '^en_US\.?(utf-?8)$'; then
+    grep -qs '^en_US.UTF-8 UTF-8' /etc/locale.gen \
+        || echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen >/dev/null
+    sudo -E locale-gen en_US.UTF-8
 fi

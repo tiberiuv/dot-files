@@ -100,11 +100,20 @@ fnm use --install-if-missing lts-latest
 eval "$(fnm env)"
 # tree-sitter-cli is only packaged by apt on very recent releases, and
 # nvim-treesitter's `main` branch needs it to build parsers.
+# vscode-langservers-extracted provides html/cssls/jsonls; the rest cover the
+# remaining npm-distributed servers enabled in lua/lsp/init.lua.
 npm install -g \
   cspell \
   markdownlint-cli2 \
   yaml-language-server \
+  bash-language-server \
+  dockerfile-language-server-nodejs \
+  typescript-language-server \
+  typescript \
+  vscode-langservers-extracted \
+  @ansible/ansible-language-server \
   @fsouza/prettierd \
+  prettier \
   yarn \
   tree-sitter-cli \
   eslint_d \
@@ -122,9 +131,16 @@ pipx install isort
 # poetry
 curl -sSL https://install.python-poetry.org | python3 -
 
+# lua/options.lua pins vim.g.python3_host_prog to ~/pynvim/bin/python, so the
+# venv has to exist or every nvim start reports a broken python3 provider.
+if [ ! -x "$HOME/pynvim/bin/python" ]; then
+  python3 -m venv "$HOME/pynvim"
+  "$HOME/pynvim/bin/pip" install --upgrade pip pynvim
+fi
+
 # pyenv
 if [ ! -d "$HOME/.pyenv" ]; then
-  curl https://pyenv.run | bash
+  curl -fsSL https://pyenv.run | bash
 fi
 
 # tfenv (no apt package)
@@ -136,7 +152,7 @@ tfenv install latest
 tfenv use latest
 
 # mise + lua plugin
-curl https://mise.run | sh
+curl -fsSL https://mise.run | sh
 mise plugins add --yes lua
 mise use -g lua@5.1
 

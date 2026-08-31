@@ -12,8 +12,7 @@ export GOPATH="$HOME/go"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export PYSPARK_PYTHON=python3
-export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
-export KITTY_CONFIG_DIRECTORY=~/.config/kitty/kitty.conf
+export KITTY_CONFIG_DIRECTORY=~/.config/kitty
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 export EDITOR=nvim
 export GPG_TTY=$(tty)
@@ -234,30 +233,48 @@ zinit wait lucid light-mode for Aloxaf/fzf-tab
 # ------------------------------------------------------------ #
 
 autoload -Uz compinit
-if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-	compinit;
+# Rebuild (and re-verify) the completion dump at most once a day; `compinit -C`
+# skips that check. This used to read `[[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]`,
+# which never worked: zsh does no filename generation inside `[[ ]]`, so the
+# test was just "is this string non-empty" -- always true, so every shell start
+# paid for a full compinit. Glob in an array assignment instead (bare glob
+# qualifiers, so no extended_glob needed), and pin -d to the same path we test.
+_zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+_zcompdump_stale=( $_zcompdump(N.mh+24) )
+if (( $#_zcompdump_stale )) || [[ ! -f $_zcompdump ]]; then
+	compinit -d $_zcompdump
 else
-	compinit -C;
-fi;
+	compinit -C -d $_zcompdump
+fi
+unset _zcompdump _zcompdump_stale
 
 zstyle ":completion:*:match:*" original only
 zstyle ":completion:*:git-checkout:*" sort false
 zstyle ":completion:*:descriptions" format '[%d]'
 zstyle ":completion:*" list-colors ${(s.:.)LS_COLORS}
 # $realpath is expanded by fzf-tab at preview time, so keep it literal
-_fzf_tab_ls=exa
-(( ${+commands[eza]} )) && _fzf_tab_ls=eza
+_fzf_tab_ls=eza
+(( ${+commands[eza]} )) || _fzf_tab_ls=exa
 zstyle ":fzf-tab:complete:cd:*" fzf-preview "$_fzf_tab_ls -1 --color=always \$realpath"
 zstyle ":fzf-tab:*" fzf-command fzf
 
 # In the line editor, number of matches to show before asking permission
 LISTMAX=9999
 
-# updates PATH for the Google Cloud SDK.
-if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"; fi
-
-# enables shell command completion for gcloud.
-if [ -f "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"; fi
+# Google Cloud SDK path + completion. The Caskroom location only exists on
+# macOS ($HOMEBREW_PREFIX is empty on Linux); on Linux the SDK unpacks into
+# ~/google-cloud-sdk or /usr/share.
+for _gcloud_root in \
+  "$HOMEBREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk" \
+  "$HOME/google-cloud-sdk" \
+  /usr/share/google-cloud-sdk; do
+  if [[ -f $_gcloud_root/path.zsh.inc ]]; then
+    . "$_gcloud_root/path.zsh.inc"
+    [[ -f $_gcloud_root/completion.zsh.inc ]] && . "$_gcloud_root/completion.zsh.inc"
+    break
+  fi
+done
+unset _gcloud_root
 
 # enable k8s command completion
 [[ ${commands[kubectl]} ]] && . <(kubectl completion zsh)
