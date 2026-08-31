@@ -26,7 +26,6 @@ brew install \
   coreutils \
   cspell \
   curl \
-  dotnet-sdk \
   fnm \
   fuse \
   gcc \

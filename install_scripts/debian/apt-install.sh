@@ -13,4 +13,50 @@ sudo apt install -y \
     git \
     git-lfs \
     zsh \
-    tree-sitter-cli
+    tree-sitter-cli \
+    build-essential \
+    cmake \
+    ninja-build \
+    automake \
+    autogen \
+    libtool \
+    gettext \
+    imagemagick \
+    jq \
+    htop \
+    procps \
+    shellcheck \
+    yamllint \
+    wget \
+    curl \
+    fuse3 \
+    pipx \
+    luarocks \
+    unzip \
+    libharfbuzz-dev \
+    libicu-dev \
+    liblcms2-dev \
+    librsync-dev \
+    libutf8proc-dev \
+    zlib1g-dev \
+    libssl-dev \
+    libreadline-dev \
+    libbz2-dev \
+    libsqlite3-dev \
+    libncursesw5-dev \
+    xz-utils \
+    tk-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
+    libffi-dev \
+    liblzma-dev \
+    gnupg \
+    pinentry-curses \
+    default-mysql-client \
+    python3 \
+    python3-pip \
+    python3-venv \
+    llvm \
+    clang \
+    lld \
+    default-jdk

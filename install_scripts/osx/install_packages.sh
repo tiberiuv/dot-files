@@ -20,9 +20,6 @@ tfenv use latest
 mise plugins add lua
 mise use -g lua@5.1
 
-# Dotnet lsp server
-dotnet tool install --global csharp-ls
-
 # Install zinit - package manager for zsh shell
 bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 

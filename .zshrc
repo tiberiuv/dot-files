@@ -14,6 +14,16 @@ elif [[ $(uname -m) == amd64 ]]; then
   export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
 fi
 
+if [[ $(uname -s) == "Linux" ]]; then
+  export JAVA_HOME=/usr/lib/jvm/default-java
+  export GOPATH=$HOME/go
+  export PATH=/usr/local/go/bin:$GOPATH/bin:$PATH
+  export PATH=$HOME/.dotnet:$HOME/.dotnet/tools:$PATH
+  export PATH=$HOME/.tfenv/bin:$PATH
+  export PATH=$HOME/.local/share/coursier/bin:$PATH
+  eval "$(pyenv init -)" 2>/dev/null
+fi
+
 export PATH=$PYENV_ROOT/bin:$PATH
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/Applications
@@ -42,10 +52,12 @@ export CARGO_HOME="$HOME/.cargo"
 export PYENV_ROOT="$HOME/.pyenv"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home
+if [[ $(uname -s) == "Darwin" ]]; then
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home
+  export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
+fi
 export SCALA_HOME=$HOMEBREW_PREFIX/opt/scala@2.12/idea
 export PYSPARK_PYTHON=python3
-export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
 export GOPATH=$HOME/go
 export SPARK_CLASSPATH=/Users/tiberiusimionvoicu/dev/reporting-backend/utils/dataproc/lib/
 export KITTY_CONFIG_DIRECTORY=~/.config/kitty/kitty.conf
