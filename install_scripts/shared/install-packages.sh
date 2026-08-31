@@ -38,7 +38,6 @@ cargo binstall --no-confirm --locked \
   bat \
   procs \
   ripgrep \
-  diesel_cli \
   trunk \
   wasm-bindgen-cli \
   fnm \
