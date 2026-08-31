@@ -151,7 +151,7 @@ export PATH="$HOME/.local/share/coursier/bin:$PATH"
 ~/.local/bin/cs install scala scalac sbtn scalafmt
 
 # stylua (conform formats lua with it; no apt package)
-cargo install stylua
+cargo binstall --no-confirm --locked stylua
 
 # luarocks packages (luarocks itself came from apt; --local avoids needing
 # sudo, and .zshrc puts ~/.luarocks/bin on PATH)
