@@ -225,7 +225,7 @@ zinit wait lucid for \
 # ------------------------------------------------------------ #
 # Fzf
 zinit ice depth"1" as"program" pick"bin/fzf" \
-  atclone"rm -rf bin/fzf && sh install" \
+  atclone"rm -rf bin/fzf && bash install --key-bindings --completion --no-update-rc" \
   atpull"%atclone"
 zinit light junegunn/fzf
 
