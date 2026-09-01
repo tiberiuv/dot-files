@@ -19,6 +19,21 @@ opt.completeopt = "menu,menuone,noselect"
 opt.ruler = false
 opt.showcmd = false
 opt.mouse = ""
+opt.termguicolors = true
+
+-- Over ssh there is no local X/Wayland display, so nvim's xclip/wl-copy
+-- providers write into a clipboard nobody can see (or fail outright). OSC 52
+-- hands the yank to the terminal emulator on *this* side of the connection
+-- instead, which is what makes `"*y` work remotely. Paste stays on the
+-- unnamed register: OSC 52 reads are refused by most terminals.
+if vim.env.SSH_TTY then
+    local osc52 = require("vim.ui.clipboard.osc52")
+    vim.g.clipboard = {
+        name = "OSC 52",
+        copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+        paste = { ["+"] = function() return {} end, ["*"] = function() return {} end },
+    }
+end
 
 -- Search
 opt.ignorecase = true

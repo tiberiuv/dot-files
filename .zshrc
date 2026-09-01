@@ -19,6 +19,7 @@ export GPG_TTY=$(tty)
 # ssh
 export SSH_KEY_PATH=~/.ssh/rsa_id
 export CLICOLOR=1
+export COLORTERM=truecolor
 export LSCOLORS=Gxfxcxdxbxegedabagacad
 export LS_COLORS='ow=36:di=34:fi=32:ex=31:ln=35:'
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20

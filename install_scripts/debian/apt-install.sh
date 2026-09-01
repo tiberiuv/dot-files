@@ -66,6 +66,7 @@ PACKAGES="
     libpq-dev
     default-libmysqlclient-dev
     libncurses-dev
+    ncurses-term
     xz-utils
     tk-dev
     libxml2-dev
