@@ -1,7 +1,8 @@
 #!/bin/zsh
 
-zsh ./install_scripts/shared/setup-dirs.sh
-zsh ./install_scripts/shared/create_symlinks.sh
+# Directories and dotfile symlinks are home-manager's now (nix/links.nix); it
+# creates the parent of every managed link. ~/.tmux/plugins is the one
+# exception, and the tpm `git clone` in shared/install-packages.sh makes it.
 zsh ./install_scripts/osx/macos_defaults.sh
 zsh ./install_scripts/shared/install-packages.sh
 zsh ./install_scripts/osx/install_packages.sh
