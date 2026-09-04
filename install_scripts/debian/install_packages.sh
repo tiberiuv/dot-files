@@ -1,135 +1,53 @@
 #!/bin/bash
 
-# Everything apt can't provide (no package, too outdated, or needs a
-# version manager). Mirrors install_scripts/osx/install_packages.sh.
+# What is left after nix/packages.nix took over the package set: version
+# managers, the node/python runtimes they hand out, and the one tool nixpkgs
+# does not carry. Mirrors install_scripts/osx/install_packages.sh.
+#
+# Deleted in the nix migration (phase 3), for the record -- every one of these
+# is now a line in nix/packages.nix:
+#   - the neovim tarball, and with it the Ubuntu-PPA-vs-Debian branch
+#   - the go.dev tarball into /usr/local/go (and the GOROOT export in .zshrc)
+#   - `go install` of yq, ijq, jid, tflint, terraform-ls
+#   - the kubectl, hadolint and lua-language-server release binaries
+#   - the JetBrainsMono Nerd Font tarball (fonts.fontconfig.enable in
+#     nix/linux.nix makes fc-list see the nix copy instead)
+#   - the npm -g language servers, linters and formatters
+#   - the pipx block and the poetry curl-installer
+#   - the coursier bootstrap and `cs install`
+#   - `cargo binstall stylua` and the luarocks packages
+#
+# That also took the whole `case $(uname -m)` architecture table with it: it
+# existed only to pick per-arch download URLs, and nothing here downloads a
+# release binary any more.
+#
 # Not sourced into an interactive shell, so PATH additions needed by later
 # steps in this script are exported inline.
 
-# Release tarballs/binaries below are per-architecture; don't hardcode amd64 or
-# this whole script silently produces an unusable box on arm64 hosts.
-case "$(uname -m)" in
-  x86_64 | amd64)
-    GO_ARCH=amd64
-    KUBECTL_ARCH=amd64
-    HADOLINT_ARCH=x86_64
-    LUA_LS_ARCH=x64
-    COURSIER_ARCH=x86_64
-    NVIM_ARCH=x86_64
-    ;;
-  aarch64 | arm64)
-    GO_ARCH=arm64
-    KUBECTL_ARCH=arm64
-    HADOLINT_ARCH=arm64
-    LUA_LS_ARCH=arm64
-    COURSIER_ARCH=aarch64
-    NVIM_ARCH=arm64
-    ;;
-  *)
-    echo "Unsupported architecture: $(uname -m)" >&2
-    return 1 2>/dev/null || exit 1
-    ;;
-esac
+# go and friends live in the nix profile now. setup.sh bootstraps nix before
+# reaching this script, but it does not leave it on PATH for a non-interactive
+# bash, and ~/.zshenv (which does) is only read by zsh.
+# shellcheck disable=SC1091
+[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+export PATH="$HOME/.nix-profile/bin:$PATH"
 
 mkdir -p ~/.local/bin
 export PATH="$HOME/.local/bin:$PATH"
 
-# neovim: apt only has a current version behind the Ubuntu PPA (see
-# apt-install.sh), so on Debian pull the upstream release instead.
-if ! command -v nvim >/dev/null 2>&1; then
-  curl -fsSL "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz" -o /tmp/nvim.tar.gz
-  sudo rm -rf "/usr/local/nvim-linux-${NVIM_ARCH}"
-  sudo tar -C /usr/local -xzf /tmp/nvim.tar.gz
-  rm /tmp/nvim.tar.gz
-  ln -sf "/usr/local/nvim-linux-${NVIM_ARCH}/bin/nvim" ~/.local/bin/nvim
-fi
-
-# Go (apt's golang-go lags too far behind on Debian/Ubuntu stable)
-GO_VERSION="$(curl -s 'https://go.dev/VERSION?m=text' | head -n 1)"
-curl -fsSL "https://go.dev/dl/${GO_VERSION}.linux-${GO_ARCH}.tar.gz" -o /tmp/go.tar.gz
-sudo rm -rf /usr/local/go
-sudo tar -C /usr/local -xzf /tmp/go.tar.gz
-rm /tmp/go.tar.gz
-export PATH=/usr/local/go/bin:$HOME/go/bin:$PATH
-
-# Go-installable CLIs
-go install github.com/mikefarah/yq/v4@latest
-go install github.com/gpanders/ijq@latest
-go install github.com/simeji/jid/cmd/jid@latest
+# multi-gitter is genuinely absent from nixpkgs, so it keeps its `go install`.
+# The go doing the installing is the nix one; $GOPATH/bin is on PATH per .zshrc.
 go install github.com/lindell/multi-gitter@latest
-go install github.com/terraform-linters/tflint@latest
-go install github.com/hashicorp/terraform-ls@latest
 
-# Standalone release binaries -> ~/.local/bin (already on PATH per .zshrc)
-
-# kubectl
-KUBECTL_VERSION="$(curl -s https://dl.k8s.io/release/stable.txt)"
-curl -fsSL "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${KUBECTL_ARCH}/kubectl" -o ~/.local/bin/kubectl
-chmod +x ~/.local/bin/kubectl
-
-# hadolint (Dockerfile linter, no apt package)
-curl -fsSL "https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-${HADOLINT_ARCH}" -o ~/.local/bin/hadolint
-chmod +x ~/.local/bin/hadolint
-
-# lua-language-server
-LUA_LS_VERSION="$(curl -s https://api.github.com/repos/LuaLS/lua-language-server/releases/latest | grep '"tag_name"' | cut -d '"' -f4)"
-mkdir -p ~/.local/share/lua-language-server
-curl -fsSL "https://github.com/LuaLS/lua-language-server/releases/download/${LUA_LS_VERSION}/lua-language-server-${LUA_LS_VERSION}-linux-${LUA_LS_ARCH}.tar.gz" -o /tmp/lua-language-server.tar.gz
-tar -C ~/.local/share/lua-language-server -xzf /tmp/lua-language-server.tar.gz
-rm /tmp/lua-language-server.tar.gz
-cat > ~/.local/bin/lua-language-server <<'EOF'
-#!/bin/sh
-exec "$HOME/.local/share/lua-language-server/bin/lua-language-server" "$@"
-EOF
-chmod +x ~/.local/bin/lua-language-server
-
-# JetBrains Mono Nerd Font (brew installs the cask on macOS; alacritty.toml and
-# the p10k prompt both expect the nerd glyphs)
-if ! fc-list 2>/dev/null | grep -qi "JetBrainsMono Nerd Font"; then
-  mkdir -p ~/.local/share/fonts
-  curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz" -o /tmp/JetBrainsMono.tar.xz
-  tar -C ~/.local/share/fonts -xf /tmp/JetBrainsMono.tar.xz
-  rm /tmp/JetBrainsMono.tar.xz
-  fc-cache -f >/dev/null
-fi
-
-# fnm/node/npm globals (fnm itself installed via cargo in shared/install-packages.sh)
+# fnm/node/npm (fnm itself installed via cargo in shared/install-packages.sh).
+# yarn is the only global left: everything else that used to be installed here
+# is in nix/packages.nix, wrapped with its own nodejs so it does not care which
+# version fnm has active.
 export PATH="$HOME/.cargo/bin:$PATH"
 eval "$(fnm env)"
 fnm install --lts
 fnm use --install-if-missing lts-latest
 eval "$(fnm env)"
-# tree-sitter-cli is only packaged by apt on very recent releases, and
-# nvim-treesitter's `main` branch needs it to build parsers.
-# vscode-langservers-extracted provides html/cssls/jsonls; the rest cover the
-# remaining npm-distributed servers enabled in lua/lsp/init.lua.
-npm install -g \
-  cspell \
-  markdownlint-cli2 \
-  yaml-language-server \
-  bash-language-server \
-  dockerfile-language-server-nodejs \
-  typescript-language-server \
-  typescript \
-  vscode-langservers-extracted \
-  @ansible/ansible-language-server \
-  @fsouza/prettierd \
-  prettier \
-  yarn \
-  tree-sitter-cli \
-  eslint_d \
-  @commitlint/cli \
-  @commitlint/config-conventional
-
-# Python CLIs via pipx
-pipx install ansible-lint
-pipx install ruff
-pipx install pipenv
-pipx install flake8
-pipx install black
-pipx install isort
-
-# poetry
-curl -sSL https://install.python-poetry.org | python3 -
+npm install -g yarn
 
 # lua/options.lua pins vim.g.python3_host_prog to ~/pynvim/bin/python, so the
 # venv has to exist or every nvim start reports a broken python3 provider.
@@ -143,8 +61,9 @@ if [ ! -d "$HOME/.pyenv" ]; then
   curl -fsSL https://pyenv.run | bash
 fi
 
-# tfenv (no apt package). Upstream is tfutils/tfenv -- the old kamatama41
-# repo redirects there, and github.com/tfenv/tfenv is a 404.
+# tfenv (no apt package, and no nixpkgs package either -- version managers are
+# out of scope for nixpkgs by design). Upstream is tfutils/tfenv -- the old
+# kamatama41 repo redirects there, and github.com/tfenv/tfenv is a 404.
 if [ ! -d "$HOME/.tfenv" ]; then
   git clone --depth 1 https://github.com/tfutils/tfenv.git ~/.tfenv
 fi
@@ -152,25 +71,8 @@ export PATH="$HOME/.tfenv/bin:$PATH"
 tfenv install latest
 tfenv use latest
 
-# mise + lua plugin
+# mise + lua plugin. Still the owner of lua itself; luacheck and luaformatter
+# moved to nix (the luaformatter binary is called lua-format).
 curl -fsSL https://mise.run | sh
 mise plugins add --yes lua
 mise use -g lua@5.1
-
-# Scala via Coursier (no apt package). Deliberately not `cs setup` since it
-# auto-appends PATH exports to the detected shell rc file, and ~/.zshrc here
-# is a symlink into this git repo (would silently mutate the tracked file).
-curl -fL "https://github.com/coursier/coursier/releases/latest/download/cs-${COURSIER_ARCH}-pc-linux.gz" -o /tmp/cs.gz
-gunzip -f /tmp/cs.gz
-chmod +x /tmp/cs
-mv /tmp/cs ~/.local/bin/cs
-export PATH="$HOME/.local/share/coursier/bin:$PATH"
-~/.local/bin/cs install scala scalac sbtn scalafmt
-
-# stylua (conform formats lua with it; no apt package)
-cargo binstall --no-confirm --locked stylua
-
-# luarocks packages (luarocks itself came from apt; --local avoids needing
-# sudo, and .zshrc puts ~/.luarocks/bin on PATH)
-luarocks install --local luacheck
-luarocks install --local luaformatter
