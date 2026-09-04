@@ -14,7 +14,7 @@ language toolchains, macOS GUI apps, or the nvim/zsh plugin managers.
 | --- | --- | --- |
 | 0 | Bootstrap nix | done (this workspace) |
 | 1 | flake + home-manager, packages only | done — `fd31190`, `4d6aa51` |
-| 2 | Symlinks move to home-manager | not started |
+| 2 | Symlinks move to home-manager | done |
 | 3 | Strip the imperative installers | not started |
 | 4 | `setup.sh` rewrite + Coder integration | not started |
 | 5 | Optional: nix-darwin, devshells, nixvim | not started |
@@ -94,83 +94,50 @@ earliest. PATH ordering keeps their shims ahead of the nix profile:
 fnm shims > pyenv shims > ~/.local/bin > ~/.cargo/bin > nix profile > /usr/bin
 ```
 
-## Phase 2 — symlinks
+## Phase 2 — symlinks (done)
 
-**Done when:** 11 links resolve into the checkout, an edit to a repo file is
-visible through `~/` immediately, and `create_symlinks.sh` is gone.
+`dotfiles.manageLinks = true`; home-manager owns all 11 links, and
+`create_symlinks.sh` and `setup-dirs.sh` are deleted. `setup-dirs.sh` went too
+because home-manager creates the parent of every managed link — all of
+`~/.config/{nvim,alacritty,kitty}` and `~/.claude` — and the only directory it
+does not cover, `~/.tmux/plugins`, is created by the tpm `git clone` in
+`shared/install-packages.sh`.
 
-1. Set `dotfiles.manageLinks = true` in `nix/home.nix`.
+The old links had to be removed by hand first: home-manager refuses to clobber
+files it did not create and aborts the activation listing each one. The survey
+that produced the delete list, kept here because it is the safe way to repeat
+this on another machine — it deletes **only** symlinks that point into the
+checkout, and reports anything that is a real file instead:
 
-2. Remove the old symlinks — home-manager refuses to clobber files it did not
-   create and will abort the activation listing each one. Derive the list from
-   the evaluated config rather than hardcoding it, and delete **only** symlinks
-   that point into the checkout. On a machine where one of these is a real file
-   rather than a link, an unguarded `rm` loses data. Report-only as written;
-   swap the `echo` for `rm` once the output looks right:
+```sh
+ROOT=$(pwd -P)
+nix eval --impure --raw ".#homeConfigurations.default.config.home.file" \
+  --apply 'f: builtins.concatStringsSep "\n" (builtins.attrNames f)' \
+| sed "s|^\([^/]\)|$HOME/\1|" \
+| while IFS= read -r f; do
+    if [ -L "$f" ]; then
+      t=$(readlink "$f")
+      case "$t" in
+        "$ROOT"/*) echo "WOULD RM   $f -> $t" ;;
+        *)         echo "KEEP(link) $f -> $t" ;;
+      esac
+    elif [ -e "$f" ]; then
+      echo "KEEP(file) $f   <-- real file, not a link; investigate before touching"
+    fi
+  done
+```
 
-   ```sh
-   ROOT=$(pwd -P)
-   nix eval --impure --raw ".#homeConfigurations.default.config.home.file" \
-     --apply 'f: builtins.concatStringsSep "\n" (builtins.attrNames f)' \
-   | sed "s|^\([^/]\)|$HOME/\1|" \
-   | while IFS= read -r f; do
-       if [ -L "$f" ]; then
-         t=$(readlink "$f")
-         case "$t" in
-           "$ROOT"/*) echo "WOULD RM   $f -> $t" ;;
-           *)         echo "KEEP(link) $f -> $t" ;;
-         esac
-       elif [ -e "$f" ]; then
-         echo "KEEP(file) $f   <-- real file, not a link; investigate before touching"
-       fi
-     done
-   ```
+The listing includes home-manager's own generated files (`fontconfig`,
+`environment.d`, `.keep`); the `$ROOT` guard correctly leaves those alone.
+Expect exactly 11 `WOULD RM` lines. Swap the `echo` for `rm`, then
+`nix/switch.sh`.
 
-   The listing includes home-manager's own generated files
-   (`fontconfig`, `environment.d`, `.keep`); the `$ROOT` guard correctly leaves
-   those alone. Expect exactly 11 `WOULD RM` lines.
+> **`~/.zshenv` is one of the 11.** Between the delete and a successful switch,
+> new shells have neither nix nor cargo on PATH. If the switch fails in that
+> window, `. ~/.nix-profile/etc/profile.d/nix.sh` restores nix by hand.
 
-3. `nix/switch.sh`
-
-4. Verify every managed link points into the checkout:
-
-   ```sh
-   export DOTFILES_DIR="$(pwd -P)"
-   nix eval --impure --raw ".#homeConfigurations.default.config.home.file" --apply '
-     f:
-     let
-       root = builtins.getEnv "DOTFILES_DIR";
-       has  = n: (f.${n}.source) ? buildCommand;
-       into = n: has n && builtins.match "(.|\n)*ln -s ${root}/(.|\n)*" f.${n}.source.buildCommand != null;
-       mine = builtins.filter into (builtins.attrNames f);
-     in
-       "links into the checkout: ${toString (builtins.length mine)} (expect 11)\n"
-       + builtins.concatStringsSep "\n" mine'
-   ```
-
-5. Verify the live-edit property — the whole reason for `mkOutOfStoreSymlink`:
-
-   ```sh
-   printf '# probe\n' >> .tmux.conf && tail -1 ~/.tmux.conf && git checkout -- .tmux.conf
-   ```
-
-6. Delete `install_scripts/shared/create_symlinks.sh` and drop its `.` line
-   from both `setup.sh` files. `setup-dirs.sh` can go too, but check it first:
-   home-manager creates the parent of every *managed link*, which covers all of
-   `~/.config/{nvim,alacritty,kitty}` and `~/.claude` — but not
-   `~/.tmux/plugins`, which exists for tpm. That one is created by the
-   `git clone` in `shared/install-packages.sh` anyway, so the file should still
-   be deletable; verify on a clean box rather than assuming.
-
-> **`~/.zshenv` is one of the 11.** Between the delete in step 2 and a
-> successful switch in step 3, new shells have neither nix nor cargo on PATH.
-> If the switch fails in that window, `. ~/.nix-profile/etc/profile.d/nix.sh`
-> restores nix by hand, and `install_scripts/shared/create_symlinks.sh` — still
-> present until step 6 — restores the old links.
-
-`nix/links.nix` already mirrors `create_symlinks.sh` exactly; it was evaluated
-with `manageLinks = true` during phase 1 and all 11 targets pointed at the
-checkout. This phase is mostly flipping it on.
+Verified after the switch: 11 links resolve into the checkout, and appending to
+`.tmux.conf` in the repo is visible through `~/.tmux.conf` immediately.
 
 ## Phase 3 — strip the imperative installers
 

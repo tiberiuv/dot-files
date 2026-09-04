@@ -1,5 +1,5 @@
-# Dotfile symlinks, mirroring install_scripts/shared/create_symlinks.sh.
-# Inert until `dotfiles.manageLinks = true` (see home.nix) -- that is phase 2.
+# Dotfile symlinks. This replaced install_scripts/shared/create_symlinks.sh;
+# gated on `dotfiles.manageLinks` (see home.nix), which is on.
 {
   config,
   lib,

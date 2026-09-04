@@ -31,23 +31,14 @@
   # nix/switch.sh is a convenience rather than a requirement.
   programs.home-manager.enable = true;
 
-  # ---------------------------------------------------------------------------
-  # Phase 1: packages only.
-  # ---------------------------------------------------------------------------
-  # ~/.zshrc and friends are still symlinked by
-  # install_scripts/shared/create_symlinks.sh. Flipping this to true (phase 2)
-  # hands those symlinks to home-manager -- which then tracks and garbage
-  # collects them -- and makes that script deletable. Do it only after removing
-  # the existing symlinks by hand: home-manager refuses to clobber files it did
-  # not create, by design.
-  dotfiles.manageLinks = false;
+  # home-manager owns the dotfile symlinks (see nix/links.nix). They are
+  # mkOutOfStoreSymlink, so they point back into this checkout and stay
+  # live-editable; home-manager only tracks and garbage collects them.
+  dotfiles.manageLinks = true;
 
   # Deliberately NOT enabling programs.zsh / programs.git / programs.tmux.
   # Those generate their own ~/.zshrc, ~/.gitconfig and ~/.tmux.conf, which
   # would fight the symlinks that keep those files live-editable in this repo.
-  # The cost is that home-manager's session variables are not sourced for us;
-  # phase 2 adds this line near the top of .zshrc:
-  #
-  #   [ -f ~/.nix-profile/etc/profile.d/hm-session-vars.sh ] \
-  #     && . ~/.nix-profile/etc/profile.d/hm-session-vars.sh
+  # The cost is that home-manager's session variables are not sourced for us,
+  # so .zshenv sources hm-session-vars.sh by hand.
 }

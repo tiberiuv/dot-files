@@ -1,7 +1,8 @@
 #!/bin/bash
 
-. ./install_scripts/shared/setup-dirs.sh
-. ./install_scripts/shared/create_symlinks.sh
+# Directories and dotfile symlinks are home-manager's now (nix/links.nix); it
+# creates the parent of every managed link. ~/.tmux/plugins is the one
+# exception, and the tpm `git clone` in shared/install-packages.sh makes it.
 . ./install_scripts/debian/apt-install.sh
 . ./install_scripts/shared/install-packages.sh
 . ./install_scripts/debian/install_packages.sh
