@@ -4,7 +4,7 @@
 # before being written down; the handful of tools nixpkgs does not carry are
 # listed at the bottom with what still installs them.
 #
-# Replaces, once phase 3 lands:
+# Replaced (phase 3):
 #   install_scripts/shared/install-packages.sh   (the cargo-binstall list)
 #   install_scripts/debian/install_packages.sh   (~90% of it)
 #   install_scripts/debian/apt-install.sh        (everything not a build dep)
@@ -14,14 +14,17 @@
 {
   home.packages = with pkgs; [
     # --- Core CLI --------------------------------------------------------
-    # apt/brew today; eza, bat, procs, ripgrep and starship are also
-    # cargo-binstall'd into ~/.cargo/bin, which sits earlier in PATH. Until
-    # phase 3 removes them from install-packages.sh the cargo copies win --
-    # expect `which -a bat` to show both.
+    # eza, bat, procs, ripgrep and starship used to be cargo-binstall'd into
+    # ~/.cargo/bin, which sits earlier in PATH; phase 3 dropped them from
+    # shared/install-packages.sh, so the nix copies are the only ones now.
+    #
+    # fzf is deliberately absent: zinit installs it with --key-bindings
+    # --completion, which writes ~/.fzf.zsh and wires ^T/^R. nixpkgs' fzf ships
+    # no shell integration, and home-manager's programs.fzf would generate
+    # shell init -- the thing this config avoids. zinit stays fzf's owner.
     bat
     eza
     fd
-    fzf
     ripgrep
     procs
     tree
@@ -39,7 +42,7 @@
     starship
 
     # --- Editor ----------------------------------------------------------
-    # Biggest single win: this deletes the entire Ubuntu-PPA-vs-Debian-tarball
+    # Biggest single win: this deleted the entire Ubuntu-PPA-vs-Debian-tarball
     # branch in apt-install.sh and install_packages.sh. tree-sitter is the CLI
     # nvim-treesitter's `main` branch shells out to when building parsers.
     neovim
@@ -71,6 +74,7 @@
     commitlint
     stylua
     luajitPackages.luacheck
+    luaformatter
     tflint
     ruff
     black
@@ -87,15 +91,35 @@
     kubectl
 
     # --- Scala ------------------------------------------------------------
-    # Replaces the coursier bootstrap + `cs install`, which install_packages.sh
-    # deliberately avoids running as `cs setup` because that rewrites ~/.zshrc.
+    # Replaced the coursier bootstrap + `cs install`, which install_packages.sh
+    # deliberately avoided running as `cs setup` because that rewrites ~/.zshrc.
     coursier
     scala
     sbt
     scalafmt
 
+    # --- Toolchains and base tools ---------------------------------------
+    # go: replaces the go.dev tarball into /usr/local/go on Linux and `brew
+    # install go` on macOS. GOROOT is now unset on purpose -- the go binary
+    # finds its own -- and .zshrc no longer exports it; setting it to a stale
+    # /usr/local/go while running the nix go is how you get "go: cannot find
+    # GOROOT directory".
+    go
+
+    # zsh: on PATH, but NOT the login shell. `chsh` to a /nix path is a way to
+    # lose a login shell entirely on a box where /nix is a volume that can fail
+    # to mount. apt/brew zsh stays in /etc/shells and stays the login shell.
+    zsh
+
+    # git is here for the same reason as everything else -- it is a package --
+    # but note the bootstrap still needs *some* git to clone this repo before
+    # nix exists. apt/brew's copy does that; this one wins on PATH afterwards.
+    git
+    git-lfs
+    tmux
+
     # --- Fonts ------------------------------------------------------------
-    # Replaces the Nerd Font tarball download on Linux and the cask on macOS.
+    # Replaced the Nerd Font tarball download on Linux and the cask on macOS.
     # fonts.fontconfig.enable (linux.nix) is what makes fc-list see it.
     nerd-fonts.jetbrains-mono
   ];
@@ -119,15 +143,11 @@
   #   rustc, cargo  -- rustup, which also owns the wasm32 target and trunk/
   #                    wasm-bindgen-cli built against it
   #
-  # Blocked on a config change, so they land in phase 3 rather than now:
-  #   go     -- .zshrc pins GOROOT=/usr/local/go on Linux; that export has to
-  #             go first, or `go` and GOROOT disagree
-  #   zsh    -- fine to install, but do not chsh to it while /nix is a mounted
-  #             volume that can fail to appear: that locks you out of a login
-  #             shell. apt/brew zsh stays the login shell.
+  # Deliberately left to the C toolchain that already exists:
   #   gcc, binutils -- installing a nix toolchain into the profile while
-  #             `go install`, `cargo build` and node-gyp still use the system
-  #             headers is the classic way to get glibc/header mismatches.
+  #                    `go install`, `cargo build` and node-gyp still use the
+  #                    system headers is the classic route to glibc/header
+  #                    mismatches. build-essential / the Xcode CLT keep it.
   #
   # Enabled in lua/lsp/init.lua but never installed by any script, before or
   # after this migration -- pre-existing gaps, not regressions:

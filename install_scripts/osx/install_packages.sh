@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# nvim and the tooling below come from the nix profile. setup.sh bootstraps nix
+# before reaching this script, but does not leave it on PATH for a
+# non-interactive /bin/sh, and ~/.zshenv (which does) is only read by zsh.
+# shellcheck disable=SC1091
+[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+export PATH="$HOME/.nix-profile/bin:$PATH"
+
 if ! which -s brew ; then
     # Install brew - package/app for osx
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
@@ -23,19 +30,10 @@ tfenv use latest
 mise plugins add lua
 mise use -g lua@5.1
 
-# npm-only tooling: commitlint's shareable config has no brew formula, and
-# these language servers (enabled in lua/lsp/init.lua) aren't packaged either.
-# vscode-langservers-extracted provides html/cssls/jsonls.
-npm install -g \
-  @commitlint/cli \
-  @commitlint/config-conventional \
-  bash-language-server \
-  dockerfile-language-server-nodejs \
-  typescript-language-server \
-  typescript \
-  vscode-langservers-extracted \
-  @ansible/ansible-language-server \
-  tree-sitter-cli
+# The npm -g block that used to be here -- commitlint, the node language
+# servers, tree-sitter-cli -- is in nix/packages.nix now, wrapped with its own
+# nodejs so it does not care which version brew's node is on. yarn stays a brew
+# formula (see install_brew_packages.sh).
 
 # lua/options.lua pins vim.g.python3_host_prog to ~/pynvim/bin/python, so the
 # venv has to exist or every nvim start reports a broken python3 provider.
@@ -51,9 +49,6 @@ bash -c "$(curl --fail --show-error --silent --location https://raw.githubuserco
 # of these need an *interactive* zsh: sourcing it from this /bin/sh script only
 # produces a wall of syntax errors, and `zinit` is never defined here.
 zsh -i -c "zinit update" </dev/null
-
-# Install Lua linter
-luarocks install luacheck luaformatter
 
 # Install nvim plugins and treesitter parsers. Runs last: it needs the
 # toolchain, node and tree-sitter-cli that the steps above install.

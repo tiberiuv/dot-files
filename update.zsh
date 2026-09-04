@@ -16,13 +16,26 @@ else
   sudo apt update
   sudo apt upgrade -y
   sudo apt autoremove -y
-  [[ ${commands[pipx]} ]] && pipx upgrade-all
   [[ ${commands[mise]} ]] && mise upgrade
 fi
 
-# Rust CLI tools installed with cargo-binstall don't self-update
+# The nix package set, which is now most of the tooling. `nix flake update`
+# moves the pinned nixpkgs/home-manager revisions forward -- without it a
+# switch just rebuilds the same closure. Then drop old generations: each one
+# pins its entire closure, so /nix grows without bound otherwise.
+#
+# This file is sourced, so $0 is its own path; :A resolves the symlink chain
+# and :h takes the directory, which is the checkout wherever it lives.
+if [[ ${commands[nix]} ]]; then
+  nix flake update --flake ${0:A:h}
+  ${0:A:h}/nix/switch.sh
+  nix-collect-garbage -d --delete-older-than 14d
+fi
+
+# The three rust tools left outside the nix package set -- they belong to the
+# rustup toolchain, not to the package set. cargo-binstall does not self-update.
 [[ ${commands[cargo-binstall]} ]] && cargo binstall --no-confirm --locked \
-  eza bat procs ripgrep trunk wasm-bindgen-cli fnm starship stylua
+  trunk wasm-bindgen-cli fnm
 
 # Update yarn packages
 [[ ${commands[yarn]} ]] && yarn global upgrade

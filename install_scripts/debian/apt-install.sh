@@ -7,85 +7,71 @@ export DEBIAN_FRONTEND=noninteractive
 sudo -E apt update
 sudo -E apt upgrade -y
 
-# add-apt-repository ships in software-properties-common, which is absent from
-# minimal/cloud images, so install it before reaching for a PPA.
-sudo -E apt install -y software-properties-common ca-certificates gnupg curl
+sudo -E apt install -y ca-certificates curl
 
-# PPAs are Ubuntu-only. Debian gets a current neovim from the upstream release
-# tarball in install_packages.sh instead (bookworm's apt neovim is 0.7, far too
-# old for this config: blink.cmp and nvim-treesitter `main` need 0.11+).
-DISTRO_ID="$(. /etc/os-release && echo "$ID")"
-if [ "$DISTRO_ID" = "ubuntu" ]; then
-    sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
-    sudo -E apt update
-    NEOVIM_PKG=neovim
-else
-    NEOVIM_PKG=""
-fi
-
+# The Ubuntu-PPA-vs-Debian branch that used to live here is gone: it existed
+# solely to get a neovim newer than bookworm's 0.7, and neovim now comes from
+# nix/packages.nix on both distros. So do jq, htop, tmux, git-lfs, imagemagick,
+# shellcheck, yamllint, wget, gnupg, pinentry-curses, diff-so-fancy, xclip,
+# wl-clipboard and luarocks, along with the neovim build deps (cmake,
+# ninja-build, automake, autogen, libtool, gettext, libharfbuzz-dev,
+# libicu-dev, liblcms2-dev, librsync-dev, libutf8proc-dev) that no longer have
+# anything to build. pipx went with the pipx block in install_packages.sh.
+#
+# What is left is what nix does not, or must not, provide:
+#   - build-essential/pkg-config/llvm/clang/lld: the C toolchain. Deliberately
+#     NOT moved into the nix profile -- `go install`, `cargo build` and
+#     node-gyp compile against the system headers, and mixing a nix toolchain
+#     into that is the classic glibc/header mismatch.
+#   - the pyenv build deps: pyenv compiles CPython, so it needs the -dev
+#     headers on the system, not in a profile.
+#   - git, curl, zsh: needed to *reach* nix. git clones this repo, curl runs
+#     the installer, and zsh is the login shell -- `chsh` to a /nix path is
+#     how you lose a shell on a box where /nix fails to mount. The nix copies
+#     of all three win on PATH afterwards; that is fine and intended.
+#   - alacritty and fontconfig: GUI terminal, plus the fc-cache/fc-list that
+#     `fonts.fontconfig.enable` in nix/linux.nix writes config for.
+#   - default-jdk: .zshrc exports JAVA_HOME=/usr/lib/jvm/default-java.
+#   - the libpq/mysql/xml -dev headers: project-level Python build deps
+#     (psycopg2, mysqlclient, xmlsec). Not dotfiles, but nothing else installs
+#     them, so dropping them silently breaks pip installs.
 PACKAGES="
-    $NEOVIM_PKG
-    tmux
     alacritty
     git
-    git-lfs
     zsh
+    sudo
     build-essential
     pkg-config
-    cmake
-    ninja-build
-    automake
-    autogen
-    libtool
-    gettext
-    imagemagick
-    jq
-    htop
+    llvm
+    clang
+    lld
+    default-jdk
     procps
-    shellcheck
-    yamllint
-    wget
     curl
     fuse3
-    pipx
-    luarocks
     unzip
     fontconfig
-    xclip
-    wl-clipboard
-    libharfbuzz-dev
-    libicu-dev
-    liblcms2-dev
-    librsync-dev
-    libutf8proc-dev
-    zlib1g-dev
-    libssl-dev
-    libreadline-dev
-    libbz2-dev
-    libsqlite3-dev
-    libpq-dev
-    default-libmysqlclient-dev
-    libncurses-dev
     ncurses-term
-    xz-utils
-    tk-dev
-    libxml2-dev
-    libxmlsec1-dev
-    libffi-dev
-    liblzma-dev
-    gnupg
-    pinentry-curses
-    default-mysql-client
-    diff-so-fancy
     locales
     python3
     python3-dev
     python3-pip
     python3-venv
-    llvm
-    clang
-    lld
-    default-jdk
+    zlib1g-dev
+    libssl-dev
+    libreadline-dev
+    libbz2-dev
+    libsqlite3-dev
+    libncurses-dev
+    xz-utils
+    tk-dev
+    libffi-dev
+    liblzma-dev
+    libpq-dev
+    default-libmysqlclient-dev
+    libxml2-dev
+    libxmlsec1-dev
+    default-mysql-client
 "
 
 # One unavailable package name would otherwise abort the entire list, so retry

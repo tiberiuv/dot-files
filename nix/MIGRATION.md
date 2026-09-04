@@ -15,7 +15,7 @@ language toolchains, macOS GUI apps, or the nvim/zsh plugin managers.
 | 0 | Bootstrap nix | done (this workspace) |
 | 1 | flake + home-manager, packages only | done — `fd31190`, `4d6aa51` |
 | 2 | Symlinks move to home-manager | done |
-| 3 | Strip the imperative installers | not started |
+| 3 | Strip the imperative installers | done |
 | 4 | `setup.sh` rewrite + Coder integration | not started |
 | 5 | Optional: nix-darwin, devshells, nixvim | not started |
 
@@ -139,19 +139,17 @@ Expect exactly 11 `WOULD RM` lines. Swap the `echo` for `rm`, then
 Verified after the switch: 11 links resolve into the checkout, and appending to
 `.tmux.conf` in the repo is visible through `~/.tmux.conf` immediately.
 
-## Phase 3 — strip the imperative installers
+## Phase 3 — strip the imperative installers (done)
 
 **Done when:** the measurement below reports every tool under `NIX`, except the
-deliberate exceptions — whatever the version managers own, and `fzf` if zinit
-keeps it.
+deliberate exceptions — whatever the version managers own, and `fzf`.
 
 **Order matters.** Per row: confirm the nix copy works, *then* delete the old
 installer, *then* re-measure. Deleting first can strand you without a working
 `ruff` or `kubectl` halfway through.
 
-Re-run this after each removal. It produced the table below, and it is the
-definition of done. `env -i` matters — measuring from an inherited PATH gives
-the wrong answer:
+Re-run this after each removal. It is the definition of done. `env -i` matters
+— measuring from an inherited PATH gives the wrong answer:
 
 ```sh
 CMDS=$(tr '\n' ' ' <<'EOF'
@@ -187,7 +185,7 @@ Keep `CMDS` on continuation lines exactly as above — an embedded newline lands
 inside the `for ... ; do` and silently produces an empty result rather than an
 error.
 
-Baseline immediately after phase 1 (20 of 55 already on nix):
+Before, immediately after phase 1 — 20 of 55 on nix:
 
 ```
 NIX         20  fd tree htop jq yq ijq jid wget curl unzip gpg magick diff-so-fancy nvim
@@ -203,52 +201,87 @@ zinit        1  fzf
 luarocks     1  luacheck
 ```
 
-This is where the payoff lands. Everything below is currently installed twice:
-once by Nix, once by the old script, with the old copy still winning on PATH.
-Measured from a clean login after phase 1:
+After — 54 of 55, with the one intended exception:
 
-| Still winning from | Tools | Retire by |
+```
+NIX         54  bat eza fd rg procs tree htop jq yq ijq jid wget curl unzip gpg magick
+                diff-so-fancy starship nvim tree-sitter lua-language-server
+                bash-language-server docker-langserver typescript-language-server tsc
+                vscode-json-language-server yaml-language-server ansible-language-server
+                terraform-ls pyright shellcheck yamllint hadolint cspell markdownlint-cli2
+                prettier prettierd eslint_d commitlint stylua luacheck tflint ruff black
+                isort flake8 ansible-lint pipenv poetry kubectl cs scala sbt scalafmt
+zinit        1  fzf
+```
+
+### What was retired, and how
+
+Each row: the old installer line was deleted from the repo, then the installed
+copy removed from this machine.
+
+| Was winning from | Tools | Retired by |
 | --- | --- | --- |
-| `~/.cargo/bin` | bat, eza, rg, procs, starship, stylua | drop from the `cargo binstall` list in `shared/install-packages.sh` and `update.zsh`, then `cargo uninstall` each |
-| npm globals (fnm) | tree-sitter, bash-language-server, docker-langserver, typescript-language-server, tsc, vscode-json-language-server, yaml-language-server, ansible-language-server, cspell, markdownlint-cli2, prettier, prettierd, eslint_d, commitlint | delete the `npm install -g` block in **both** `install_packages.sh` files |
-| `~/.local/bin` (pipx) | ruff, black, isort, flake8, ansible-lint, pipenv, poetry | delete the pipx block and the poetry curl-installer, then `pipx uninstall-all` |
-| `~/.local/bin` (tarballs) | hadolint, kubectl, lua-language-server, cs | delete the download blocks **and the whole `case $(uname -m)` arch table** they exist to feed |
-| coursier | scala, scalafmt | delete the `cs install` line |
-| `~/.luarocks/bin` | luacheck | delete `luarocks install --local luacheck` |
-| zinit | fzf | decide — see below |
+| `~/.cargo/bin` | bat, eza, rg, procs, starship, stylua | dropped from the `cargo binstall` list in `shared/install-packages.sh` and `update.zsh`; `cargo uninstall` each |
+| npm globals (fnm) | tree-sitter, the six node language servers, tsc, cspell, markdownlint-cli2, prettier, prettierd, eslint_d, commitlint | the `npm install -g` block in **both** `install_packages.sh` files; `npm uninstall -g`. `yarn` is the only global left |
+| `~/.local/bin` (pipx) | ruff, black, isort, flake8, ansible-lint, pipenv | the pipx block; `pipx uninstall-all` |
+| `~/.local/bin` (curl) | poetry | the poetry curl-installer; `install.python-poetry.org \| python3 - --uninstall` |
+| `~/.local/bin` (tarballs) | hadolint, kubectl, lua-language-server, cs | the download blocks **and the whole `case $(uname -m)` arch table** they existed to feed |
+| coursier | scala, scalac, sbtn, scalafmt | the `cs install` line; `cs uninstall` |
+| `~/.luarocks/bin` | luacheck | `luarocks install --local luacheck`; `luarocks remove --local` |
+| `~/go/bin` | yq, ijq, jid, tflint, terraform-ls | those five `go install` lines. `multi-gitter` keeps its one — genuinely absent from nixpkgs |
+| zinit | fzf | **kept.** zinit installs it with `--key-bindings --completion`, which writes `~/.fzf.zsh` and wires `^T`/`^R`; nixpkgs' fzf ships no shell integration and `programs.fzf` would generate shell init. `fzf` was dropped from `packages.nix` instead |
 
-Then:
+### The two config changes that had to land here
 
-- **`apt-install.sh`** drops to roughly: `build-essential pkg-config` plus the
-  pyenv build deps (`libssl-dev libbz2-dev libreadline-dev libsqlite3-dev
-  libffi-dev liblzma-dev tk-dev zlib1g-dev xz-utils`) plus `locales fuse3
-  ca-certificates sudo`. **The entire Ubuntu-PPA-vs-Debian branch disappears**,
-  because neovim now comes from Nix — that alone removes the `NEOVIM_PKG`
-  conditional, the `add-apt-repository` call, and the upstream tarball fallback.
-- **`install_brew_packages.sh`** drops to casks only:
-  `firefox@developer-edition`, `temurin11`, `docker`, plus `alacritty` and
-  `kitty` (nixpkgs builds those for darwin, but Dock/Spotlight integration is
-  poor). `font-jetbrains-mono-nerd-font` is superseded by
-  `nerd-fonts.jetbrains-mono`.
-- **`update.zsh`** loses the `cargo binstall` refresh line and gains
-  `nix flake update && nix/switch.sh` plus a `nix-collect-garbage` call.
+- **`go`** is in `packages.nix`, and **both** `GOROOT` exports are gone from
+  `.zshrc` (`/usr/local/go` on Linux, `$HOMEBREW_PREFIX/opt/go/libexec` on
+  macOS), along with `$GOROOT/bin` on PATH. The nix `go` finds its own root; a
+  stale `GOROOT` produces "go: cannot find GOROOT directory".
+- **`zsh`** is in `packages.nix` but is **not** the login shell. `chsh` to a
+  `/nix` path loses you a login shell on a box where `/nix` fails to mount, so
+  apt/brew zsh stays in `/etc/shells` and stays the shell `chsh` points at.
 
-Two config changes have to land in the same phase, because packages depend on
-them:
+`SCALA_HOME`, `$HOME/.local/share/coursier/bin`, `$HOME/Library/Application
+Support/Coursier/bin` and `$HOME/.luarocks/bin` came out of `.zshrc` too:
+nothing installs into any of them any more.
 
-- **`go`**: add to `packages.nix` *and* delete `export GOROOT=/usr/local/go`
-  from `.zshrc`. Doing one without the other leaves `go` and `GOROOT`
-  disagreeing.
-- **`zsh`**: safe to install, but do **not** `chsh` to the nix one while `/nix`
-  is a mountable volume that can fail to appear — that locks you out of a login
-  shell. apt/brew zsh stays the login shell.
+`update-all` was hardcoded to `. ~/dot-files/update.zsh`, which contradicts the
+location-independence decision above and was already broken in the Coder
+workspace. It now derives the checkout from `%x` — the file zsh is sourcing,
+i.e. `.zshrc` itself, which is a symlink into the repo.
 
-**Open decision — fzf.** zinit installs it with `--key-bindings --completion`,
-which wires `^T`/`^R` and the completion hooks that `.zshrc` depends on. Nix's
-fzf does not. Either keep zinit as the owner and drop `fzf` from
-`packages.nix`, or move to home-manager's `programs.fzf` — but that generates
-shell init, which is the thing phase 1 deliberately avoided. Leaning towards
-dropping it from `packages.nix`.
+### Where this deviates from the original sketch
+
+The sketch said `apt-install.sh` would drop to build deps plus
+`locales fuse3 ca-certificates sudo`, and `install_brew_packages.sh` to casks
+only. Both were too aggressive: taken literally they delete tools that nothing
+else installs. The rule actually applied was **remove exactly what nix now
+provides, keep everything else**, so these stayed:
+
+- `git`, `curl`, `zsh` — needed to *reach* nix (clone, download, log in). The
+  nix copies win on PATH afterwards, which is intended.
+- `default-jdk` — `.zshrc` exports `JAVA_HOME=/usr/lib/jvm/default-java`.
+- `llvm`, `clang`, `lld`, `build-essential`, `pkg-config` — the C toolchain,
+  deliberately never moved into the profile.
+- `alacritty`, `fontconfig` — GUI terminal, and the `fc-cache`/`fc-list` that
+  `fonts.fontconfig.enable` writes config for.
+- `libpq-dev`, `default-libmysqlclient-dev`, `libxml2-dev`, `libxmlsec1-dev`,
+  `default-mysql-client` — project-level Python build deps (psycopg2,
+  mysqlclient, xmlsec). Not dotfiles, but nothing else installs them.
+- On macOS, `fnm mise pyenv tfenv node yarn python` — the sketch's "casks only"
+  would have left the version managers, which this migration explicitly keeps,
+  with no installer at all. Plus `multi-gitter`, `mysql`, `watch`.
+
+What *did* go from `apt-install.sh`: the whole Ubuntu-PPA-vs-Debian neovim
+branch, and tmux git-lfs imagemagick jq htop shellcheck yamllint wget gnupg
+pinentry-curses diff-so-fancy xclip wl-clipboard luarocks pipx, plus the neovim
+build deps (cmake ninja-build automake autogen libtool gettext libharfbuzz-dev
+libicu-dev liblcms2-dev librsync-dev libutf8proc-dev) that no longer have
+anything to build.
+
+**`update.zsh`** lost the `cargo binstall` refresh for the six retired tools
+and gained `nix flake update` → `nix/switch.sh` → `nix-collect-garbage -d
+--delete-older-than 14d`.
 
 ## Phase 4 — setup.sh and Coder
 

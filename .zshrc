@@ -44,9 +44,11 @@ if [[ $(uname -s) == "Darwin" ]]; then
     export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
   fi
 
+  # GOROOT and SCALA_HOME are deliberately unset: go, scala and sbt come from
+  # the nix profile now, and every one of them locates its own runtime. A
+  # GOROOT left pointing at the old brew prefix outlives `brew uninstall go`
+  # and turns into "go: cannot find GOROOT directory".
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home
-  export GOROOT=$HOMEBREW_PREFIX/opt/go/libexec
-  export SCALA_HOME=$HOMEBREW_PREFIX/opt/scala@2.12/idea
 
   export PATH=$HOMEBREW_PREFIX/bin:$PATH
   export PATH=$HOMEBREW_PREFIX/sbin:$PATH
@@ -54,22 +56,19 @@ if [[ $(uname -s) == "Darwin" ]]; then
   export PATH=$HOMEBREW_PREFIX/opt/openssl@3/bin:$PATH
   export PATH=$PATH:$HOMEBREW_PREFIX/texlive/2019/texmf-dist/tex/xelatex
   export PATH=$PATH:/Applications
-  export PATH=$PATH:$HOME/Library/Application\ Support/Coursier/bin
 
   # Compiler flags
   export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@3/lib"
   export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
 elif [[ $(uname -s) == "Linux" ]]; then
+  # No GOROOT here either -- see the Darwin branch above. The coursier and
+  # ~/.luarocks/bin entries went with it: scala/scalafmt/luacheck/luaformatter
+  # all come from the nix profile, and nothing installs into those dirs.
   export JAVA_HOME=/usr/lib/jvm/default-java
-  export GOROOT=/usr/local/go
   export RUST_ANALYZER_TARGET="$(uname -m)-unknown-linux-gnu"
 
-  export PATH=$GOROOT/bin:$PATH
   export PATH=$HOME/.dotnet:$HOME/.dotnet/tools:$PATH
   export PATH=$HOME/.tfenv/bin:$PATH
-  export PATH=$HOME/.local/share/coursier/bin:$PATH
-  # luarocks --local installs luacheck/luaformatter here
-  export PATH=$HOME/.luarocks/bin:$PATH
 fi
 
 export PATH=$PYENV_ROOT/bin:$PATH
@@ -139,7 +138,11 @@ alias kc="kubectl"
 alias kcgc='kubectl config get-contexts'
 alias kcuc='kubectl config use-context'
 alias ssh="TERM=xterm-256color ssh"
-alias update-all=". ~/dot-files/update.zsh"
+# The checkout is not required to live at ~/dot-files (this one does not).
+# %x is the file zsh is currently sourcing -- this very .zshrc, which is a
+# symlink into the checkout -- so :A resolves it and :h gives the repo root.
+DOTFILES_DIR=${${(%):-%x}:A:h}
+alias update-all=". $DOTFILES_DIR/update.zsh"
 alias clean_evicted="kubectl get pod | grep Evicted | awk '{print $1}' | xargs kubectl delete pod"
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
