@@ -359,22 +359,65 @@ using `command -v zsh`. A login shell under `/nix` stops existing the moment
 `/nix` fails to mount, and a box you cannot log into is a bad trade for a newer
 zsh.
 
-### Coder specifics — still unresolved
+### Coder: keeping the store across rebuilds
 
-None of these are fixable inside this repo; they need changes to the workspace
-image or template.
+In a Coder workspace `/` is ephemeral and `$HOME` is a separate volume
+(`/dev/homedata` here, 50G). The store is ~6.3G, so it fits with room to spare
+— but it cannot simply be *moved* there.
 
-- `/nix` is **not on a persistent volume**. It is ~6.0G and is lost on every
-  workspace rebuild. The guards in `.zshenv` and `bootstrap.sh` mean a rebuilt
-  workspace degrades cleanly back to the system tools rather than erroring, but
-  the store has to be refetched.
-- A persistent volume only helps from the *second* rebuild onward. The real fix
-  is baking a pre-warmed `/nix` into the workspace image, which also sidesteps
-  the next point.
-- Coder kills long-running `dotfiles_uri` scripts. Even with a warm store the
-  first `switch` is minutes; from cold it is well past any reasonable timeout.
-  Until the image carries `/nix`, running `./setup.sh` by hand after the
-  workspace comes up is the honest answer.
+**The store data can live in `$HOME`; the store prefix cannot.** Every binary
+nix installs has `/nix/store/...` baked into its RPATHs, shebangs and ELF
+interpreter, and `cache.nixos.org` serves artifacts built for that literal
+path. Point nix at another root (`--store`, a relocated install) and nothing in
+the binary cache matches, so the whole closure compiles from source. That is
+the "Nix is slow" trap in the gotchas above, arrived at deliberately.
+
+So relocate the storage and keep the prefix — bind mount one onto the other:
+
+```sh
+sudo mv /nix ~/.nix-store        # once, if a store already exists
+sudo mkdir -p /nix
+sudo mount --bind ~/.nix-store /nix
+```
+
+After that nix behaves completely normally: no wrapper, no `--store` flag, full
+binary-cache compatibility. The nix database (`/nix/var/nix/db`) and the
+profile generations live under `/nix` too, so they persist with it.
+
+`nix/bootstrap.sh` performs this mount itself when `~/.nix-store` exists (or
+`$DOTFILES_NIX_STORE` points elsewhere), which makes `./setup.sh` self-healing
+after a rebuild. It is **opt-in by that directory existing** — on a laptop,
+where `/nix` is a real directory on a disk that already persists, the guard
+does nothing and says nothing. To opt in on a fresh box, `mkdir -p
+~/.nix-store` before the first `./setup.sh` and nix installs straight onto the
+persistent volume, with no 6.3G move ever needed.
+
+It refuses rather than guesses in the one ambiguous case: `~/.nix-store` exists
+*and* `/nix` is a non-empty directory that is not it. Mounting would silently
+hide a real store, so it stops and says so.
+
+The "is it already mounted?" test compares **device+inode** of `/nix` and the
+persistent directory, not the mount table. "Is something mounted at `/nix`" is
+the wrong question — a foreign or stale mount passes it and hands back a store
+that is not the persistent one, silently. `/proc/self/mounts` cannot answer the
+right question anyway: for a bind mount it records the device, not the source
+path.
+
+**The mount still belongs in the Coder template's startup script**, which runs
+as root before the session. Mounts do not survive a rebuild, and the bootstrap
+guard only fires when something runs `./setup.sh`. The guard is the fallback,
+not the mechanism.
+
+> With `/nix` empty (mount missing, or before the first setup) every tool in
+> the profile vanishes. `.zshenv` is guarded and degrades to the system tools,
+> and `chsh` deliberately points at `/usr/bin/zsh` rather than the nix one, so
+> a login shell survives. Those two guards are load-bearing under this scheme.
+
+Still open, and not fixable in this repo: Coder kills long-running
+`dotfiles_uri` scripts. With a warm store a `switch` does no downloading and
+takes seconds, so persistence largely defuses this — but the *first* run on a
+brand new workspace is still well past any reasonable timeout. Running
+`./setup.sh` by hand that once is the honest answer.
 
 ## Phase 5 — optional, later
 
