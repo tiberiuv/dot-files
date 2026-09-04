@@ -16,7 +16,7 @@ language toolchains, macOS GUI apps, or the nvim/zsh plugin managers.
 | 1 | flake + home-manager, packages only | done — `fd31190`, `4d6aa51` |
 | 2 | Symlinks move to home-manager | done |
 | 3 | Strip the imperative installers | done |
-| 4 | `setup.sh` rewrite + Coder integration | not started |
+| 4 | `setup.sh` rewrite + Coder integration | done, except the Coder items |
 | 5 | Optional: nix-darwin, devshells, nixvim | not started |
 
 Apply with `nix/switch.sh` (or `nix/switch.sh --dry-run`). It works from any
@@ -24,12 +24,18 @@ working directory and with the checkout at any path.
 
 ## Running this
 
+Clean box, one command:
+
+```sh
+./setup.sh
+```
+
 `nix` reaches `PATH` through `.zshenv`, which **non-interactive shells do not
 read**. Any script or agent shell needs this first, or the very first `nix`
 call fails with `command not found`:
 
 ```sh
-. ~/.nix-profile/etc/profile.d/nix.sh
+. nix/bootstrap.sh          # installs nix if absent, no-op if not; SOURCE it
 ```
 
 Apply a change:
@@ -283,42 +289,92 @@ anything to build.
 and gained `nix flake update` → `nix/switch.sh` → `nix-collect-garbage -d
 --delete-older-than 14d`.
 
-## Phase 4 — setup.sh and Coder
+## Phase 4 — setup.sh and Coder (done; the Coder items are not)
 
 **Done when:** a clean box reaches a working shell with one `./setup.sh`, and
 `setup.sh` no longer installs any individual package.
 
-`setup.sh` collapses to roughly: bootstrap nix if absent → `nix/switch.sh` →
-the OS-specific leftovers that genuinely need root or are not packages
-(macOS `launchd` plists, `macos_defaults.sh`, `sudo_local`; Debian
-`locale-gen`, `chsh`, the `gpg-agent.conf` pinentry line) → `nvim --headless
-"+Lazy! sync" +qa`.
+`setup.sh` itself is now only the OS dispatch. Both per-OS scripts have the
+same five-step shape, and steps 1 and 5 are the only parts that differ:
 
-Bootstrap, for reference — this is what was run in phase 0:
+1. **OS prerequisites** — only what is needed to *reach* nix, plus what cannot
+   live in a user profile: the C toolchain, pyenv's CPython build headers,
+   root-owned system config. `apt-install.sh` on Debian;
+   `install_brew_packages.sh` (via `install_packages.sh`) on macOS.
+2. **`. nix/bootstrap.sh`** — installs nix if absent, no-op if not.
+3. **`nix/switch.sh`** — the package set *and* every dotfile symlink, in one
+   step. This is what used to be `create_symlinks.sh` plus most of four
+   installers. It runs before anything else so `~/.zshrc` and
+   `~/.config/nvim` exist by the time zinit and nvim run.
+4. **Version and plugin managers** — the categories nix deliberately does not
+   own: rustup (and the three rust tools tied to its toolchain), fnm, pyenv,
+   tfenv, mise, plus tpm and zinit.
+5. **Root-owned leftovers, then nvim last** — `chsh`, `gpg-agent.conf`,
+   `locale-gen` on Debian; `macos_defaults.sh`, the two `launchd` plists and
+   the `sudo_local` Touch ID edit on macOS. Then
+   `nvim --headless "+Lazy! sync" +qa`, which needs everything above it.
+
+### `nix/bootstrap.sh`
+
+**Source it, do not run it** — its job is to leave `nix` on PATH for the rest
+of `setup.sh`, and a child process cannot do that. Idempotent, so a second run
+is a no-op and it is safe to source from an interactive shell.
+
+Two install shapes, picked per platform:
+
+- **Linux: single-user** (`--no-daemon`), because the Coder workspace has no
+  systemd for `nix-daemon` to run under. Needs `/nix` to exist and be owned by
+  the invoking user first — the installer will not create it without root.
+- **macOS: multi-user** (`--daemon`). Single-user is not really supported there
+  any more: `/nix` has to be a synthetic APFS volume, and only the daemon
+  installer knows how to make one.
+
+`--no-modify-profile` on both, because the installer appends to `~/.zshenv`,
+which is a symlink into this repo — it would silently mutate a tracked file.
+`.zshenv` sources the profile itself, and now tries **both** locations, since
+the two install shapes put the script in different places under different
+names.
+
+Two traps worth keeping written down:
+
+- **`nix.sh` is a silent no-op when `USER` is unset.** It wraps its whole body
+  in `if [ -n "$HOME" ] && [ -n "$USER" ]`. The profile sources without error
+  and `nix` is still not on PATH. A login shell sets `USER`; Coder's
+  `dotfiles_uri`, a `RUN` line in a Dockerfile and `env -i` do not.
+  `bootstrap.sh` and `switch.sh` both set it from `id -un` first.
+- **`sh <(curl ...)`, which upstream documents, is a bash/zsh-ism.** These
+  files are `/bin/sh`. `bootstrap.sh` downloads to a temp file and runs that.
+
+Verify the chain from an environment with nothing in it:
 
 ```sh
-sudo mkdir -m 0755 /nix && sudo chown "$(id -u):$(id -g)" /nix
-sh <(curl -L https://nixos.org/nix/install) --no-daemon --no-modify-profile
-mkdir -p ~/.config/nix
-echo 'experimental-features = nix-command flakes' >> ~/.config/nix/nix.conf
+env -i HOME="$HOME" PATH=/usr/bin:/bin sh -c '. ./nix/bootstrap.sh && ./nix/switch.sh --dry-run'
 ```
 
-Single-user (`--no-daemon`) because the Coder workspace has no systemd.
-`--no-modify-profile` because the installer appends to `~/.zshenv`, which is a
-symlink into this repo — it would silently mutate a tracked file. `.zshenv`
-sources the profile itself instead.
+### `chsh` still points at the distro zsh
 
-**Coder specifics, unresolved:**
+`packages.nix` installs zsh and it wins on PATH, but `install_scripts/debian/setup.sh`
+deliberately hardcodes `/usr/bin/zsh` (falling back to `/bin/zsh`) rather than
+using `command -v zsh`. A login shell under `/nix` stops existing the moment
+`/nix` fails to mount, and a box you cannot log into is a bad trade for a newer
+zsh.
 
-- `/nix` is **not on a persistent volume yet**. It is ~6.0G (148 binaries in
-  the profile) and is lost on every workspace rebuild. The guards in `.zshenv` mean a
-  rebuilt workspace degrades cleanly back to the old tools rather than
-  erroring, but the store has to be refetched.
+### Coder specifics — still unresolved
+
+None of these are fixable inside this repo; they need changes to the workspace
+image or template.
+
+- `/nix` is **not on a persistent volume**. It is ~6.0G and is lost on every
+  workspace rebuild. The guards in `.zshenv` and `bootstrap.sh` mean a rebuilt
+  workspace degrades cleanly back to the system tools rather than erroring, but
+  the store has to be refetched.
 - A persistent volume only helps from the *second* rebuild onward. The real fix
   is baking a pre-warmed `/nix` into the workspace image, which also sidesteps
   the next point.
 - Coder kills long-running `dotfiles_uri` scripts. Even with a warm store the
   first `switch` is minutes; from cold it is well past any reasonable timeout.
+  Until the image carries `/nix`, running `./setup.sh` by hand after the
+  workspace comes up is the honest answer.
 
 ## Phase 5 — optional, later
 

@@ -12,8 +12,8 @@ sudo -E apt install -y ca-certificates curl
 # The Ubuntu-PPA-vs-Debian branch that used to live here is gone: it existed
 # solely to get a neovim newer than bookworm's 0.7, and neovim now comes from
 # nix/packages.nix on both distros. So do jq, htop, tmux, git-lfs, imagemagick,
-# shellcheck, yamllint, wget, gnupg, pinentry-curses, diff-so-fancy, xclip,
-# wl-clipboard and luarocks, along with the neovim build deps (cmake,
+# wget, gnupg, diff-so-fancy, xclip, wl-clipboard, luarocks, pinentry-curses,
+# and the shellcheck/yamllint pair -- along with the neovim build deps (cmake,
 # ninja-build, automake, autogen, libtool, gettext, libharfbuzz-dev,
 # libicu-dev, liblcms2-dev, librsync-dev, libutf8proc-dev) that no longer have
 # anything to build. pipx went with the pipx block in install_packages.sh.

@@ -3,10 +3,18 @@
 # "no such file or directory: ~/.cargo/env" on every single shell start.
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-# Nix single-user profile. Guarded the same way as the cargo line above: this
-# file is in place on machines where nix has not been installed yet, and an
-# unguarded source would break every shell start on a fresh box.
+# Nix. Guarded the same way as the cargo line above: this file is in place on
+# machines where nix has not been installed yet, and an unguarded source would
+# break every shell start on a fresh box.
+#
+# Two paths because there are two install shapes, and nix/bootstrap.sh picks
+# per platform: single-user (--no-daemon, used on Linux because the Coder
+# workspace has no systemd) puts the script in the user's own profile;
+# multi-user (macOS, where /nix must be a synthetic APFS volume) puts it in the
+# system profile under a different name. Only one of these ever exists.
 [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ] \
+  && . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 
 # home-manager's session variables (MANPATH, XDG_DATA_DIRS, NIX_PATH...).
 # programs.zsh would normally emit these, but nix/home.nix deliberately leaves

@@ -41,15 +41,3 @@ if [ ! -x "$HOME/pynvim/bin/python" ]; then
   python3 -m venv "$HOME/pynvim"
   "$HOME/pynvim/bin/pip" install --upgrade pip pynvim
 fi
-
-# Install zinit - package manager for zsh shell
-bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-
-# ~/.zshrc is zsh syntax and zinit is a shell function defined by it, so both
-# of these need an *interactive* zsh: sourcing it from this /bin/sh script only
-# produces a wall of syntax errors, and `zinit` is never defined here.
-zsh -i -c "zinit update" </dev/null
-
-# Install nvim plugins and treesitter parsers. Runs last: it needs the
-# toolchain, node and tree-sitter-cli that the steps above install.
-nvim --headless "+Lazy! sync" +qa
