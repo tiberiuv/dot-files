@@ -22,6 +22,54 @@ language toolchains, macOS GUI apps, or the nvim/zsh plugin managers.
 Apply with `nix/switch.sh` (or `nix/switch.sh --dry-run`). It works from any
 working directory and with the checkout at any path.
 
+## Running this
+
+`nix` reaches `PATH` through `.zshenv`, which **non-interactive shells do not
+read**. Any script or agent shell needs this first, or the very first `nix`
+call fails with `command not found`:
+
+```sh
+. ~/.nix-profile/etc/profile.d/nix.sh
+```
+
+Apply a change:
+
+```sh
+nix/switch.sh              # build and activate
+nix/switch.sh --dry-run    # build, print the closure diff, activate nothing
+```
+
+Move the pinned inputs forward (deliberately, never as a side effect):
+
+```sh
+nix flake update && nix/switch.sh --dry-run
+```
+
+**Validating without `/nix`.** `/nix` is not persistent here, so after a
+workspace rebuild it may be gone. A sandboxed nix still parses and fully
+evaluates the config with no root, no `/nix`, and no system changes:
+
+```sh
+curl -fsSL -o /tmp/nix-portable \
+  "https://github.com/DavHau/nix-portable/releases/latest/download/nix-portable-$(uname -m)"
+chmod +x /tmp/nix-portable
+export DOTFILES_DIR="$(pwd -P)"
+
+/tmp/nix-portable nix-instantiate --parse flake.nix nix/*.nix   # syntax only
+
+/tmp/nix-portable nix --extra-experimental-features 'nix-command flakes' \
+  eval --impure --raw '.#homeConfigurations.default.activationPackage.drvPath'
+```
+
+The second command resolves every package in the closure, so it catches a bad
+attribute name before anything is downloaded. Prefix it with
+`NIX_SYSTEM=aarch64-darwin` to evaluate the **macOS** configuration from Linux
+— the only way to check that half from a Coder workspace.
+
+Do not reach for `nixpkgs-fmt` as a syntax check: it silently accepts malformed
+Nix. Use `nix-instantiate --parse`.
+
+
 ## Decisions already locked in
 
 **The checkout is location-independent.** No canonical `~/dot-files`. A flake
@@ -48,12 +96,65 @@ fnm shims > pyenv shims > ~/.local/bin > ~/.cargo/bin > nix profile > /usr/bin
 
 ## Phase 2 — symlinks
 
-1. Delete the symlinks `create_symlinks.sh` made. Home-manager refuses to
-   clobber files it did not create, by design, and will abort the activation
-   listing each one.
-2. Set `dotfiles.manageLinks = true` in `nix/home.nix`.
-3. `nix/switch.sh`, then confirm all 11 links resolve into the checkout.
-4. Delete `install_scripts/shared/create_symlinks.sh` and drop its `.` line
+**Done when:** 11 links resolve into the checkout, an edit to a repo file is
+visible through `~/` immediately, and `create_symlinks.sh` is gone.
+
+1. Set `dotfiles.manageLinks = true` in `nix/home.nix`.
+
+2. Remove the old symlinks — home-manager refuses to clobber files it did not
+   create and will abort the activation listing each one. Derive the list from
+   the evaluated config rather than hardcoding it, and delete **only** symlinks
+   that point into the checkout. On a machine where one of these is a real file
+   rather than a link, an unguarded `rm` loses data. Report-only as written;
+   swap the `echo` for `rm` once the output looks right:
+
+   ```sh
+   ROOT=$(pwd -P)
+   nix eval --impure --raw ".#homeConfigurations.default.config.home.file" \
+     --apply 'f: builtins.concatStringsSep "\n" (builtins.attrNames f)' \
+   | sed "s|^\([^/]\)|$HOME/\1|" \
+   | while IFS= read -r f; do
+       if [ -L "$f" ]; then
+         t=$(readlink "$f")
+         case "$t" in
+           "$ROOT"/*) echo "WOULD RM   $f -> $t" ;;
+           *)         echo "KEEP(link) $f -> $t" ;;
+         esac
+       elif [ -e "$f" ]; then
+         echo "KEEP(file) $f   <-- real file, not a link; investigate before touching"
+       fi
+     done
+   ```
+
+   The listing includes home-manager's own generated files
+   (`fontconfig`, `environment.d`, `.keep`); the `$ROOT` guard correctly leaves
+   those alone. Expect exactly 11 `WOULD RM` lines.
+
+3. `nix/switch.sh`
+
+4. Verify every managed link points into the checkout:
+
+   ```sh
+   export DOTFILES_DIR="$(pwd -P)"
+   nix eval --impure --raw ".#homeConfigurations.default.config.home.file" --apply '
+     f:
+     let
+       root = builtins.getEnv "DOTFILES_DIR";
+       has  = n: (f.${n}.source) ? buildCommand;
+       into = n: has n && builtins.match "(.|\n)*ln -s ${root}/(.|\n)*" f.${n}.source.buildCommand != null;
+       mine = builtins.filter into (builtins.attrNames f);
+     in
+       "links into the checkout: ${toString (builtins.length mine)} (expect 11)\n"
+       + builtins.concatStringsSep "\n" mine'
+   ```
+
+5. Verify the live-edit property — the whole reason for `mkOutOfStoreSymlink`:
+
+   ```sh
+   printf '# probe\n' >> .tmux.conf && tail -1 ~/.tmux.conf && git checkout -- .tmux.conf
+   ```
+
+6. Delete `install_scripts/shared/create_symlinks.sh` and drop its `.` line
    from both `setup.sh` files. `setup-dirs.sh` can go too, but check it first:
    home-manager creates the parent of every *managed link*, which covers all of
    `~/.config/{nvim,alacritty,kitty}` and `~/.claude` — but not
@@ -61,11 +162,79 @@ fnm shims > pyenv shims > ~/.local/bin > ~/.cargo/bin > nix profile > /usr/bin
    `git clone` in `shared/install-packages.sh` anyway, so the file should still
    be deletable; verify on a clean box rather than assuming.
 
+> **`~/.zshenv` is one of the 11.** Between the delete in step 2 and a
+> successful switch in step 3, new shells have neither nix nor cargo on PATH.
+> If the switch fails in that window, `. ~/.nix-profile/etc/profile.d/nix.sh`
+> restores nix by hand, and `install_scripts/shared/create_symlinks.sh` — still
+> present until step 6 — restores the old links.
+
 `nix/links.nix` already mirrors `create_symlinks.sh` exactly; it was evaluated
-with `manageLinks = true` during phase 1 and every target pointed at the
-checkout. This phase is just flipping it on.
+with `manageLinks = true` during phase 1 and all 11 targets pointed at the
+checkout. This phase is mostly flipping it on.
 
 ## Phase 3 — strip the imperative installers
+
+**Done when:** the measurement below reports every tool under `NIX`, except the
+deliberate exceptions — whatever the version managers own, and `fzf` if zinit
+keeps it.
+
+**Order matters.** Per row: confirm the nix copy works, *then* delete the old
+installer, *then* re-measure. Deleting first can strand you without a working
+`ruff` or `kubectl` halfway through.
+
+Re-run this after each removal. It produced the table below, and it is the
+definition of done. `env -i` matters — measuring from an inherited PATH gives
+the wrong answer:
+
+```sh
+CMDS=$(tr '\n' ' ' <<'EOF'
+bat eza fd fzf rg procs tree htop jq yq ijq jid wget curl unzip gpg magick diff-so-fancy
+starship nvim tree-sitter lua-language-server bash-language-server docker-langserver
+typescript-language-server tsc vscode-json-language-server yaml-language-server
+ansible-language-server terraform-ls pyright shellcheck yamllint hadolint cspell
+markdownlint-cli2 prettier prettierd eslint_d commitlint stylua luacheck tflint ruff
+black isort flake8 ansible-lint pipenv poetry kubectl cs scala sbt scalafmt
+EOF
+)
+env -i HOME="$HOME" USER="$USER" TERM=xterm SHELL="$(command -v zsh)" \
+    PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    zsh -i -c "for c in $CMDS; do printf '%s\t%s\n' \"\$c\" \"\$(command -v \$c 2>/dev/null || echo MISSING)\"; done" \
+    </dev/null 2>/dev/null \
+  | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\[?1042l//' \
+  | awk -F'\t' '{ p=$2
+      if      (p ~ /nix-profile/)     k="NIX"
+      else if (p == "MISSING")        k="missing"
+      else if (p ~ /\.cargo/)         k="cargo"
+      else if (p ~ /fnm_multishells/) k="npm-global"
+      else if (p ~ /coursier/)        k="coursier"
+      else if (p ~ /zinit/)           k="zinit"
+      else if (p ~ /luarocks/)        k="luarocks"
+      else if (p ~ /go\/bin/)         k="go-install"
+      else if (p ~ /\.local\/bin/)    k="local-bin"
+      else                            k="system"
+      a[k]=a[k]" "$1; n[k]++ }
+    END { for (x in a) printf "%-11s %2d %s\n", x, n[x], a[x] }' | sort -k2 -rn
+```
+
+Keep `CMDS` on continuation lines exactly as above — an embedded newline lands
+inside the `for ... ; do` and silently produces an empty result rather than an
+error.
+
+Baseline immediately after phase 1 (20 of 55 already on nix):
+
+```
+NIX         20  fd tree htop jq yq ijq jid wget curl unzip gpg magick diff-so-fancy nvim
+                terraform-ls pyright shellcheck yamllint tflint sbt
+npm-global  14  tree-sitter bash-language-server docker-langserver typescript-language-server
+                tsc vscode-json-language-server yaml-language-server ansible-language-server
+                cspell markdownlint-cli2 prettier prettierd eslint_d commitlint
+local-bin   11  lua-language-server hadolint ruff black isort flake8 ansible-lint pipenv
+                poetry kubectl cs
+cargo        6  bat eza rg procs starship stylua
+coursier     2  scala scalafmt
+zinit        1  fzf
+luarocks     1  luacheck
+```
 
 This is where the payoff lands. Everything below is currently installed twice:
 once by Nix, once by the old script, with the old copy still winning on PATH.
@@ -115,6 +284,9 @@ shell init, which is the thing phase 1 deliberately avoided. Leaning towards
 dropping it from `packages.nix`.
 
 ## Phase 4 — setup.sh and Coder
+
+**Done when:** a clean box reaches a working shell with one `./setup.sh`, and
+`setup.sh` no longer installs any individual package.
 
 `setup.sh` collapses to roughly: bootstrap nix if absent → `nix/switch.sh` →
 the OS-specific leftovers that genuinely need root or are not packages
