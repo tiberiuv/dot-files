@@ -38,7 +38,7 @@ if [ ! -f "$DOTFILES_DIR/flake.nix" ]; then
 fi
 
 if ! command -v nix >/dev/null 2>&1; then
-    echo "switch.sh: nix is not installed. See the phase 0 bootstrap in the migration notes." >&2
+    echo "switch.sh: nix is not installed. Run \`. $DOTFILES_DIR/nix/bootstrap.sh\` first (source it -- it has to leave nix on PATH)." >&2
     exit 1
 fi
 
