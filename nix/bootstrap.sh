@@ -28,9 +28,12 @@ fi
 # On a fresh box `mkdir -p ~/.nix-store` before ./setup.sh installs nix
 # straight onto the persistent volume, so nothing ever needs moving.
 #
-# This is a fallback. The mount belongs in the Coder template's startup script,
-# which runs as root before the session; mounts do not survive a rebuild and
-# this only fires when something runs ./setup.sh.
+# This is a fallback: mounts do not survive a rebuild, and this only fires when
+# something runs ./setup.sh. The mount belongs in the Coder template's startup
+# script, which runs as root before the session:
+#
+#   mkdir -p /nix
+#   mountpoint -q /nix || mount --bind /home/<user>/.nix-store /nix
 DOTFILES_NIX_STORE="${DOTFILES_NIX_STORE:-$HOME/.nix-store}"
 
 _nix_store_is_persistent() {
