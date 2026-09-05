@@ -44,10 +44,8 @@ if [[ $(uname -s) == "Darwin" ]]; then
     export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
   fi
 
-  # GOROOT and SCALA_HOME are deliberately unset: go, scala and sbt come from
-  # the nix profile now, and every one of them locates its own runtime. A
-  # GOROOT left pointing at the old brew prefix outlives `brew uninstall go`
-  # and turns into "go: cannot find GOROOT directory".
+  # No GOROOT or SCALA_HOME: go, scala and sbt come from nix and locate their
+  # own runtimes. A stale GOROOT gives "go: cannot find GOROOT directory".
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home
 
   export PATH=$HOMEBREW_PREFIX/bin:$PATH
@@ -61,9 +59,7 @@ if [[ $(uname -s) == "Darwin" ]]; then
   export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@3/lib"
   export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
 elif [[ $(uname -s) == "Linux" ]]; then
-  # No GOROOT here either -- see the Darwin branch above. The coursier and
-  # ~/.luarocks/bin entries went with it: scala/scalafmt/luacheck/luaformatter
-  # all come from the nix profile, and nothing installs into those dirs.
+  # No GOROOT here either -- see the Darwin branch above.
   export JAVA_HOME=/usr/lib/jvm/default-java
   export RUST_ANALYZER_TARGET="$(uname -m)-unknown-linux-gnu"
 
@@ -138,9 +134,8 @@ alias kc="kubectl"
 alias kcgc='kubectl config get-contexts'
 alias kcuc='kubectl config use-context'
 alias ssh="TERM=xterm-256color ssh"
-# The checkout is not required to live at ~/dot-files (this one does not).
-# %x is the file zsh is currently sourcing -- this very .zshrc, which is a
-# symlink into the checkout -- so :A resolves it and :h gives the repo root.
+# The checkout need not live at ~/dot-files. %x is the file being sourced --
+# this .zshrc, a symlink into the checkout -- so :A:h gives the repo root.
 DOTFILES_DIR=${${(%):-%x}:A:h}
 alias update-all=". $DOTFILES_DIR/update.zsh"
 alias clean_evicted="kubectl get pod | grep Evicted | awk '{print $1}' | xargs kubectl delete pod"

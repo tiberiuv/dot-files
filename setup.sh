@@ -1,22 +1,15 @@
 #!/bin/bash
 set -u
 
-# One command, clean box to working shell.
+# One command, clean box to working shell. Both per-OS scripts have the same
+# shape; only the prerequisites and the root-owned leftovers differ:
 #
-# The shape after the nix migration is the same on both platforms:
-#
-#   1. OS prerequisites -- only what is needed to *reach* nix, plus the things
-#      that genuinely cannot live in a user profile (the C toolchain, the
-#      headers pyenv compiles CPython against, root-owned system config).
-#   2. Bootstrap nix, if absent.
-#   3. nix/switch.sh -- the package set and every dotfile symlink, in one step.
-#      This is what used to be create_symlinks.sh plus most of four installers.
-#   4. The version managers nix deliberately does not own: rustup, fnm, pyenv,
-#      tfenv, mise. Plus tpm and zinit, which are plugin managers, not packages.
+#   1. OS prerequisites -- only what is needed to reach nix, plus what cannot
+#      live in a user profile (C toolchain, pyenv's headers, system config).
+#   2. Bootstrap nix.
+#   3. nix/switch.sh -- the package set and every dotfile symlink.
+#   4. The version and plugin managers nix does not own.
 #   5. Root-owned OS leftovers, then nvim plugins last.
-#
-# Steps 1 and 5 are the only per-OS parts, so they are what the dispatch below
-# selects. Everything in between is identical and lives in shared/.
 
 # Every sub-script below refers to ./install_scripts/... relative to the repo
 # root, so don't depend on the caller's cwd.

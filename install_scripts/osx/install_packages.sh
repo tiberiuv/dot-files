@@ -1,8 +1,7 @@
 #!/bin/sh
 
-# nvim and the tooling below come from the nix profile. setup.sh bootstraps nix
-# before reaching this script, but does not leave it on PATH for a
-# non-interactive /bin/sh, and ~/.zshenv (which does) is only read by zsh.
+# setup.sh bootstraps nix before this, but does not leave it on PATH for a
+# non-interactive /bin/sh, and ~/.zshenv is only read by zsh.
 # shellcheck disable=SC1091
 [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 export PATH="$HOME/.nix-profile/bin:$PATH"
@@ -29,11 +28,6 @@ tfenv use latest
 
 mise plugins add lua
 mise use -g lua@5.1
-
-# The npm -g block that used to be here -- commitlint, the node language
-# servers, tree-sitter-cli -- is in nix/packages.nix now, wrapped with its own
-# nodejs so it does not care which version brew's node is on. yarn stays a brew
-# formula (see install_brew_packages.sh).
 
 # lua/options.lua pins vim.g.python3_host_prog to ~/pynvim/bin/python, so the
 # venv has to exist or every nvim start reports a broken python3 provider.
