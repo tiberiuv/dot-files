@@ -5,6 +5,13 @@
 #   nix/switch.sh              apply
 #   nix/switch.sh --dry-run    show what would change, touch nothing
 #
+# To roll back: `home-manager generations` lists each with its store path; run
+# the `activate` script inside an older one.
+#
+# A flake only sees git-tracked files, so a new file under nix/ must be `git
+# add`ed before it is visible here. The error does not hint at this -- it says
+# the path "does not contain a '/flake.nix' file".
+#
 set -eu
 
 # `readlink -f` would be one line, but macOS's readlink has no -f.
