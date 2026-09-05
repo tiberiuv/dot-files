@@ -27,18 +27,13 @@ if ! command -v cargo-binstall >/dev/null 2>&1; then
         https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 fi
 
-# Install Rust cli tools.
-#
-# What used to be here -- eza, bat, procs, ripgrep, starship -- moved to
-# nix/packages.nix. These three did not, and the reason is the same for all of
-# them: they belong to the rustup toolchain rather than to the package set.
-# trunk and wasm-bindgen-cli have to match the wasm32-unknown-unknown target
-# added above, and fnm is a version manager, which is the one category this
-# migration deliberately leaves alone.
+# Only the tools tied to the rustup toolchain: trunk and wasm-bindgen-cli must
+# match the wasm32 target added above, and fnm is a version manager. Everything
+# else is in nix/packages.nix.
 #
 # fnm comes from the QuickInstall build service rather than an upstream
-# release. Add `--disable-strategies quick-install` to take only
-# upstream-published binaries, at the cost of compiling it.
+# release. `--disable-strategies quick-install` takes only upstream-published
+# binaries, at the cost of compiling it.
 cargo binstall --no-confirm --locked \
   trunk \
   wasm-bindgen-cli \

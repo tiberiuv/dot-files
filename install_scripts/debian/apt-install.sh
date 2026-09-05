@@ -9,32 +9,20 @@ sudo -E apt upgrade -y
 
 sudo -E apt install -y ca-certificates curl
 
-# The Ubuntu-PPA-vs-Debian branch that used to live here is gone: it existed
-# solely to get a neovim newer than bookworm's 0.7, and neovim now comes from
-# nix/packages.nix on both distros. So do jq, htop, tmux, git-lfs, imagemagick,
-# wget, gnupg, diff-so-fancy, xclip, wl-clipboard, luarocks, pinentry-curses,
-# and the shellcheck/yamllint pair -- along with the neovim build deps (cmake,
-# ninja-build, automake, autogen, libtool, gettext, libharfbuzz-dev,
-# libicu-dev, liblcms2-dev, librsync-dev, libutf8proc-dev) that no longer have
-# anything to build. pipx went with the pipx block in install_packages.sh.
-#
-# What is left is what nix does not, or must not, provide:
-#   - build-essential/pkg-config/llvm/clang/lld: the C toolchain. Deliberately
-#     NOT moved into the nix profile -- `go install`, `cargo build` and
-#     node-gyp compile against the system headers, and mixing a nix toolchain
-#     into that is the classic glibc/header mismatch.
+# What nix cannot or must not provide:
+#   - build-essential/pkg-config/llvm/clang/lld: the C toolchain. Kept out of
+#     the nix profile on purpose -- `go install`, `cargo build` and node-gyp
+#     compile against the system headers.
 #   - the pyenv build deps: pyenv compiles CPython, so it needs the -dev
 #     headers on the system, not in a profile.
-#   - git, curl, zsh: needed to *reach* nix. git clones this repo, curl runs
-#     the installer, and zsh is the login shell -- `chsh` to a /nix path is
-#     how you lose a shell on a box where /nix fails to mount. The nix copies
-#     of all three win on PATH afterwards; that is fine and intended.
-#   - alacritty and fontconfig: GUI terminal, plus the fc-cache/fc-list that
-#     `fonts.fontconfig.enable` in nix/linux.nix writes config for.
+#   - git, curl, zsh: needed to *reach* nix, and zsh is the login shell (chsh
+#     to a /nix path loses you a shell the moment /nix fails to mount). The nix
+#     copies win on PATH afterwards, which is intended.
+#   - alacritty, fontconfig: GUI terminal, and the fc-cache/fc-list that
+#     fonts.fontconfig.enable in nix/linux.nix writes config for.
 #   - default-jdk: .zshrc exports JAVA_HOME=/usr/lib/jvm/default-java.
 #   - the libpq/mysql/xml -dev headers: project-level Python build deps
-#     (psycopg2, mysqlclient, xmlsec). Not dotfiles, but nothing else installs
-#     them, so dropping them silently breaks pip installs.
+#     (psycopg2, mysqlclient, xmlsec). Nothing else installs them.
 PACKAGES="
     alacritty
     git

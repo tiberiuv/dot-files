@@ -1,5 +1,4 @@
-# Dotfile symlinks. This replaced install_scripts/shared/create_symlinks.sh;
-# gated on `dotfiles.manageLinks` (see home.nix), which is on.
+# Dotfile symlinks, gated on `dotfiles.manageLinks` (see home.nix).
 {
   config,
   lib,
@@ -8,12 +7,10 @@
 }:
 
 let
-  # mkOutOfStoreSymlink points at the working checkout rather than copying the
-  # file into /nix/store. That keeps the current workflow intact: edit
-  # ~/.zshrc, the change is live immediately, and `git diff` still sees it.
-  # `home.file.<n>.source = ./path` would instead produce a read-only store
-  # copy needing a `switch` per keystroke -- hence the DOTFILES_DIR plumbing in
-  # flake.nix, since a flake cannot otherwise learn its own checkout path.
+  # Points at the checkout rather than copying into /nix/store, so edits are
+  # live and `git diff` still sees them. `source = ./path` would give a
+  # read-only store copy needing a `switch` per keystroke -- which is why
+  # flake.nix has to plumb DOTFILES_DIR in.
   link = path: config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/${path}";
 in
 {

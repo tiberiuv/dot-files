@@ -1,17 +1,13 @@
 #!/bin/sh
-# Apply the home-manager configuration.
-#
-# Works from any working directory, and with the checkout at any path -- run it
-# as ./nix/switch.sh, /abs/path/to/nix/switch.sh, or through a symlink parked
-# somewhere on $PATH. Everything it needs is derived from its own location.
+# Apply the home-manager configuration. Works from any cwd, with the checkout
+# at any path, invoked directly or through a symlink on $PATH.
 #
 #   nix/switch.sh              apply
 #   nix/switch.sh --dry-run    show what would change, touch nothing
 #
 set -eu
 
-# Resolve $0 through any chain of symlinks. `readlink -f` would be one line,
-# but macOS's readlink has no -f, and this repo has to run on both.
+# `readlink -f` would be one line, but macOS's readlink has no -f.
 resolve_symlinks() {
     _p=$1
     while [ -L "$_p" ]; do
@@ -26,9 +22,8 @@ resolve_symlinks() {
 }
 
 _self=$(resolve_symlinks "$0")
-# `pwd -P` resolves symlinked parent directories too, so DOTFILES_DIR is always
-# the real path on disk. nix/links.nix points symlinks at it, and a symlink to
-# a symlink to the checkout would be a needless indirection to leave in ~.
+# `pwd -P` resolves symlinked parents too: nix/links.nix points symlinks at
+# this, and a symlink to a symlink is needless indirection to leave in ~.
 DOTFILES_DIR=$(CDPATH='' cd -- "$(dirname -- "$_self")/.." && pwd -P)
 export DOTFILES_DIR
 
@@ -42,20 +37,18 @@ if ! command -v nix >/dev/null 2>&1; then
     exit 1
 fi
 
-# Set by the installer's profile script, but this script is often run from a
-# shell that predates the install.
+# Normally set by the profile script, but this often runs from a shell that
+# predates the install. flake.nix reads it.
 if [ -z "${USER:-}" ]; then
     USER=$(id -un)
     export USER
 fi
 
-# Both flags are needed on a stock install: nix.conf may not enable flakes, and
-# the config reads HOME/USER/DOTFILES_DIR from the environment (see flake.nix).
+# nix.conf may not enable flakes on a stock install.
 NIX="nix --extra-experimental-features nix-command --extra-experimental-features flakes"
 
-# Build with the home-manager pinned in flake.lock rather than `nix run
-# home-manager/master`, which would fetch a second, unpinned copy and can skew
-# against the module set this config was written for.
+# The home-manager pinned in flake.lock, not `nix run home-manager/master`,
+# which fetches a second unpinned copy that can skew against these modules.
 # --no-link keeps a `result` symlink out of the checkout.
 target="$DOTFILES_DIR#homeConfigurations.default.activationPackage"
 
