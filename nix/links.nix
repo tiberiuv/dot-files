@@ -28,8 +28,6 @@ in
     xdg.configFile = {
       "starship.toml".source = link "starship.toml";
       "alacritty/alacritty.toml".source = link "alacritty.toml";
-      "kitty/kitty.conf".source = link "kitty/kitty.conf";
-      "kitty/gruvbox.conf".source = link "kitty/gruvbox.conf";
       "nvim/init.lua".source = link "init.lua";
       "nvim/lua".source = link "lua";
     };

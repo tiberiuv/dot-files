@@ -3,8 +3,8 @@
 # What Homebrew still owns; everything else is in nix/packages.nix.
 #
 #   1. GUI apps. Casks install real .app bundles with Dock/Spotlight/Launch
-#      Services registration, which nix cannot do. alacritty and kitty do build
-#      for darwin in nixpkgs, but integrate poorly enough that the formulae stay.
+#      Services registration, which nix cannot do. alacritty does build for
+#      darwin in nixpkgs, but integrates poorly enough that the formula stays.
 #   2. Version managers -- fnm, mise, pyenv, tfenv -- and the node/yarn they
 #      hand out. Deliberately out of scope; see the migration notes.
 #   3. The C toolchain and the headers pyenv compiles CPython against. A nix
@@ -22,7 +22,6 @@ brew install --cask \
   temurin11 \
   docker
 
-brew install kitty --head
 brew install alacritty
 
 # Version managers, and the runtimes they distribute
