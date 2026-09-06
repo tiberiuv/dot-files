@@ -209,15 +209,6 @@ setopt promptsubst
 # ------------------------------------------------------------ #
 # PLUGINS
 # ------------------------------------------------------------ #
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zdharma-continuum/zinit-annex-as-monitor \
-    zdharma-continuum/zinit-annex-bin-gem-node \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/z-a-submods \
-    zdharma-continuum/declare-zsh
-
 zinit wait"0a" lucid light-mode for \
   atload"_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 
@@ -299,7 +290,11 @@ unset _gcloud_root
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || . ~/.p10k.zsh
 
-[[ ${commands[pyenv]} ]] && eval "$(pyenv init -)"
+# Guarded on $PYENV_ROOT/versions: with no pyenv-owned interpreter the init
+# only re-exports what system python already provides. --no-rehash leaves
+# shims stale after installing a package with new entry points -- run
+# `pyenv rehash` by hand then.
+[[ ${commands[pyenv]} && -d $PYENV_ROOT/versions ]] && eval "$(pyenv init - --no-rehash)"
 
 printf "\e[?1042l"
 ### End of Zinit's installer chunk
