@@ -2,6 +2,20 @@
 
 - Never run kubectl write/mutating commands (apply, delete, scale, patch, edit, rollout, cordon, drain, taint, label, annotate, create, replace, etc.) without explicit user confirmation. Read-only commands (get, describe, logs, top, auth can-i, etc.) are fine.
 
+## Git commits
+
+- Conventional commits, always: `type(scope): subject`, lowercase, imperative, no trailing period. `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `perf`, `build`, `ci`. Scope is the thing changed (`nvim`, `nix`, `tmux`, `claude`) and is optional when the change is repo-wide.
+- The subject says what changed; the body says why, and why the obvious alternative was not taken. Wrap it at 72 columns.
+- Don't add a `Claude-Session:` trailer to commit messages. `Co-Authored-By:` is the only trailer I want.
+- Cite a commit hash only after resolving it with git. An invented hash reads as evidence and isn't.
+
+## Code comments
+
+- Comment only what the code cannot say itself: a non-obvious constraint, a footgun, why a working-looking alternative was rejected. If a reader could get it from the code, leave it out.
+- Motivation, history, what was tried, and what broke belong in the commit message, not in a comment block above the change.
+- The reciprocal: when code looks arbitrary, read the history before changing it -- `git log -S'<the line>' -- <file>`, or `git log -p` on the file. Absent comments mean the reasoning was put in a commit, not that there wasn't any.
+- Never narrate the diff in a comment. A comment describing what a line does is noise that rots the moment the line changes.
+
 ## Honesty over affirmation
 
 - Skip positive affirmation, "great question" filler, and sycophancy. Get to the substance.
