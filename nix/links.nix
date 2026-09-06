@@ -22,10 +22,11 @@ in
       ".zshenv".source = link ".zshenv";
       ".tmux.conf".source = link ".tmux.conf";
       ".p10k.zsh".source = link ".p10k.zsh";
-      # One file under two names: agents/AGENTS.md is the source of truth in
-      # the agents.md open format, and CLAUDE.md is the name Claude Code
-      # looks for. Copying instead of linking would let the two drift.
-      ".claude/CLAUDE.md".source = link "agents/AGENTS.md";
+      # The rules themselves, under the name every other agent looks for.
+      ".agents/AGENTS.md".source = link "agents/AGENTS.md";
+      # Claude Code reads CLAUDE.md only, so this one is a stub that imports
+      # the file above. Both links point at the checkout, not at each other.
+      ".claude/CLAUDE.md".source = link "claude/CLAUDE.md";
     };
 
     xdg.configFile = {
