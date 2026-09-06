@@ -8,11 +8,21 @@ return {
     config = function()
         local dap = require("dap")
 
-        dap.adapters.lldb = {
-            type = "executable",
-            command = "/opt/homebrew/opt/llvm/bin/lldb-vscode", -- adjust as needed
-            name = "lldb",
-        }
+        -- Resolved from PATH, not a Homebrew prefix: LLVM, Xcode and nix each
+        -- put this somewhere different. The binary was renamed lldb-vscode ->
+        -- lldb-dap in LLVM 18, so try both, and register nothing when neither
+        -- is installed rather than pointing the adapter at a missing file.
+        local lldb = vim.fn.exepath("lldb-dap")
+        if lldb == "" then
+            lldb = vim.fn.exepath("lldb-vscode")
+        end
+        if lldb ~= "" then
+            dap.adapters.lldb = {
+                type = "executable",
+                command = lldb,
+                name = "lldb",
+            }
+        end
 
         dap.configurations.rust = {
             {
@@ -38,7 +48,10 @@ return {
                 name = "Launch file",
                 program = "${file}",
                 pythonPath = function()
-                    return "/usr/bin/python"
+                    -- Not /usr/bin/python: that is gone on current macOS, and
+                    -- resolving from PATH picks up an active venv or pyenv shim.
+                    local py = vim.fn.exepath("python3")
+                    return py ~= "" and py or "python3"
                 end,
             },
         }
