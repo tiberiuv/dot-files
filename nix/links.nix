@@ -29,6 +29,13 @@ in
       "alacritty/alacritty.toml".source = link "alacritty.toml";
       "nvim/init.lua".source = link "init.lua";
       "nvim/lua".source = link "lua";
+      # Has to be `link`, not a store copy: lazy.nvim *writes* this file on
+      # every sync/update, and writing through the symlink is what puts the
+      # pinned plugin revisions in `git diff` instead of in ~/.config.
+      # lazy.nvim has already written a real file there on any existing box;
+      # activation refuses to overwrite it, so move it aside (or into the
+      # checkout) before the first switch.
+      "nvim/lazy-lock.json".source = link "lazy-lock.json";
     };
   };
 }
