@@ -12,7 +12,6 @@ export GOPATH="$HOME/go"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export PYSPARK_PYTHON=python3
-export KITTY_CONFIG_DIRECTORY=~/.config/kitty
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 export EDITOR=nvim
 export GPG_TTY=$(tty)
