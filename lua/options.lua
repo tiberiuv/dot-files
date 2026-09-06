@@ -18,7 +18,9 @@ opt.backspace = "indent,eol,start"
 opt.completeopt = "menu,menuone,noselect"
 opt.ruler = false
 opt.showcmd = false
-opt.mouse = ""
+-- Empty here silently kills the wheel: the .tmux.conf bindings route on
+-- mouse_any_flag, which only rises if the pane enables mouse reporting.
+opt.mouse = "a"
 opt.termguicolors = true
 
 -- Over ssh or mosh there is no local X/Wayland display, so nvim's xclip/wl-copy
