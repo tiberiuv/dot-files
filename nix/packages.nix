@@ -24,7 +24,6 @@
     gnupg
     imagemagick
     diff-so-fancy
-    starship
 
     # --- Editor ----------------------------------------------------------
     # tree-sitter is the CLI nvim-treesitter's `main` branch shells out to when

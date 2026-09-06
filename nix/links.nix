@@ -26,7 +26,6 @@ in
     };
 
     xdg.configFile = {
-      "starship.toml".source = link "starship.toml";
       "alacritty/alacritty.toml".source = link "alacritty.toml";
       "nvim/init.lua".source = link "init.lua";
       "nvim/lua".source = link "lua";
