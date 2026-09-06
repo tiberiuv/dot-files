@@ -56,13 +56,19 @@ CTX_WARN=45     # % used at which it starts warning
 # none needs a U+FE0F variation selector -- the VS16 forms (a bare U+23F1,
 # say) render at inconsistent widths and would misalign the line. All are
 # double-width; the trailing space keeps one clear cell after them.
-ICON_DIR="\xf0\x9f\x93\x81"     # U+1F4C1 file folder
-ICON_BRANCH="\xf0\x9f\x8c\xbf"  # U+1F33F herb
-ICON_MODEL="\xf0\x9f\xa4\x96"   # U+1F916 robot
-ICON_CTX="\xf0\x9f\xa7\xa0"     # U+1F9E0 brain
-ICON_5H="\xe2\x8f\xb3"           # U+23F3 hourglass
-ICON_7D="\xf0\x9f\x93\x85"      # U+1F4C5 calendar
-ICON_SPEND="\xf0\x9f\x92\xb3"   # U+1F4B3 credit card
+#
+# Literal characters, not \xNN escapes: these strings reach the terminal via
+# printf %b, and %b only has to understand POSIX \0nnn octal. dash -- which is
+# /bin/sh on Debian and Ubuntu -- does not accept \xNN there and emits the
+# escape text verbatim. Literal bytes need no escape dialect at all, and match
+# how the block characters in bar() are already written.
+ICON_DIR="📁"     # U+1F4C1 file folder
+ICON_BRANCH="🌿"  # U+1F33F herb
+ICON_MODEL="🤖"   # U+1F916 robot
+ICON_CTX="🧠"     # U+1F9E0 brain
+ICON_5H="⏳"      # U+23F3 hourglass
+ICON_7D="📅"      # U+1F4C5 calendar
+ICON_SPEND="💳"   # U+1F4B3 credit card
 
 # round <float> -- nearest integer. Percentages are NOT clamped to 100: the
 # CLI documents utilization above 1 as legitimate (usage running past a
