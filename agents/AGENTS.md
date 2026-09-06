@@ -1,7 +1,11 @@
 # Global Rules
 
 - These rules live in `~/.agents/AGENTS.md` (checkout: `dot-files/agents/AGENTS.md`). Asked to change my global rules, edit that file -- not a per-agent stub that imports it. Only rules specific to one agent belong in that agent's stub.
-- Never run kubectl write/mutating commands (apply, delete, scale, patch, edit, rollout, cordon, drain, taint, label, annotate, create, replace, etc.) without explicit confirmation. Read-only (get, describe, logs, top, auth can-i, etc.) is fine.
+
+## Mutating commands
+
+- Ask before anything that changes state outside the working tree or is hard to undo: infra applies (`terraform apply`, kubectl writes -- apply, delete, scale, patch, edit, rollout, cordon, drain, taint, label, annotate, create, replace), package and profile changes (`nix` switches, `brew uninstall`), history rewrites and force pushes, `rm -rf`, and anything that publishes (`git push`, `gh pr merge`). Approval for one is not approval for the next.
+- Read-only counterparts never need asking: kubectl get/describe/logs/top/auth can-i, `--dry-run` anything, `git log`, `git status`.
 
 ## Git commits
 
