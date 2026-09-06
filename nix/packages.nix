@@ -89,9 +89,7 @@
     # shell the moment /nix fails to mount. apt/brew zsh stays in /etc/shells.
     zsh
 
-    # apt/brew git still bootstraps the clone; this one wins on PATH after.
-    git
-    git-lfs
+    # No git or git-lfs: programs.git in git.nix installs both.
     tmux
 
     # --- Fonts ------------------------------------------------------------

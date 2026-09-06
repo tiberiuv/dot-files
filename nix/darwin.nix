@@ -9,6 +9,10 @@
       # edit in install_scripts/osx/setup.sh.
       pam-reattach
     ];
+
+    # The helper ships with Apple's git; there is no such thing on Linux, so it
+    # cannot live in the shared git.nix.
+    programs.git.settings.credential.helper = "osxkeychain";
   };
 
   # Not moved off Homebrew, on purpose:

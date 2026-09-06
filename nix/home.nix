@@ -13,6 +13,7 @@
   imports = [
     ./packages.nix
     ./links.nix
+    ./git.nix
     ./linux.nix
     ./darwin.nix
   ];
@@ -29,8 +30,8 @@
 
   dotfiles.manageLinks = true;
 
-  # programs.zsh / programs.git / programs.tmux stay off on purpose: they
-  # generate their own ~/.zshrc, ~/.gitconfig and ~/.tmux.conf, which would
-  # fight the symlinks that keep those files live-editable here. The cost is
-  # that .zshenv has to source hm-session-vars.sh by hand.
+  # programs.zsh / programs.tmux stay off on purpose: they generate their own
+  # ~/.zshrc and ~/.tmux.conf, which would fight the symlinks that keep those
+  # files live-editable here. The cost is that .zshenv has to source
+  # hm-session-vars.sh by hand. git is the exception -- see git.nix.
 }
