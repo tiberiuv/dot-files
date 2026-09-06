@@ -26,9 +26,21 @@ local function map(mode, combo, mapping, opts)
     end
 end
 
+-- True when this nvim has no local clipboard of its own to reach. Not an
+-- SSH_TTY test on purpose: a mosh session carries no SSH_* variables at all.
+local function is_remote()
+    if vim.env.SSH_TTY or vim.env.SSH_CONNECTION then
+        return true
+    end
+    if vim.fn.has("mac") == 1 then
+        return false
+    end
+    return not (vim.env.DISPLAY or vim.env.WAYLAND_DISPLAY)
+end
+
 local function require_reset(pck)
     package.loaded[pck] = nil
     require(pck)
 end
 
-return { require_reset = require_reset, map = map, opt = opt }
+return { require_reset = require_reset, map = map, opt = opt, is_remote = is_remote }
