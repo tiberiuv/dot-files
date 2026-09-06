@@ -102,6 +102,14 @@
     # No git or git-lfs: programs.git in git.nix installs both.
     tmux
 
+    # Two things this depends on that are not visible from here. Incoming
+    # connections find mosh-server only because ~/.zshenv, not ~/.zshrc, is what
+    # puts the nix profile on PATH -- ssh runs the command in a non-interactive
+    # shell. And the client half hardcodes nixpkgs' own openssh rather than
+    # taking `ssh` from PATH, so Apple-only ~/.ssh/config options (UseKeychain)
+    # would fail there while still working for plain ssh.
+    mosh
+
     # --- Fonts ------------------------------------------------------------
     # fonts.fontconfig.enable (linux.nix) is what makes fc-list see this.
     nerd-fonts.jetbrains-mono
