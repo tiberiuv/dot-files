@@ -14,6 +14,7 @@
     ./packages.nix
     ./links.nix
     ./git.nix
+    ./gpg.nix
     ./linux.nix
     ./darwin.nix
   ];

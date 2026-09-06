@@ -13,6 +13,8 @@
     # The helper ships with Apple's git; there is no such thing on Linux, so it
     # cannot live in the shared git.nix.
     programs.git.settings.credential.helper = "osxkeychain";
+
+    dotfiles.gpg.pinentry = "${pkgs.pinentry_mac}/bin/pinentry-mac";
   };
 
   # Not moved off Homebrew, on purpose:

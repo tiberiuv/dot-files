@@ -16,15 +16,7 @@
 . ./install_scripts/debian/install_packages.sh
 
 # ---- 5. Root-owned leftovers -----------------------------------------------
-# Guarded because an empty pinentry-program line breaks gpg-agent outright,
-# and because this would otherwise re-append on every run.
-PINENTRY="$(command -v pinentry-curses)"
-if [ -n "$PINENTRY" ] && ! grep -qs pinentry-program ~/.gnupg/gpg-agent.conf; then
-    mkdir -p ~/.gnupg
-    chmod 700 ~/.gnupg
-    echo "pinentry-program $PINENTRY" >> ~/.gnupg/gpg-agent.conf
-    gpgconf --kill gpg-agent 2>/dev/null
-fi
+# ~/.gnupg/gpg-agent.conf is nix/gpg.nix's now, written by switch.sh above.
 
 # chsh refuses any shell missing from /etc/shells, and a container image often
 # does not list zsh. Hardcoded to the apt zsh, not `command -v zsh` which would
