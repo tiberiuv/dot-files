@@ -1,5 +1,6 @@
 # Global Rules
 
+- These rules live in `~/.agents/AGENTS.md` (checkout: `dot-files/agents/AGENTS.md`). Asked to change my global rules, edit that file -- not a per-agent stub that imports it. Only rules specific to one agent belong in that agent's stub.
 - Never run kubectl write/mutating commands (apply, delete, scale, patch, edit, rollout, cordon, drain, taint, label, annotate, create, replace, etc.) without explicit confirmation. Read-only (get, describe, logs, top, auth can-i, etc.) is fine.
 
 ## Git commits
