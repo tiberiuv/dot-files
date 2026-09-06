@@ -2,6 +2,8 @@ local opt = require("utils").opt
 
 -- Global
 -----------------------------------------------
+-- ~/pynvim is a symlink to a nix python env carrying pynvim (nix/packages.nix),
+-- not a venv; the path is kept only so this line did not have to move.
 vim.g.python3_host_prog = "~/pynvim/bin/python"
 vim.g.cursorhold_updatetime = 100
 opt.cmdheight = 0

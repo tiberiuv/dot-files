@@ -28,10 +28,3 @@ tfenv use latest
 
 mise plugins add lua
 mise use -g lua@5.1
-
-# lua/options.lua pins vim.g.python3_host_prog to ~/pynvim/bin/python, so the
-# venv has to exist or every nvim start reports a broken python3 provider.
-if [ ! -x "$HOME/pynvim/bin/python" ]; then
-  python3 -m venv "$HOME/pynvim"
-  "$HOME/pynvim/bin/pip" install --upgrade pip pynvim
-fi
