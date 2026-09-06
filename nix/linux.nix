@@ -6,11 +6,12 @@
     home.packages = with pkgs; [
       xclip
       wl-clipboard
-      # gpg-agent's pinentry-program in install_scripts/debian/setup.sh points
-      # at whatever `command -v pinentry-curses` finds; once this is on PATH
-      # that resolves into the nix profile.
+      # On PATH for anything that shells out to it by name; gpg-agent gets the
+      # store path below instead.
       pinentry-curses
     ];
+
+    dotfiles.gpg.pinentry = "${pkgs.pinentry-curses}/bin/pinentry-curses";
 
     # Generates ~/.config/fontconfig so fc-list/fc-cache see
     # nerd-fonts.jetbrains-mono from the nix profile. Replaces the

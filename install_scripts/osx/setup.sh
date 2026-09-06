@@ -19,15 +19,7 @@ zsh ./install_scripts/shared/install-packages.sh
 # ---- 5. Root-owned leftovers -----------------------------------------------
 zsh ./install_scripts/osx/macos_defaults.sh
 
-# Guarded because an empty pinentry-program line breaks gpg-agent outright,
-# and because this would otherwise re-append on every run.
-PINENTRY="$(command -v pinentry-mac)"
-if [ -n "$PINENTRY" ] && ! grep -qs pinentry-program ~/.gnupg/gpg-agent.conf; then
-    mkdir -p ~/.gnupg
-    chmod 700 ~/.gnupg
-    echo "pinentry-program $PINENTRY" >> ~/.gnupg/gpg-agent.conf
-    gpgconf --kill gpg-agent 2>/dev/null
-fi
+# ~/.gnupg/gpg-agent.conf is nix/gpg.nix's now, written by switch.sh above.
 
 sudo cp ./install_scripts/osx/com.startup.sysctl.plist /Library/LaunchDaemons/com.startup.sysctl.plist
 
