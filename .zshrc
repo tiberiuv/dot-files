@@ -190,8 +190,6 @@ zinit depth=1 lucid light-mode nocd for romkatv/powerlevel10k
 POWERLEVEL10K_MODE="nerfont-complete"
 setopt promptsubst
 
-# eval "$(starship init zsh)"
-
 # ------------------------------------------------------------ #
 # PLUGINS
 # ------------------------------------------------------------ #
