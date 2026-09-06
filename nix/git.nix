@@ -8,11 +8,30 @@
 # git reads ~/.gitconfig *instead of* the XDG path when it exists, so a box
 # carrying a stray ~/.gitconfig silently shadows every setting here. Move it
 # aside before the first switch.
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  signingKey = "23F716AA41329BBB0584365DC3E0272200493EA0";
+  signingConf = "${config.xdg.configHome}/git/signing.conf";
+  signingOn = pkgs.writeText "git-signing.conf" ''
+    [commit]
+    gpgsign = true
+  '';
+in
 
 {
   programs.git = {
     enable = true;
+
+    # git ignores an include whose target is missing, which is the whole
+    # mechanism below: the activation script writes this file only where the
+    # secret key exists, so a box without it just does not sign.
+    includes = [ { path = signingConf; } ];
 
     # Emits the [filter "lfs"] block and pulls in git-lfs.
     lfs.enable = true;
@@ -32,17 +51,20 @@
         excludesfile = "~/.gitignore_global";
         # less is left bare on purpose -- it is a system tool, not part of
         # this package set, so there is no store path to point at.
-        pager = "${pkgs.diff-so-fancy}/bin/diff-so-fancy | less --tabs=4 -RFX";
+        # -+X, not a dropped -X: git exports LESS=FRX itself, so the X has to
+        # be reset here rather than merely left out. It keeps less off the
+        # alternate screen, where the wheel has nothing to scroll.
+        pager = "${pkgs.diff-so-fancy}/bin/diff-so-fancy | less --tabs=4 -RF -+X";
       };
 
-      # commit.gpgsign is deliberately absent. The old .gitconfig set it, but
-      # that file was linked into no home directory, so signing has never
-      # actually been on -- and switching it on breaks `git commit` outright on
-      # any box without a secret key, this workspace included. Turn it on per
-      # machine, or here once every machine has a key.
+      # commit.gpgsign is set in signing.conf, not here, because it is the one
+      # setting that cannot be shared: with it on and no secret key present,
+      # `git commit` fails outright rather than degrading. The signingkey is
+      # safe to state unconditionally -- it does nothing until signing is on.
       # gpg-agent's pinentry is configured per-OS in install_scripts; only the
       # binary is pinned here.
       gpg.program = "${pkgs.gnupg}/bin/gpg";
+      user.signingkey = signingKey;
 
       color = {
         ui = true;
@@ -62,8 +84,21 @@
         };
       };
 
-      pull.rebase = false;
+      # true, not the false this file used to declare: ~/.gitconfig had set it
+      # true since 2024 and was winning, so false was never once in effect.
+      pull.rebase = true;
       branch.autosetuprebase = "never";
+      push.autoSetupRemote = true;
     };
   };
+
+  # Re-checked on every switch, so importing or dropping the key is picked up
+  # by the next one rather than needing this file edited.
+  home.activation.gitSigning = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if ${pkgs.gnupg}/bin/gpg --list-secret-keys ${signingKey} > /dev/null 2>&1; then
+      run install -Dm644 ${signingOn} "${signingConf}"
+    else
+      run rm -f "${signingConf}"
+    fi
+  '';
 }
