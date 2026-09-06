@@ -96,6 +96,18 @@
     nerd-fonts.jetbrains-mono
   ];
 
+  # nvim's python3 provider. lua/options.lua pins vim.g.python3_host_prog to
+  # ~/pynvim/bin/python, so the path stays -- it is a symlink to this env now
+  # rather than a venv both install_packages.sh scripts built by hand.
+  #
+  # home.file, not home.packages, on purpose: this env's bin/ carries `python`
+  # and `python3`, which in a profile would sit in PATH alongside pyenv's shims
+  # for no reason. Nothing but nvim needs to see it.
+  #
+  # A box set up before this has a real ~/pynvim venv directory, which
+  # activation refuses to overwrite. Delete it before the first switch.
+  home.file."pynvim".source = pkgs.python3.withPackages (ps: [ ps.pynvim ]);
+
   # ---------------------------------------------------------------------------
   # Deliberately NOT here
   # ---------------------------------------------------------------------------
@@ -106,7 +118,8 @@
   # In nixpkgs, but adding them would shadow a version manager's shims and
   # silently hand back the wrong toolchain:
   #   nodejs, yarn  -- fnm
-  #   python3       -- pyenv
+  #   python3       -- pyenv (the provider env above is off PATH, so it does
+  #                    not shadow the shims)
   #   terraform     -- tfenv (also unfree/BUSL)
   #   lua, luarocks -- mise
   #   rustc, cargo  -- rustup, which also owns the wasm32 target and the
