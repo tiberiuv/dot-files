@@ -27,6 +27,7 @@ in
       # Claude Code reads CLAUDE.md only, so this one is a stub that imports
       # the file above. Both links point at the checkout, not at each other.
       ".claude/CLAUDE.md".source = link "claude/CLAUDE.md";
+      ".claude/settings.json".source = link "claude/settings.json";
       # settings.json points at this by path and runs it through `sh`, so the
       # link needs no exec bit.
       ".claude/statusline-command.sh".source = link "claude/statusline-command.sh";

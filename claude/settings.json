@@ -1,0 +1,24 @@
+{
+  "enabledPlugins": {
+    "rust-analyzer-lsp@claude-plugins-official": true
+  },
+  "theme": "auto",
+  "agentPushNotifEnabled": true,
+  "model": "opus",
+  "notifications": "true",
+  "bash": {
+    "deniedCommands": [
+      "rm -rf",
+      "git push --force",
+      "sudo",
+      "DROP TABLE",
+      "truncate"
+    ]
+  },
+  "verbose": true,
+  "autoUpdate": true,
+  "statusLine": {
+    "type": "command",
+    "command": "sh ~/.claude/statusline-command.sh"
+  }
+}
