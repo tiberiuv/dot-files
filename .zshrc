@@ -32,16 +32,14 @@ export KUBERNETES_PROVIDER=docker
 # branch: on Linux the variable is empty, so those lines would otherwise
 # inject /bin, /sbin, /opt/... into PATH and, worse, export LDFLAGS/CPPFLAGS
 # pointing at non-existent dirs (which breaks pyenv/cargo source builds).
+#
+# Apple Silicon only -- no /usr/local fallback. The Intel branch this replaced
+# had rotted anyway: it pinned SPARK_HOME to a Cellar path for apache-spark
+# 3.2.0, which stopped resolving at the first `brew upgrade` after it landed.
 if [[ $(uname -s) == "Darwin" ]]; then
-  if [[ $(uname -m) == arm64 ]]; then
-    eval $(/opt/homebrew/bin/brew shellenv)
-    export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
-    export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
-  else
-    eval $(/usr/local/bin/brew shellenv)
-    export SPARK_HOME="$HOMEBREW_PREFIX/Cellar/apache-spark/3.2.0/libexec"
-    export RUST_ANALYZER_TARGET="x86_64-apple-darwin"
-  fi
+  eval $(/opt/homebrew/bin/brew shellenv)
+  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
+  export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
 
   # No GOROOT or SCALA_HOME: go, scala and sbt come from nix and locate their
   # own runtimes. A stale GOROOT gives "go: cannot find GOROOT directory".

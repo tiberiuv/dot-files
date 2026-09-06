@@ -11,11 +11,8 @@ if ! which -s brew ; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
-if [ "$(arch)" = "arm64" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)";
-else
-  eval "$(/usr/local/bin/brew shellenv)";
-fi
+# Apple Silicon only; /usr/local is not probed.
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Resolve relative to this script, not the caller's cwd: setup.sh runs it
 # from the repo root, where ./install_brew_packages.sh does not exist.
