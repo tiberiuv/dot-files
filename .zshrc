@@ -143,6 +143,24 @@ if [[ $(uname) == "Darwin" ]]; then
 fi
 
 alias vim=nvim
+
+# `tm` for the machine that owns the windows, `tm <device>` for anything
+# attaching alongside it, so the two do not have to share a geometry.
+#
+# The extra member is reused rather than reaped: destroy-unattached takes
+# effect the instant it is set, which destroys a session created detached
+# before anything can attach to it.
+tm() {
+    local base=main
+    local member=${1:-$base}
+    tmux has-session -t "=$base" 2>/dev/null || tmux new-session -d -s "$base"
+    if [[ "$member" != "$base" ]]; then
+        tmux has-session -t "=$member" 2>/dev/null \
+            || tmux new-session -d -t "$base" -s "$member"
+    fi
+    tmux attach-session -t "$member"
+}
+
 if type eza >/dev/null 2>&1; then
   alias ls=eza
 elif type exa >/dev/null 2>&1; then
