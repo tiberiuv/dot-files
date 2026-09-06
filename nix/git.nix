@@ -52,8 +52,10 @@ in
         # less is left bare on purpose -- it is a system tool, not part of
         # this package set, so there is no store path to point at.
         # -+X, not a dropped -X: git exports LESS=FRX itself, so the X has to
-        # be reset here rather than merely left out. It keeps less off the
-        # alternate screen, where the wheel has nothing to scroll.
+        # be reset here rather than merely left out. Resetting it restores the
+        # termcap init/deinit, i.e. less runs on the alternate screen -- which
+        # is what the WheelUpPane binding in .tmux.conf keys off to translate
+        # the wheel into arrow keys. less does no mouse reporting of its own.
         pager = "${pkgs.diff-so-fancy}/bin/diff-so-fancy | less --tabs=4 -RF -+X";
       };
 
