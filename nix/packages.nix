@@ -113,6 +113,7 @@
     # --- Fonts ------------------------------------------------------------
     # fonts.fontconfig.enable (linux.nix) is what makes fc-list see this.
     nerd-fonts.jetbrains-mono
+    codex
   ];
 
   # ---------------------------------------------------------------------------

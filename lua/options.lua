@@ -20,7 +20,7 @@ opt.ruler = false
 opt.showcmd = false
 -- Empty here silently kills the wheel: the .tmux.conf bindings route on
 -- mouse_any_flag, which only rises if the pane enables mouse reporting.
-opt.mouse = "a"
+opt.mouse = ""
 opt.termguicolors = true
 
 -- Over ssh or mosh there is no local X/Wayland display, so nvim's xclip/wl-copy
