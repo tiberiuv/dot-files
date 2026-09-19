@@ -27,6 +27,9 @@ in
       # Claude Code reads CLAUDE.md only, so this one is a stub that imports
       # the file above. Both links point at the checkout, not at each other.
       ".claude/CLAUDE.md".source = link "claude/CLAUDE.md";
+      # Codex loads its global AGENTS.md from ~/.codex; keep shared rules in
+      # the canonical file above and import them from this agent-specific stub.
+      ".codex/AGENTS.md".source = link "codex/AGENTS.md";
       ".claude/settings.json".source = link "claude/settings.json";
       # settings.json points at this by path and runs it through `sh`, so the
       # link needs no exec bit.
