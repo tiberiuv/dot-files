@@ -46,6 +46,7 @@ return {
                 "typescript",
                 "yaml",
                 "zsh",
+                "make"
             }
             require("nvim-treesitter").install(parsers)
         end,
