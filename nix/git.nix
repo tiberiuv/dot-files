@@ -90,7 +90,18 @@ in
       # true since 2024 and was winning, so false was never once in effect.
       pull.rebase = true;
       branch.autosetuprebase = "never";
-      push.autoSetupRemote = true;
+      push = {
+        autoSetupRemote = true;
+        # A bare --force-with-lease trusts the remote-tracking ref, which any
+        # background fetch (an editor's autofetch, say) silently moves up to
+        # the remote tip, turning the lease into a plain --force. This makes
+        # the lease also require that tip to be reachable from local history.
+        useForceIfIncludes = true;
+      };
+
+      # git has no setting that makes --force itself lease-checked, so the
+      # safe form has to be the shorter one to type.
+      alias.pf = "push --force-with-lease";
     };
   };
 
