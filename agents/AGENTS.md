@@ -6,6 +6,7 @@
 
 - Ask before anything that changes state outside the working tree or is hard to undo: infra applies (`terraform apply`, kubectl writes -- apply, delete, scale, patch, edit, rollout, cordon, drain, taint, label, annotate, create, replace), package and profile changes (`nix` switches, `brew uninstall`), history rewrites and force pushes, `rm -rf`, and anything that publishes (`git push`, `gh pr merge`). Approval for one is not approval for the next.
 - Read-only counterparts never need asking: kubectl get/describe/logs/top/auth can-i, `--dry-run` anything, `git log`, `git status`.
+- Propose before editing when the change is a design decision -- swapping a mechanism, deleting or merging files, renaming config keys. Lay out the problem, the approach, the trade-offs and the files it touches, then stop for my go-ahead. Small mechanical edits and read-only investigation don't need this.
 
 ## Git commits
 
