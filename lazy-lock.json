@@ -19,6 +19,8 @@
   "lualine.nvim": { "branch": "master", "commit": "221ce6b2d999187044529f49da6554a92f740a96" },
   "markdown-preview.nvim": { "branch": "master", "commit": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee" },
   "mcphub.nvim": { "branch": "main", "commit": "7cd5db330f41b7bae02b2d6202218a061c3ebc1f" },
+  "mega.cmdparse": { "branch": "main", "commit": "47ea5b1b23059fbb79a8e262002f32e7cd8aed90" },
+  "mega.logging": { "branch": "main", "commit": "194ad8c300186e73c3eb1ebeb3ede42eb219be3b" },
   "mini.pick": { "branch": "main", "commit": "230805ad6d0d6e4cebbf377bad864ac20b83a1f0" },
   "neoscroll.nvim": { "branch": "master", "commit": "c8d29979cb0cb3a2437a8e0ae683fd82f340d3b8" },
   "nginx.vim": { "branch": "master", "commit": "a5991f38135d0c6c259d0b9f5e629ba33b891b9e" },

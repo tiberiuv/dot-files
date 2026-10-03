@@ -58,6 +58,8 @@ return {
         },
     },
     dependencies = {
+        "ColinKennedy/mega.cmdparse",
+        "ColinKennedy/mega.logging",
         -- "nvim-treesitter/nvim-treesitter",
         "nvim-lua/plenary.nvim",
         "MunifTanjim/nui.nvim",
