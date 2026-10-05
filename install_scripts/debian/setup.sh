@@ -14,6 +14,7 @@
 # ---- 4. Version and plugin managers ----------------------------------------
 . ./install_scripts/shared/install-packages.sh
 . ./install_scripts/debian/install_packages.sh
+. ./install_scripts/shared/install-ai-tools.sh
 
 # ---- 5. Root-owned leftovers -----------------------------------------------
 # ~/.gnupg/gpg-agent.conf is nix/gpg.nix's now, written by switch.sh above.

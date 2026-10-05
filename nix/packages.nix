@@ -113,7 +113,6 @@
     # --- Fonts ------------------------------------------------------------
     # fonts.fontconfig.enable (linux.nix) is what makes fc-list see this.
     nerd-fonts.jetbrains-mono
-    codex
   ];
 
   # ---------------------------------------------------------------------------
@@ -122,6 +121,8 @@
   # Not in nixpkgs, so their own installers stay:
   #   multi-gitter  -- `go install`
   #   tfenv         -- git clone
+  #   claude-code   -- Anthropic native installer, stable channel
+  #   codex         -- OpenAI npm package, latest stable dist-tag
   #
   # In nixpkgs, but adding them would shadow a version manager's shims and
   # silently hand back the wrong toolchain:

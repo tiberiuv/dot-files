@@ -37,6 +37,11 @@ fi
 # Update yarn packages
 [[ ${commands[yarn]} ]] && yarn global upgrade
 
+# Provider-managed coding agents. Claude's native installer remains on its
+# configured stable channel; npm's latest dist-tag is Codex's stable release.
+[[ ${commands[claude]} ]] && claude update
+[[ ${commands[npm]} ]] && npm install -g @openai/codex@latest
+
 # Update zinit & packages
 if (( ${+functions[zinit]} )); then
   zinit self-update

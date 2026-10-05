@@ -15,6 +15,7 @@
 # version managers together.
 zsh ./install_scripts/osx/install_packages.sh
 zsh ./install_scripts/shared/install-packages.sh
+zsh ./install_scripts/shared/install-ai-tools.sh
 
 # ---- 5. Root-owned leftovers -----------------------------------------------
 zsh ./install_scripts/osx/macos_defaults.sh
