@@ -25,7 +25,7 @@ fi
 #
 # Sourced, so $0 is this file; :A:h gives the checkout wherever it lives.
 if [[ ${commands[nix]} ]]; then
-  nix flake update --flake ${0:A:h}
+  nix --extra-experimental-features 'nix-command flakes' flake update --flake ${0:A:h}
   ${0:A:h}/nix/switch.sh
   nix-collect-garbage -d --delete-older-than 14d
 fi
