@@ -1,0 +1,6 @@
+[tui]
+alternate_screen = "never"
+status_line = ["model-with-reasoning", "context-remaining", "five-hour-limit", "weekly-limit", "current-dir", "git-branch"]
+
+[features]
+memories = true

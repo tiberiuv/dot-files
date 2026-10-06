@@ -30,6 +30,7 @@ in
       # Codex loads its global AGENTS.md from ~/.codex; keep shared rules in
       # the canonical file above and import them from this agent-specific stub.
       ".codex/AGENTS.md".source = link "codex/AGENTS.md";
+      ".codex/shared.config.toml".source = link "codex/shared.config.toml";
       ".claude/settings.json".source = link "claude/settings.json";
       # settings.json points at this by path and runs it through `sh`, so the
       # link needs no exec bit.

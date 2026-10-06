@@ -135,6 +135,16 @@ alias ssh="TERM=xterm-256color ssh"
 # this .zshrc, a symlink into the checkout -- so :A:h gives the repo root.
 DOTFILES_DIR=${${(%):-%x}:A:h}
 alias update-all=". $DOTFILES_DIR/update.zsh"
+# Codex profile files overlay the local config; config.toml has no include.
+codex() {
+  local arg
+  for arg in "$@"; do
+    case "$arg" in
+      -p|--profile|-p?*|--profile=*) command codex "$@"; return ;;
+    esac
+  done
+  command codex --profile shared "$@"
+}
 alias clean_evicted="kubectl get pod | grep Evicted | awk '{print $1}' | xargs kubectl delete pod"
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
