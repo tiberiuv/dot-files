@@ -358,6 +358,9 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [window]
 decorations = "full"
+# Left Option is Meta, for Alt-b/f/. in zsh; right Option still types
+# accented characters.
+option_as_alt = "OnlyLeft"
 opacity = 1
 
 [window.dimensions]
