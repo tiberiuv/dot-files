@@ -28,6 +28,10 @@ export KUBERNETES_PROVIDER=docker
 # ------------------------------------------------------------ #
 # Path
 # ------------------------------------------------------------ #
+# Shells inside tmux inherit PATH and then prepend all of the below again.
+# Both names: -U on the array alone does not dedupe the `export PATH=...:$PATH`
+# assignments below, which go through the scalar.
+typeset -U PATH path
 # Everything derived from $HOMEBREW_PREFIX has to stay inside the Darwin
 # branch: on Linux the variable is empty, so those lines would otherwise
 # inject /bin, /sbin, /opt/... into PATH and, worse, export LDFLAGS/CPPFLAGS
