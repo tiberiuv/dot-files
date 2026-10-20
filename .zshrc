@@ -9,16 +9,11 @@ export RUST_HOME="$HOME/.rustup"
 export CARGO_HOME="$HOME/.cargo"
 export PYENV_ROOT="$HOME/.pyenv"
 export GOPATH="$HOME/go"
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 export PYSPARK_PYTHON=python3
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 export EDITOR=nvim
-export GPG_TTY=$(tty)
-# ssh
-export SSH_KEY_PATH=~/.ssh/rsa_id
+export GPG_TTY=$TTY
 export CLICOLOR=1
-export COLORTERM=truecolor
 export LSCOLORS=Gxfxcxdxbxegedabagacad
 export LS_COLORS='ow=36:di=34:fi=32:ex=31:ln=35:'
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
