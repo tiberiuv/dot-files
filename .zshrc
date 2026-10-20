@@ -72,11 +72,7 @@ export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 # ------------------------------------------------------------ #
-# Without the bindkey alt+right/left is broken it tmux
-# ------------------------------------------------------------ #
 bindkey -e
-bindkey "^[[1;9C" forward-word
-bindkey "^[[1;9D" backward-word
 
 WORDCHARS="*?[]~=&;!#$%^(){}<>"
 # ------------------------------------------------------------ #
