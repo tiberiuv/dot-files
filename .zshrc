@@ -73,9 +73,6 @@ export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 # ------------------------------------------------------------ #
-# Minifort
-alias STAGING_CLUSTER=gcloud container clusters get-credentials staging-2 --zone europe-west1-b
-# ------------------------------------------------------------ #
 # Without the bindkey alt+right/left is broken it tmux
 # ------------------------------------------------------------ #
 bindkey -e
@@ -183,8 +180,7 @@ if type procs >/dev/null 2>&1; then
   alias ps=procs
 fi
 
-# Forward port 80 and 443 from host to nginx running in kubernetes (minikube)
-alias forward_nginx='sudo kubectl port-forward svc/nginx 80:80 443:443'
+alias claude="claude --model opus"
 # ------------------------------------------------------------ #
 #
 # ------------------------------------------------------------ #
