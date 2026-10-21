@@ -1,10 +1,17 @@
 {
+  "model": "opus",
+  "statusLine": {
+    "type": "command",
+    "command": "sh ~/.claude/statusline-command.sh"
+  },
   "enabledPlugins": {
-    "rust-analyzer-lsp@claude-plugins-official": true
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true
   },
   "theme": "auto",
+  "verbose": true,
   "agentPushNotifEnabled": true,
-  "model": "opus",
   "notifications": "true",
   "bash": {
     "deniedCommands": [
@@ -15,10 +22,5 @@
       "truncate"
     ]
   },
-  "verbose": true,
-  "autoUpdate": true,
-  "statusLine": {
-    "type": "command",
-    "command": "sh ~/.claude/statusline-command.sh"
-  }
+  "autoUpdate": true
 }
