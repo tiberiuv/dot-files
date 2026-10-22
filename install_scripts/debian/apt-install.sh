@@ -20,6 +20,9 @@ sudo -E apt install -y ca-certificates curl
 #     copies win on PATH afterwards, which is intended.
 #   - alacritty, fontconfig: GUI terminal, and the fc-cache/fc-list that
 #     fonts.fontconfig.enable in nix/linux.nix writes config for.
+#   - iputils-ping: the store cannot hold setuid or file-capability binaries,
+#     so a nix ping only works where ping_group_range allows unprivileged
+#     ICMP -- and, being first on PATH, would shadow this one where it does not.
 #   - default-jdk: .zshrc exports JAVA_HOME=/usr/lib/jvm/default-java.
 #   - the libpq/mysql/xml -dev headers: project-level Python build deps
 #     (psycopg2, mysqlclient, xmlsec). Nothing else installs them.
@@ -35,6 +38,7 @@ PACKAGES="
     lld
     default-jdk
     procps
+    iputils-ping
     curl
     fuse3
     unzip

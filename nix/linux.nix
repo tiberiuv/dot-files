@@ -9,6 +9,7 @@
       # On PATH for anything that shells out to it by name; gpg-agent gets the
       # store path below instead.
       pinentry-curses
+      dnsutils # dig, nslookup; macOS ships both. ping is apt's, see apt-install.sh.
     ];
 
     dotfiles.gpg.pinentry = "${pkgs.pinentry-curses}/bin/pinentry-curses";
