@@ -83,6 +83,13 @@
 
     # --- Kubernetes -------------------------------------------------------
     kubectl
+    # Ships only `krew`, not `kubectl-krew`, so it is invoked as `krew ...`;
+    # `kubectl krew` resolves only if krew is also installed into ~/.krew,
+    # which would then shadow this one. Plugins it installs land in
+    # ~/.krew/bin, which .zshrc puts on PATH.
+    krew
+    kubectl-cnpg # kubectl cnpg
+    kubectl-rook-ceph # kubectl rook-ceph
 
     # --- Scala ------------------------------------------------------------
     coursier
