@@ -36,6 +36,12 @@ return {
             vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
                 callback = function()
                     require("lint").try_lint()
+                    -- Not in linters_by_ft: workflows are plain `yaml`, and
+                    -- actionlint flags any other YAML as a broken workflow.
+                    local forge = vim.api.nvim_buf_get_name(0):match("/%.(%a+)/workflows/[^/]+%.ya?ml$")
+                    if forge == "github" or forge == "forgejo" then
+                        require("lint").try_lint("actionlint")
+                    end
                 end,
             })
             vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
