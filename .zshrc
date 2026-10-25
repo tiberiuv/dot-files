@@ -9,7 +9,6 @@ export RUST_HOME="$HOME/.rustup"
 export CARGO_HOME="$HOME/.cargo"
 export PYENV_ROOT="$HOME/.pyenv"
 export GOPATH="$HOME/go"
-export PYSPARK_PYTHON=python3
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 export EDITOR=nvim
 export GPG_TTY=$TTY
@@ -32,17 +31,13 @@ typeset -U PATH path
 # inject /bin, /sbin, /opt/... into PATH and, worse, export LDFLAGS/CPPFLAGS
 # pointing at non-existent dirs (which breaks pyenv/cargo source builds).
 #
-# Apple Silicon only -- no /usr/local fallback. The Intel branch this replaced
-# had rotted anyway: it pinned SPARK_HOME to a Cellar path for apache-spark
-# 3.2.0, which stopped resolving at the first `brew upgrade` after it landed.
+# Apple Silicon only -- no /usr/local fallback.
 if [[ $(uname -s) == "Darwin" ]]; then
   eval $(/opt/homebrew/bin/brew shellenv)
-  export SPARK_HOME="$HOMEBREW_PREFIX/opt/apache-spark/libexec"
   export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
 
-  # No GOROOT or SCALA_HOME: go, scala and sbt come from nix and locate their
-  # own runtimes. A stale GOROOT gives "go: cannot find GOROOT directory".
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home
+  # No GOROOT: go comes from nix and locates its own. A stale GOROOT gives
+  # "go: cannot find GOROOT directory".
 
   export PATH=$HOMEBREW_PREFIX/bin:$PATH
   export PATH=$HOMEBREW_PREFIX/sbin:$PATH
@@ -56,7 +51,6 @@ if [[ $(uname -s) == "Darwin" ]]; then
   export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
 elif [[ $(uname -s) == "Linux" ]]; then
   # No GOROOT here either -- see the Darwin branch above.
-  export JAVA_HOME=/usr/lib/jvm/default-java
   export RUST_ANALYZER_TARGET="$(uname -m)-unknown-linux-gnu"
 
   export PATH=$HOME/.dotnet:$HOME/.dotnet/tools:$PATH
@@ -66,7 +60,6 @@ fi
 export PATH=$PYENV_ROOT/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$JAVA_HOME/bin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"

@@ -12,14 +12,13 @@
 #      classic glibc/header mismatch.
 
 # homebrew/cask is built into brew now, and homebrew/cask-versions was
-# deprecated and its casks (temurin11, firefox@developer-edition) folded into
+# deprecated and its casks (firefox@developer-edition) folded into
 # homebrew/cask -- tapping either just errors out.
 brew tap hashicorp/tap
 
 # GUI apps
 brew install --cask \
   firefox@developer-edition \
-  temurin11 \
   docker
 
 brew install alacritty

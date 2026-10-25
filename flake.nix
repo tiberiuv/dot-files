@@ -50,9 +50,9 @@
 
       pkgs = import nixpkgs {
         inherit system;
-        # terraform (BUSL) and the temurin JDKs are unfree. Neither is in
-        # nix/packages.nix today -- tfenv still owns terraform -- but leaving
-        # this off turns a future one-line addition into a confusing eval error.
+        # terraform (BUSL) is unfree. It is not in nix/packages.nix today --
+        # tfenv still owns it -- but leaving this off turns a future one-line
+        # addition into a confusing eval error.
         config.allowUnfree = true;
       };
 
