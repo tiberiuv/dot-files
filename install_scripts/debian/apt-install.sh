@@ -20,6 +20,11 @@ sudo -E apt install $APT_FLAGS ca-certificates curl
 #     compile against the system headers.
 #   - the pyenv build deps: pyenv compiles CPython, so it needs the -dev
 #     headers on the system, not in a profile.
+#   - less, openssh-client, iproute2, rsync, psmisc, lsof, strace, file, ...:
+#     the userland a full Ubuntu install has and the ubuntu:26.04 image lacks,
+#     so no-ops on a workstation. System tools because they get called bare:
+#     less by git.nix's pager, rsync from the far end of an ssh, strace and
+#     lsof through sudo.
 #   - git, curl, zsh: needed to *reach* nix, and zsh is the login shell (chsh
 #     to a /nix path loses you a shell the moment /nix fails to mount). The nix
 #     copies win on PATH afterwards, which is intended.
@@ -37,6 +42,19 @@ PACKAGES="
     alacritty
     git
     zsh
+    less
+    openssh-client
+    iproute2
+    rsync
+    bsdextrautils
+    lsb-release
+    psmisc
+    lsof
+    strace
+    file
+    xxd
+    zip
+    bc
     sudo
     build-essential
     pkg-config

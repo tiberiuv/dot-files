@@ -30,7 +30,7 @@ check docker buildx version
 check docker compose version
 check bash -c "locale -a | grep -qiE '^en_US\.utf-?8$'"
 
-for cmd in git zsh curl unzip clang lld pkg-config make python3 mysql fc-list ping mtr traceroute tcpdump nmap; do
+for cmd in git zsh less ssh ip ss rsync column lsb_release pstree lsof strace file xxd zip bc curl unzip clang lld pkg-config make python3 mysql fc-list ping mtr traceroute tcpdump nmap; do
     check command -v "$cmd"
 done
 
