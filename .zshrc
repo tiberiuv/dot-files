@@ -53,7 +53,6 @@ elif [[ $(uname -s) == "Linux" ]]; then
   # No GOROOT here either -- see the Darwin branch above.
   export RUST_ANALYZER_TARGET="$(uname -m)-unknown-linux-gnu"
 
-  export PATH=$HOME/.dotnet:$HOME/.dotnet/tools:$PATH
   export PATH=$HOME/.tfenv/bin:$PATH
 fi
 

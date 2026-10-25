@@ -141,5 +141,5 @@
   #
   # Enabled in lua/lsp/init.lua but installed by nothing, before or after this
   # migration -- pre-existing gaps, not regressions:
-  #   vimls, gopls, hls, zls, csharp_ls, clangd
+  #   vimls, gopls, hls, zls, clangd
 }
