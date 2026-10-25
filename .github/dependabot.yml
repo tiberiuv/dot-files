@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # Keeps the SHA pins in .github/workflows current, comments included.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
