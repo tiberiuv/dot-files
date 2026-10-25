@@ -22,27 +22,30 @@ env:
   IMAGE: ghcr.io/${{ github.repository_owner }}/dot-files-workspace
 
 jobs:
-  build:
+  # Build, smoke-test and scan with no token that can write packages: the
+  # scanner is third-party code, and nothing past this job runs unless the
+  # image passed both.
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
     permissions:
       contents: read
-      packages: write
     outputs:
-      digest: ${{ steps.push.outputs.digest }}
+      today: ${{ steps.date.outputs.today }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
       - id: date
         run: echo "today=$(date -u +%Y%m%d)" >> "$GITHUB_OUTPUT"
 
       # amd64 only: the runner's own arch, so it can be loaded and run without
-      # QEMU. The push below reuses these layers from the cache.
+      # QEMU. Exported to the cache on every run, the schedule included, since
+      # that is how the push job gets the very layers tested here instead of
+      # rebuilding them.
       - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: install_scripts/debian
@@ -51,13 +54,60 @@ jobs:
           load: true
           tags: workspace:test
           build-args: APT_REFRESH=${{ steps.date.outputs.today }}
-          # No cache-to: the push build exports both platforms to the same
-          # scope moments later, overwriting this one.
           cache-from: type=gha
+          cache-to: type=gha,mode=max
           provenance: false
           sbom: false
 
       - run: docker run --rm -v "$PWD/install_scripts/debian:/t:ro" workspace:test bash /t/smoke-test.sh
+
+      # Everything, report-only. The prebuilt Go binaries (the docker CLI
+      # plugins) carry findings only an upstream rebuild can fix, and holding
+      # `latest` for them would also hold back that day's apt fixes.
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: workspace:test
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: table
+          output: trivy.txt
+          exit-code: "0"
+
+      - run: |
+          {
+            echo '### Trivy: HIGH/CRITICAL with a fix available'
+            echo '```'
+            cat trivy.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # The gate: Ubuntu packages only. A fixed HIGH/CRITICAL there should be
+      # gone after the `apt upgrade` this build just ran, so one that survives
+      # means something is actually wrong.
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: workspace:test
+          vuln-type: os
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: table
+          exit-code: "1"
+          skip-setup-trivy: true
+
+  push:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
 
       - uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
         with:
@@ -74,8 +124,9 @@ jobs:
             type=raw,value={{date 'YYYYMMDD'}}
             type=sha
 
-      - id: push
-        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      # The same APT_REFRESH as the test job, so amd64 is a cache hit on the
+      # layers that were tested and scanned.
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: install_scripts/debian
           platforms: linux/amd64,linux/arm64
@@ -83,50 +134,20 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: APT_REFRESH=${{ steps.date.outputs.today }}
+          build-args: APT_REFRESH=${{ needs.test.outputs.today }}
           cache-from: type=gha
-          # Not written on the schedule: the apt layer is ~1.5 GB per platform
-          # and keyed to the date, so a scheduled export only helps a later
-          # push on the same day, against a 10 GB repo cache limit.
+          # Not written on the schedule: arm64's apt layer is keyed to the
+          # date, so a scheduled export only helps a later push on the same
+          # day, against a 10 GB repo cache limit.
           cache-to: ${{ github.event_name != 'schedule' && 'type=gha,mode=max' || '' }}
           provenance: mode=max
           sbom: true
-
-  # Separate job so a third-party scanner never runs next to a token that can
-  # write packages. Report-only: most findings are in the Ubuntu base and have
-  # no fix to apply here.
-  scan:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      packages: read
-    steps:
-      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        env:
-          TRIVY_USERNAME: ${{ github.actor }}
-          TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          image-ref: ${{ env.IMAGE }}@${{ needs.build.outputs.digest }}
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          format: table
-          output: trivy.txt
-          exit-code: "0"
-
-      - run: |
-          {
-            echo '### Trivy: HIGH/CRITICAL with a fix available'
-            echo '```'
-            cat trivy.txt
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
 
   # delete-package-versions is not used: it treats each platform and
   # attestation manifest as its own version, so pruning by count deletes
   # children out from under images it keeps.
   prune:
-    needs: build
+    needs: push
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
