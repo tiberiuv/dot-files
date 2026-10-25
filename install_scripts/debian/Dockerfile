@@ -9,10 +9,15 @@
 # drifting apart.
 FROM codercom/enterprise-base:ubuntu
 
+# CI passes the date. Any change to a build arg invalidates the RUN below, so a
+# daily rebuild re-runs `apt upgrade` instead of replaying yesterday's cached
+# layer, while builds within the same day still share it.
+ARG APT_REFRESH
+
 USER root
 
 COPY apt-install.sh /tmp/apt-install.sh
-RUN bash /tmp/apt-install.sh \
+RUN APT_STRICT=1 bash /tmp/apt-install.sh \
     && rm -rf /tmp/apt-install.sh /var/lib/apt/lists/*
 
 USER coder

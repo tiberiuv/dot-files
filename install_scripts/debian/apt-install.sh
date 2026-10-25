@@ -70,7 +70,10 @@ PACKAGES="
 if ! sudo -E apt install -y $PACKAGES; then
     echo "Batch apt install failed; retrying package by package." >&2
     for pkg in $PACKAGES; do
-        sudo -E apt install -y "$pkg" || echo "apt: could not install $pkg" >&2
+        if ! sudo -E apt install -y "$pkg"; then
+            echo "apt: could not install $pkg" >&2
+            apt_failed="${apt_failed:-}$pkg "
+        fi
     done
 fi
 
@@ -81,4 +84,12 @@ if command -v locale-gen >/dev/null 2>&1 && ! locale -a 2>/dev/null | grep -qiE 
     grep -qs '^en_US.UTF-8 UTF-8' /etc/locale.gen \
         || echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen >/dev/null
     sudo -E locale-gen en_US.UTF-8
+fi
+
+# Set by the image build, where a missing package must fail the build rather
+# than ship. Off by default: setup.sh sources this file, so the exit would take
+# setup.sh down with it.
+if [ -n "${APT_STRICT:-}" ] && [ -n "${apt_failed:-}" ]; then
+    echo "apt: failed to install: $apt_failed" >&2
+    exit 1
 fi
