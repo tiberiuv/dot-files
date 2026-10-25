@@ -112,6 +112,11 @@
     # would fail there while still working for plain ssh.
     mosh
 
+    # --- Network ----------------------------------------------------------
+    # Only what runs unprivileged; the rest is apt's, see apt-install.sh.
+    socat
+    iperf3
+
     # --- Fonts ------------------------------------------------------------
     # fonts.fontconfig.enable (linux.nix) is what makes fc-list see this.
     nerd-fonts.jetbrains-mono

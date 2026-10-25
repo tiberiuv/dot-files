@@ -22,12 +22,13 @@ check test "$(id -un)" = coder
 check sudo -n true
 check bash -c "locale -a | grep -qiE '^en_US\.utf-?8$'"
 
-for cmd in git zsh curl unzip clang lld pkg-config make python3 mysql fc-list ping; do
+for cmd in git zsh curl unzip clang lld pkg-config make python3 mysql fc-list ping mtr traceroute tcpdump nmap; do
     check command -v "$cmd"
 done
 
 check bash -c 'printf "int main(void){return 0;}" | clang -x c - -o /tmp/smoke && /tmp/smoke'
 check python3 -m venv /tmp/smoke-venv
 check ping -c 1 -W 2 127.0.0.1
+check mtr -r -c 1 127.0.0.1
 
 exit "$failed"

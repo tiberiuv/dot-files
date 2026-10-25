@@ -28,6 +28,9 @@ sudo -E apt install $APT_FLAGS ca-certificates curl
 #   - iputils-ping: the store cannot hold setuid or file-capability binaries,
 #     so a nix ping only works where ping_group_range allows unprivileged
 #     ICMP -- and, being first on PATH, would shadow this one where it does not.
+#   - mtr-tiny, traceroute, tcpdump, nmap: the same raw-socket problem, and
+#     the root-only modes are run through sudo, whose secure_path never sees
+#     the nix profile. Unprivileged network tools are in nix.
 #   - the libpq/mysql/xml -dev headers: project-level Python build deps
 #     (psycopg2, mysqlclient, xmlsec). Nothing else installs them.
 PACKAGES="
@@ -42,6 +45,10 @@ PACKAGES="
     lld
     procps
     iputils-ping
+    mtr-tiny
+    traceroute
+    tcpdump
+    nmap
     curl
     fuse3
     unzip
