@@ -17,7 +17,7 @@ ARG APT_REFRESH
 USER root
 
 COPY apt-install.sh /tmp/apt-install.sh
-RUN APT_STRICT=1 bash /tmp/apt-install.sh \
+RUN APT_STRICT=1 APT_NO_RECOMMENDS=1 bash /tmp/apt-install.sh \
     && rm -rf /tmp/apt-install.sh /var/lib/apt/lists/*
 
 USER coder

@@ -7,7 +7,12 @@ export DEBIAN_FRONTEND=noninteractive
 sudo -E apt update
 sudo -E apt upgrade -y
 
-sudo -E apt install -y ca-certificates curl
+# Set by the image build only: a workstation keeps Recommends.
+APT_FLAGS="-y"
+[ -n "${APT_NO_RECOMMENDS:-}" ] && APT_FLAGS="$APT_FLAGS --no-install-recommends"
+
+# shellcheck disable=SC2086
+sudo -E apt install $APT_FLAGS ca-certificates curl
 
 # What nix cannot or must not provide:
 #   - build-essential/pkg-config/llvm/clang/lld: the C toolchain. Kept out of
@@ -64,13 +69,22 @@ PACKAGES="
     default-mysql-client
 "
 
+# No display to draw on: an image build, a Coder workspace, a server. The
+# catch is a desktop box set up over ssh without X forwarding, which skips it
+# too.
+if [ -z "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then
+    # shellcheck disable=SC2086
+    PACKAGES=$(printf '%s\n' $PACKAGES | grep -vx alacritty)
+fi
+
 # One unavailable package name would otherwise abort the entire list, so retry
 # per package and report what could not be installed instead of dying.
 # shellcheck disable=SC2086
-if ! sudo -E apt install -y $PACKAGES; then
+if ! sudo -E apt install $APT_FLAGS $PACKAGES; then
     echo "Batch apt install failed; retrying package by package." >&2
     for pkg in $PACKAGES; do
-        if ! sudo -E apt install -y "$pkg"; then
+        # shellcheck disable=SC2086
+        if ! sudo -E apt install $APT_FLAGS "$pkg"; then
             echo "apt: could not install $pkg" >&2
             apt_failed="${apt_failed:-}$pkg "
         fi
