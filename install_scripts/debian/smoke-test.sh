@@ -18,8 +18,16 @@ check() {
     fi
 }
 
-check test "$(id -un)" = coder
+check test "$(id -un):$(id -u)" = coder:1000
 check sudo -n true
+
+# The k8s-kata Coder template's entrypoint and startup scripts.
+for cmd in blkid mount mountpoint runuser jq; do
+    check command -v "$cmd"
+done
+check docker --version
+check docker buildx version
+check docker compose version
 check bash -c "locale -a | grep -qiE '^en_US\.utf-?8$'"
 
 for cmd in git zsh curl unzip clang lld pkg-config make python3 mysql fc-list ping mtr traceroute tcpdump nmap; do
