@@ -60,6 +60,7 @@
     shellcheck
     yamllint
     hadolint
+    actionlint
     cspell
     markdownlint-cli2
     prettier
