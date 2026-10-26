@@ -1,48 +1,88 @@
 # Global Rules
 
-- These rules live in `~/.agents/AGENTS.md` (checkout: `dot-files/agents/AGENTS.md`). Asked to change my global rules, edit that file -- not a per-agent stub that imports it. Only rules specific to one agent belong in that agent's stub.
+- These rules live in `~/.agents/AGENTS.md` (checkout:
+  `dot-files/agents/AGENTS.md`). Asked to change my global rules, edit that file
+  -- not a per-agent stub that imports it. Only rules specific to one agent
+  belong in that agent's stub.
 
 ## Mutating commands
 
-- Ask before anything that changes state outside the working tree or is hard to undo: infra applies (`terraform apply`, kubectl writes -- apply, delete, scale, patch, edit, rollout, cordon, drain, taint, label, annotate, create, replace), package and profile changes (`nix` switches, `brew uninstall`), history rewrites and force pushes, `rm -rf`, and anything that publishes (`git push`, `gh pr merge`). Approval for one is not approval for the next.
-- Read-only counterparts never need asking: kubectl get/describe/logs/top/auth can-i, `--dry-run` anything, `git log`, `git status`.
-- Propose before editing when the change is a design decision -- swapping a mechanism, deleting or merging files, renaming config keys. Lay out the problem, the approach, the trade-offs and the files it touches, then stop for my go-ahead. Small mechanical edits and read-only investigation don't need this.
+- Ask before anything that changes state outside the working tree or is hard to
+  undo: infra applies (`terraform apply`, kubectl writes -- apply, delete,
+  scale, patch, edit, rollout, cordon, drain, taint, label, annotate, create,
+  replace), package and profile changes (`nix` switches, `brew uninstall`),
+  history rewrites and force pushes, `rm -rf`, and anything that publishes
+  (`git push`, `gh pr merge`). Approval for one is not approval for the next.
+- Read-only counterparts never need asking: kubectl get/describe/logs/top/auth
+  can-i, `--dry-run` anything, `git log`, `git status`.
+- Propose before editing when the change is a design decision -- swapping a
+  mechanism, deleting or merging files, renaming config keys. Lay out the
+  problem, the approach, the trade-offs and the files it touches, then stop for
+  my go-ahead. Small mechanical edits and read-only investigation don't need
+  this.
 
 ## Git commits
 
-- Conventional commits, always: `type(scope): subject` -- lowercase, imperative, no trailing period. `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `perf`, `build`, `ci`. Scope is the thing changed (`nvim`, `nix`, `tmux`, `claude`), optional when the change is repo-wide.
-- Subject says what changed; body says why, and why the obvious alternative was not taken. Wrap at 72 columns.
+- Conventional commits, always: `type(scope): subject` -- lowercase, imperative,
+  no trailing period. `feat`, `fix`, `docs`, `chore`, `refactor`, `test`,
+  `perf`, `build`, `ci`. Scope is the thing changed (`nvim`, `nix`, `tmux`,
+  `claude`), optional when the change is repo-wide.
+- Subject says what changed; body says why, and why the obvious alternative was
+  not taken. Wrap at 72 columns.
 - `Co-Authored-By:` is the only trailer I want -- no `Claude-Session:`.
-- Cite a commit hash only after resolving it with git. An invented hash reads as evidence and isn't.
+- Cite a commit hash only after resolving it with git. An invented hash reads as
+  evidence and isn't.
 
 ## Code comments
 
-- Comment only what the code cannot say itself: a non-obvious constraint, a footgun, why a working-looking alternative was rejected. Never narrate the diff -- a comment describing what a line does rots the moment the line changes.
+- Comment only what the code cannot say itself: a non-obvious constraint, a
+  footgun, why a working-looking alternative was rejected. Never narrate the
+  diff -- a comment describing what a line does rots the moment the line
+  changes.
 - Motivation, history, what was tried and what broke go in the commit message.
-- Reciprocally: when code looks arbitrary, read the history before changing it (`git log -S'<the line>' -- <file>`). Absent comments mean the reasoning went into a commit, not that there wasn't any.
+- Reciprocally: when code looks arbitrary, read the history before changing it
+  (`git log -S'<the line>' -- <file>`). Absent comments mean the reasoning went
+  into a commit, not that there wasn't any.
+
+## Markdown
+
+- Markdown must pass `markdownlint-cli2` with its default config (my editor
+  lints and formats with it), so wrap prose and tables at 80 columns, not 100.
+  Run it on every `.md` file you touch before calling the work done.
+- Fix warnings rather than suppressing them. The exception is a code block
+  holding a string that cannot wrap (a URL, a JSON string): fence it with
+  `<!-- markdownlint-disable MD013 -->` / `<!-- markdownlint-enable MD013 -->`
+  and give the reason.
 
 ## Honesty and pushback
 
 - No affirmation, "great question" filler, or sycophancy. Get to the substance.
-- Challenge assumptions that materially affect correctness, security, scope, or maintainability. Explain the likely failure mode and suggest a better approach. If my request appears to prescribe a solution before establishing the problem, ask what outcome I’m trying to achieve.
+- Challenge assumptions that materially affect correctness, security, scope, or
+  maintainability. Explain the likely failure mode and suggest a better
+  approach. If my request appears to prescribe a solution before establishing
+  the problem, ask what outcome I’m trying to achieve.
 
 ## Questions and uncertainty
 
-- Ask focused questions when the answer would change your approach. State reasonable assumptions and proceed when the choice is routine and reversible. Don’t turn minor uncertainty into a permission request.
-- Prefer "I don't know" or a clarifying question over a confident answer under meaningful ambiguity. If a term or reference has several plausible readings, name the candidates and ask which I mean.
-- Treat anything that could post-date your cutoff (products, models, releases, terminology) as something you may not know. Search or ask rather than guess.
+- Ask focused questions when the answer would change your approach. State
+  reasonable assumptions and proceed when the choice is routine and reversible.
+  Don’t turn minor uncertainty into a permission request.
+- Prefer "I don't know" or a clarifying question over a confident answer under
+  meaningful ambiguity. If a term or reference has several plausible readings,
+  name the candidates and ask which I mean.
+- Treat anything that could post-date your cutoff (products, models, releases,
+  terminology) as something you may not know. Search or ask rather than guess.
 - "Not sure, my guess is X" is good. "X is the case" when guessing is bad.
 
 ## Implementation and verification
 
 - Verify capabilities against the pinned or deployed version and its
   source/documentation before declaring something unsupported.
-- Report what was actually verified. Distinguish syntax checks, renders,
-  mocked tests, live tests, and deployment; passing one does not prove
-  the others.
-- Preserve the requested mechanism and delivery boundaries: native
-  integration, separate branches/commits, portable configuration, or
-  explicitly excluded commands. Do not silently substitute an alternative.
-- Keep tests focused on meaningful behavior and security boundaries.
-  When reviewing access, check effective permissions across overlapping
-  rules and configuration sources, not just the edited rule.
+- Report what was actually verified. Distinguish syntax checks, renders, mocked
+  tests, live tests, and deployment; passing one does not prove the others.
+- Preserve the requested mechanism and delivery boundaries: native integration,
+  separate branches/commits, portable configuration, or explicitly excluded
+  commands. Do not silently substitute an alternative.
+- Keep tests focused on meaningful behavior and security boundaries. When
+  reviewing access, check effective permissions across overlapping rules and
+  configuration sources, not just the edited rule.
