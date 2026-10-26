@@ -65,6 +65,13 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 # ------------------------------------------------------------ #
 bindkey -e
+# The emacs keymap only binds ESC-b/ESC-f. Alt-arrow arrives as CSI 1;3 from
+# tmux (xterm-keys) and xterm-style terminals, or ESC-prefixed from terminals
+# that send Alt as a bare ESC.
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' forward-word
+bindkey '^[^[[D' backward-word
+bindkey '^[^[[C' forward-word
 
 WORDCHARS="*?[]~=&;!#$%^(){}<>"
 # ------------------------------------------------------------ #
