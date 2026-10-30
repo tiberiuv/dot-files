@@ -22,6 +22,8 @@
     curl
     unzip
     gnupg
+    age
+    sops
     imagemagick
     diff-so-fancy
 
