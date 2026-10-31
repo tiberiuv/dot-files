@@ -32,7 +32,7 @@ typeset -U PATH path
 # pointing at non-existent dirs (which breaks pyenv/cargo source builds).
 #
 # Apple Silicon only -- no /usr/local fallback.
-if [[ $(uname -s) == "Darwin" ]]; then
+if [[ $OSTYPE == darwin* ]]; then
   eval $(/opt/homebrew/bin/brew shellenv)
   export RUST_ANALYZER_TARGET="aarch64-apple-darwin"
 
@@ -49,7 +49,7 @@ if [[ $(uname -s) == "Darwin" ]]; then
   # Compiler flags
   export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@3/lib"
   export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/openssl@3/include"
-elif [[ $(uname -s) == "Linux" ]]; then
+elif [[ $OSTYPE == linux* ]]; then
   # No GOROOT here either -- see the Darwin branch above.
   export RUST_ANALYZER_TARGET="$(uname -m)-unknown-linux-gnu"
 
@@ -149,7 +149,7 @@ clean_evicted() {
 }
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
-if [[ $(uname) == "Darwin" ]]; then
+if [[ $OSTYPE == darwin* ]]; then
   alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 fi
 
@@ -172,17 +172,13 @@ tm() {
     tmux attach-session -t "$member"
 }
 
-if type eza >/dev/null 2>&1; then
+if (( ${+commands[eza]} )); then
   alias ls=eza
-elif type exa >/dev/null 2>&1; then
+elif (( ${+commands[exa]} )); then
   alias ls=exa
 fi
-if type bat >/dev/null 2>&1; then
-  alias cat=bat
-fi
-if type procs >/dev/null 2>&1; then
-  alias ps=procs
-fi
+(( ${+commands[bat]} )) && alias cat=bat
+(( ${+commands[procs]} )) && alias ps=procs
 
 alias claude="claude --model opus"
 # ------------------------------------------------------------ #
@@ -289,11 +285,29 @@ for _gcloud_root in \
 done
 unset _gcloud_root
 
-# enable k8s command completion
-[[ ${commands[kubectl]} ]] && . <(kubectl completion zsh)
-
-# enable velero command completion
-[[ ${commands[velero]} ]] &&  . <(velero completion zsh)
+# `<cmd> completion zsh` costs 35-55ms per shell, so its output is cached and
+# regenerated only when the binary changes. Keyed on the resolved path, not
+# just mtime: nix store files all carry mtime 1, so an upgraded kubectl is
+# never "newer" than the cache -- but it does live at a new store path.
+# Sets REPLY rather than sourcing: sourced inside a function, any typeset in
+# the generated script would become function-local.
+_completion_cache() {
+  local bin=${commands[$1]} cache=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/$1-completion.zsh
+  local stamp="# ${bin:A}" first
+  [[ -n $bin ]] || return 1
+  [[ -r $cache ]] && read -r first < $cache
+  if [[ $first != "$stamp" || $bin -nt $cache ]]; then
+    mkdir -p ${cache:h}
+    { print -r -- "$stamp" && $1 completion zsh } >| $cache.$$ \
+      && mv -f $cache.$$ $cache || { rm -f $cache.$$; return 1 }
+  fi
+  REPLY=$cache
+}
+for _cmd in kubectl velero; do
+  _completion_cache $_cmd && . $REPLY
+done
+unset _cmd
+unfunction _completion_cache
 
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
