@@ -82,16 +82,19 @@ DISABLE_MAGIC_FUNCTIONS=true
 # ------------------------------------------------------------ #
 # FZF
 # ------------------------------------------------------------ #
-export FZF_DEFAULT_COMMAND='rg --smart-case --files --hidden --follow --no-messages --glob "!{node_modules,.git,*.lock,target,dist}"'
+# Not unset: the _fzf_compgen_* functions read it at completion time.
+_fzf_ignore='{node_modules,.git,*.lock,target,dist}'
+export FZF_DEFAULT_COMMAND="rg --smart-case --files --hidden --follow --no-messages --glob '!$_fzf_ignore'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
 
 _fzf_compgen_path() {
-  rg --smart-case --files --hidden --no-messages --glob "!{node_modules,.git,*.lock,target,dist}" ${1}
+  rg --smart-case --files --hidden --follow --no-messages --glob "!$_fzf_ignore" -- "$1"
 }
 
+# fd, not rg: `rg --files` can only list files, so `cd **<Tab>` offered them.
 _fzf_compgen_dir() {
-  rg --smart-case --files --hidden --no-messages --glob "!{node_modules,.git,*.lock,target,dist}" ${1}
+  fd --type d --hidden --follow --exclude "$_fzf_ignore" . "$1"
 }
 
 # ------------------------------------------------------------ #
@@ -138,7 +141,12 @@ codex() {
   done
   command codex --profile shared "$@"
 }
-alias clean_evicted="kubectl get pod | grep Evicted | awk '{print $1}' | xargs kubectl delete pod"
+# A function, not an alias: in a double-quoted alias awk's $1 was expanded
+# (empty) at definition time, so every column was passed to `kubectl delete`.
+clean_evicted() {
+  kubectl get pod --no-headers | awk '$3 == "Evicted" { print $1 }' \
+    | xargs -r kubectl delete pod
+}
 alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
 if [[ $(uname) == "Darwin" ]]; then
