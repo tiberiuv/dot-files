@@ -18,21 +18,38 @@
 #     bar are ordinary block-drawing characters and are unaffected.
 # Check /tmp/glyph-probe.sh before reaching for anything in U+E000-F8FF.
 
-input=$(cat)
+# One jq for every field: at ~7ms a process, the nine separate calls this
+# used to make were most of the render time. One field per line, not @tsv --
+# tab is IFS whitespace, so `read` would collapse the empty ones.
+{
+  read -r cwd; read -r model; read -r used
+  read -r pct_5h; read -r at_5h
+  read -r pct_7d; read -r at_7d
+  read -r pct_spend; read -r at_spend
+} <<EOF
+$(jq -r '
+  (.workspace.current_dir // .cwd), .model.display_name,
+  (.context_window.used_percentage // ""),
+  (.rate_limits | (.five_hour, .seven_day, .spend_limit)
+    | (.used_percentage // ""), (.resets_at // ""))')
+EOF
 
-cwd=$(printf "%s" "$input" | jq -r '.workspace.current_dir // .cwd')
-dir=$(printf "%s" "$cwd" | sed "s|^$HOME|~|")
-model=$(printf "%s" "$input" | jq -r '.model.display_name')
+# Not sed "s|^$HOME|~|": that also turned /home/coder2 into ~2.
+case $cwd in
+  "$HOME") dir="~" ;;
+  "$HOME"/*) dir="~${cwd#"$HOME"}" ;;
+  *) dir=$cwd ;;
+esac
 
 # --no-optional-locks: this runs on every prompt render, don't contend with
 # other git processes for the index lock.
 branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
 
-# The payload carries used and remaining separately; take used directly
-# rather than deriving it, so the bar and the number cannot disagree.
-used=$(printf "%s" "$input" | jq -r '.context_window.used_percentage // empty')
-
 now=$(date +%s)
+
+# A real ESC byte, and the line is printed with %s rather than %b, so that a
+# backslash in a branch name or directory reaches the screen as itself.
+ESC=$(printf '\033')
 
 C_DIR=75        # light blue
 C_BRANCH=114    # green
@@ -57,11 +74,10 @@ CTX_WARN=45     # % used at which it starts warning
 # say) render at inconsistent widths and would misalign the line. All are
 # double-width; the trailing space keeps one clear cell after them.
 #
-# Literal characters, not \xNN escapes: these strings reach the terminal via
-# printf %b, and %b only has to understand POSIX \0nnn octal. dash -- which is
-# /bin/sh on Debian and Ubuntu -- does not accept \xNN there and emits the
-# escape text verbatim. Literal bytes need no escape dialect at all, and match
-# how the block characters in bar() are already written.
+# Literal characters, not \xNN escapes: dash -- /bin/sh on Debian and Ubuntu
+# -- has no \xNN in printf and emits the escape text verbatim. Literal bytes
+# need no escape dialect at all, and match how the block characters in bar()
+# are already written.
 ICON_DIR="📁"     # U+1F4C1 file folder
 ICON_BRANCH="🌿"  # U+1F33F herb
 ICON_MODEL="🤖"   # U+1F916 robot
@@ -123,7 +139,7 @@ bar() {
   full=$((eighths / 8))
   part=$((eighths % 8))
 
-  b="\033[38;5;${2}m"
+  b="${ESC}[38;5;${2}m"
   i=0
   while [ "$i" -lt "$full" ]; do b="${b}█"; i=$((i + 1)); done
   if [ "$part" -gt 0 ] && [ "$full" -lt "$width" ]; then
@@ -133,11 +149,11 @@ bar() {
     esac
     i=$((i + 1))
   fi
-  b="${b}\033[38;5;${C_TROUGH}m"
+  b="${b}${ESC}[38;5;${C_TROUGH}m"
   tinted=0
   while [ "$i" -lt "$width" ]; do
     if [ -n "$3" ] && [ "$tinted" -eq 0 ] && [ $((i * 100 / width)) -ge "$3" ]; then
-      b="${b}\033[38;5;${C_DANGER}m"
+      b="${b}${ESC}[38;5;${C_DANGER}m"
       tinted=1
     fi
     b="${b}█"
@@ -146,36 +162,38 @@ bar() {
   printf '%s' "$b"
 }
 
-# limit <icon> <label> <key> -- "(icon) 5h 42% (2h14m)", empty when absent.
+# limit <icon> <label> <pct> <resets_at> -- "(icon) 5h 42% (2h14m)", empty
+# when pct is absent.
 limit() {
-  pct=$(printf "%s" "$input" | jq -r ".rate_limits.$3.used_percentage // empty")
-  [ -n "$pct" ] || return 0
-  p=$(round "$pct")
-  at=$(printf "%s" "$input" | jq -r ".rate_limits.$3.resets_at // empty")
-  left=$(until_reset "$at")
-  printf '%b \033[38;5;%dm%s \033[38;5;%dm%d%%' "$1" "$C_LABEL" "$2" "$(load_color "$p")" "$p"
-  [ -n "$left" ] && printf '\033[38;5;%dm (%s)' "$C_LABEL" "$left"
+  [ -n "$3" ] || return 0
+  p=$(round "$3")
+  left=$(until_reset "$4")
+  printf '%s %s[38;5;%dm%s %s[38;5;%dm%d%%' "$1" "$ESC" "$C_LABEL" "$2" "$ESC" "$(load_color "$p")" "$p"
+  [ -n "$left" ] && printf '%s[38;5;%dm (%s)' "$ESC" "$C_LABEL" "$left"
 }
 
-SEP="\033[38;5;${C_SEP}m | "
+SEP="${ESC}[38;5;${C_SEP}m | "
 
-out="${ICON_DIR} \033[38;5;${C_DIR}m${dir}"
-[ -n "$branch" ] && out="${out}${SEP}${ICON_BRANCH} \033[38;5;${C_BRANCH}m${branch}"
-out="${out}${SEP}${ICON_MODEL} \033[38;5;${C_MODEL}m${model}"
+out="${ICON_DIR} ${ESC}[38;5;${C_DIR}m${dir}"
+[ -n "$branch" ] && out="${out}${SEP}${ICON_BRANCH} ${ESC}[38;5;${C_BRANCH}m${branch}"
+out="${out}${SEP}${ICON_MODEL} ${ESC}[38;5;${C_MODEL}m${model}"
 
+# The payload carries used and remaining separately; take used directly
+# rather than deriving it, so the bar and the number cannot disagree.
 if [ -n "$used" ]; then
   p=$(round "$used")
+  c=$(ctx_color "$p")
   # Bold once past the danger line so it reads at a glance, not just by hue.
   ctx_emph=""
-  [ "$p" -ge "$CTX_DANGER" ] && ctx_emph="\033[1m"
-  out="${out}${SEP}${ICON_CTX} $(bar "$used" "$(ctx_color "$p")" "$CTX_DANGER")${ctx_emph}\033[38;5;$(ctx_color "$p")m ${p}%\033[0m"
+  [ "$p" -ge "$CTX_DANGER" ] && ctx_emph="${ESC}[1m"
+  out="${out}${SEP}${ICON_CTX} $(bar "$used" "$c" "$CTX_DANGER")${ctx_emph}${ESC}[38;5;${c}m ${p}%${ESC}[0m"
 fi
 
-# label:key:icon
-for w in "5h:five_hour:$ICON_5H" "7d:seven_day:$ICON_7D" "\$:spend_limit:$ICON_SPEND"; do
-  rest=${w#*:}
-  seg=$(limit "${rest#*:}" "${w%%:*}" "${rest%%:*}")
+for seg in \
+  "$(limit "$ICON_5H" 5h "$pct_5h" "$at_5h")" \
+  "$(limit "$ICON_7D" 7d "$pct_7d" "$at_7d")" \
+  "$(limit "$ICON_SPEND" '$' "$pct_spend" "$at_spend")"; do
   [ -n "$seg" ] && out="${out}${SEP}${seg}"
 done
 
-printf "%b" "${out}\033[0m"
+printf '%s' "${out}${ESC}[0m"
