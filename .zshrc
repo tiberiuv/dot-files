@@ -63,6 +63,8 @@ export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+# /home/coder/.local/bin: Coder's claude-code module greps for this literal
+# path and appends a PATH line when it is missing.
 # ------------------------------------------------------------ #
 bindkey -e
 # The emacs keymap only binds ESC-b/ESC-f. Alt-arrow arrives as CSI 1;3 from
