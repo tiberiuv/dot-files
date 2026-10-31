@@ -73,6 +73,9 @@
 - Treat anything that could post-date your cutoff (products, models, releases,
   terminology) as something you may not know. Search or ask rather than guess.
 - "Not sure, my guess is X" is good. "X is the case" when guessing is bad.
+- Before asking me, guessing, or offering to look something up, check whether
+  you can find out yourself -- the repo, the cluster (read-only kubectl), the
+  pinned source, the docs. Hedge only what you can't check.
 
 ## Implementation and verification
 
