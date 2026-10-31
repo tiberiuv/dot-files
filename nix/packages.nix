@@ -93,6 +93,7 @@
     krew
     kubectl-cnpg # kubectl cnpg
     kubectl-rook-ceph # kubectl rook-ceph
+    velero
 
     # --- Toolchains and base tools ---------------------------------------
     # GOROOT must stay unset (see .zshrc): this go finds its own, and a stale
