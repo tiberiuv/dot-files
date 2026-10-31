@@ -10,9 +10,11 @@
     "typescript-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true
   },
+  "autoUpdatesChannel": "stable",
   "theme": "auto",
   "verbose": true,
   "agentPushNotifEnabled": true,
+  "remoteControlAtStartup": true,
   "notifications": "true",
   "bash": {
     "deniedCommands": [
