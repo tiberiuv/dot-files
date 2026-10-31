@@ -23,5 +23,5 @@ tfenv install latest
 tfenv init
 tfenv use latest
 
-mise plugins add lua
+mise plugins add --yes lua
 mise use -g lua@5.1

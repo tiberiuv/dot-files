@@ -23,11 +23,15 @@
 # does not list zsh. Hardcoded to the apt zsh, not `command -v zsh` which would
 # now find the nix one: a login shell under /nix stops existing the moment /nix
 # fails to mount.
+#
+# Compared against the passwd entry, not $SHELL: that may be unset (Coder's
+# dotfiles_uri, `env -i`), which kills this under setup.sh's `set -u`, and it
+# keeps the old shell after a chsh until the next login.
 ZSH_PATH=""
 for candidate in /usr/bin/zsh /bin/zsh; do
     [ -x "$candidate" ] && ZSH_PATH="$candidate" && break
 done
-if [ -n "$ZSH_PATH" ] && [ "$SHELL" != "$ZSH_PATH" ]; then
+if [ -n "$ZSH_PATH" ] && [ "$(getent passwd "$USER" | cut -d: -f7)" != "$ZSH_PATH" ]; then
     grep -qxs "$ZSH_PATH" /etc/shells || echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
     sudo chsh -s "$ZSH_PATH" "$USER"
 fi
