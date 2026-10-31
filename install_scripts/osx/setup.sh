@@ -34,13 +34,4 @@ sudo launchctl load /Library/LaunchDaemons/limit.maxfiles.plist
 # Touch ID for sudo, including inside tmux (pairs with pam-reattach).
 sed "s/^#auth/auth/" /etc/pam.d/sudo_local.template | sudo tee /etc/pam.d/sudo_local
 
-# zinit also owns fzf: it installs it with --key-bindings --completion, which
-# writes ~/.fzf.zsh and wires ^T/^R. Hence no fzf in nix/packages.nix.
-bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-
-# Needs an *interactive* zsh: a non-interactive `zsh -c` never reads .zshrc, so
-# the zinit function would never be defined.
-zsh -i -c "zinit update" </dev/null
-
-# Last: needs the C toolchain from Homebrew and tree-sitter from nix.
-nvim --headless "+Lazy! sync" +qa
+zsh ./install_scripts/shared/install-plugins.sh

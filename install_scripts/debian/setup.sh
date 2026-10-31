@@ -36,15 +36,4 @@ if [ -n "$ZSH_PATH" ] && [ "$(getent passwd "$USER" | cut -d: -f7)" != "$ZSH_PAT
     sudo chsh -s "$ZSH_PATH" "$USER"
 fi
 
-# zinit also owns fzf: it installs it with --key-bindings --completion, which
-# writes ~/.fzf.zsh and wires ^T/^R. Hence no fzf in nix/packages.nix.
-bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-
-# ~/.zshrc is zsh syntax and zinit is a shell function defined by it, so both of
-# these need an *interactive* zsh: sourcing it from this bash script only
-# produces a wall of syntax errors, and a non-interactive `zsh -c` never reads
-# .zshrc at all.
-zsh -i -c "zinit update" </dev/null
-
-# Last: needs the C toolchain from step 1 and tree-sitter from the nix profile.
-nvim --headless "+Lazy! sync" +qa
+. ./install_scripts/shared/install-plugins.sh
