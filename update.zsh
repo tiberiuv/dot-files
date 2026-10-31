@@ -27,7 +27,7 @@ fi
 if [[ ${commands[nix]} ]]; then
   nix --extra-experimental-features 'nix-command flakes' flake update --flake ${0:A:h}
   ${0:A:h}/nix/switch.sh
-  nix-collect-garbage -d --delete-older-than 14d
+  nix-collect-garbage --delete-older-than 14d
 fi
 
 # The rust tools tied to the rustup toolchain; binstall does not self-update.
