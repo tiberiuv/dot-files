@@ -231,6 +231,10 @@ zinit wait lucid light-mode for Aloxaf/fzf-tab
 
 # ------------------------------------------------------------ #
 
+# hm-session-vars.sh only extends XDG_DATA_DIRS, and programs.zsh (which would
+# add this) is off -- see nix/home.nix. Without it every completion nix ships
+# (kubectl, velero, rg, fd, nix...) sits unused.
+fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
 autoload -Uz compinit
 # Rebuild (and re-verify) the completion dump at most once a day; `compinit -C`
 # skips that check. This used to read `[[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]`,
@@ -274,30 +278,6 @@ for _gcloud_root in \
   fi
 done
 unset _gcloud_root
-
-# `<cmd> completion zsh` costs 35-55ms per shell, so its output is cached and
-# regenerated only when the binary changes. Keyed on the resolved path, not
-# just mtime: nix store files all carry mtime 1, so an upgraded kubectl is
-# never "newer" than the cache -- but it does live at a new store path.
-# Sets REPLY rather than sourcing: sourced inside a function, any typeset in
-# the generated script would become function-local.
-_completion_cache() {
-  local bin=${commands[$1]} cache=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/$1-completion.zsh
-  local stamp="# ${bin:A}" first
-  [[ -n $bin ]] || return 1
-  [[ -r $cache ]] && read -r first < $cache
-  if [[ $first != "$stamp" || $bin -nt $cache ]]; then
-    mkdir -p ${cache:h}
-    { print -r -- "$stamp" && $1 completion zsh } >| $cache.$$ \
-      && mv -f $cache.$$ $cache || { rm -f $cache.$$; return 1 }
-  fi
-  REPLY=$cache
-}
-for _cmd in kubectl velero; do
-  _completion_cache $_cmd && . $REPLY
-done
-unset _cmd
-unfunction _completion_cache
 
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
