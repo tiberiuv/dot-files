@@ -38,3 +38,9 @@ cargo binstall --no-confirm --locked \
   trunk \
   wasm-bindgen-cli \
   fnm
+
+# Coder's own installer, not nixpkgs: the nixpkgs pin trails the server by
+# minor releases, and the CLI warns -- and newer subcommands fail -- against a
+# newer server. Mainline is the channel the server tracks. Standalone into
+# ~/.local keeps it out of apt/brew and needs no sudo.
+curl -fsSL https://coder.com/install.sh | sh -s -- --method standalone --prefix "$HOME/.local"

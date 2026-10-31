@@ -134,6 +134,10 @@
   #   claude-code   -- Anthropic native installer, stable channel
   #   codex         -- OpenAI npm package, latest stable dist-tag
   #
+  # In nixpkgs, but the pin trails the server it talks to; Coder's own
+  # installer (shared/install-packages.sh) tracks the mainline channel instead:
+  #   coder
+  #
   # In nixpkgs, but adding them would shadow a version manager's shims and
   # silently hand back the wrong toolchain:
   #   nodejs, yarn  -- fnm
