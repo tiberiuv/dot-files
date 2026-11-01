@@ -9,6 +9,14 @@
 export LANG=${LANG:-en_US.UTF-8}
 export LC_ALL=${LC_ALL:-en_US.UTF-8}
 
+# Unset, a mosh-server whose client was killed (iPadOS reaping Blink) waits
+# forever, keeping its tmux client attached and pinning the window to that
+# client's size. A day outlasts any iPad sleep worth resuming from; tmux holds
+# the real state anyway. SIGNAL_TMOUT makes `pkill -USR1 mosh-server` spare
+# servers whose client was heard from in the last 5 minutes.
+export MOSH_SERVER_NETWORK_TMOUT=${MOSH_SERVER_NETWORK_TMOUT:-86400}
+export MOSH_SERVER_SIGNAL_TMOUT=${MOSH_SERVER_SIGNAL_TMOUT:-300}
+
 # Ubuntu's /etc/zsh/zshrc otherwise runs compinit before ~/.zshrc, writing
 # ~/.zcompdump from the stock fpath. ~/.zshrc then trusts that fresh dump via
 # `compinit -C`, so nothing it adds to fpath (the nix completions) is ever seen.
