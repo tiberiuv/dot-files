@@ -9,6 +9,11 @@
 export LANG=${LANG:-en_US.UTF-8}
 export LC_ALL=${LC_ALL:-en_US.UTF-8}
 
+# Ubuntu's /etc/zsh/zshrc otherwise runs compinit before ~/.zshrc, writing
+# ~/.zcompdump from the stock fpath. ~/.zshrc then trusts that fresh dump via
+# `compinit -C`, so nothing it adds to fpath (the nix completions) is ever seen.
+skip_global_compinit=1
+
 # Two paths because there are two install shapes (see nix/bootstrap.sh):
 # single-user puts the script in the user's profile, multi-user in the system
 # one under another name. Only one ever exists.
