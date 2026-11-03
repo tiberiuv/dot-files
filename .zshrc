@@ -16,6 +16,7 @@ export CLICOLOR=1
 export LSCOLORS=Gxfxcxdxbxegedabagacad
 export LS_COLORS='ow=36:di=34:fi=32:ex=31:ln=35:'
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
 # For minikube
 export KUBERNETES_PROVIDER=docker
 
