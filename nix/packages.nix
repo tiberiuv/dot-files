@@ -93,6 +93,7 @@
     krew
     kubectl-cnpg # kubectl cnpg
     kubectl-rook-ceph # kubectl rook-ceph
+    kubernetes-helm # helm
     velero
 
     # --- Toolchains and base tools ---------------------------------------
