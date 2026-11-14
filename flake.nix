@@ -50,9 +50,7 @@
 
       pkgs = import nixpkgs {
         inherit system;
-        # terraform (BUSL) is unfree. It is not in nix/packages.nix today --
-        # tfenv still owns it -- but leaving this off turns a future one-line
-        # addition into a confusing eval error.
+        # vault-bin (BUSL) in nix/packages.nix is unfree.
         config.allowUnfree = true;
       };
 

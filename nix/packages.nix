@@ -95,6 +95,10 @@
     kubectl-rook-ceph # kubectl rook-ceph
     kubernetes-helm # helm
     velero
+    # Unfree (BUSL), so Hydra caches neither variant: the source-built `vault`
+    # compiles locally on every bump and its version trails; -bin fetches
+    # HashiCorp's release binary.
+    vault-bin # vault
 
     # --- Toolchains and base tools ---------------------------------------
     # GOROOT must stay unset (see .zshrc): this go finds its own, and a stale
