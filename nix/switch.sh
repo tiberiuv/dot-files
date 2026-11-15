@@ -5,8 +5,10 @@
 #   nix/switch.sh              apply
 #   nix/switch.sh --dry-run    show what would change, touch nothing
 #
-# To roll back: `home-manager generations` lists each with its store path; run
-# the `activate` script inside an older one.
+# Each switch keeps the generation it activates and the one before it, then
+# collects the rest. To roll back one step, run the `activate` script inside
+# the older one (`home-manager generations` lists both with their store paths);
+# further back means checking out an older commit and switching again.
 #
 # A flake only sees git-tracked files, so a new file under nix/ must be `git
 # add`ed before it is visible here. The error does not hint at this -- it says
@@ -77,3 +79,13 @@ out=$($NIX build --impure --no-link --print-out-paths "$target")
 
 echo "==> activating $out"
 "$out/activate"
+
+# Every profile this user owns, nix-env's included, not just home-manager's.
+# nix-collect-garbage -d cannot keep any old generation, hence +2 per profile.
+echo "==> deleting all but the last two generations"
+for profile in "${XDG_STATE_HOME:-$HOME/.local/state}"/nix/profiles/*; do
+    [ -e "$profile" ] || continue
+    case $profile in *-link) continue ;; esac
+    nix-env --profile "$profile" --delete-generations +2
+done
+nix-store --gc
